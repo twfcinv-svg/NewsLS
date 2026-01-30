@@ -4,65 +4,45 @@ import re
 import random
 
 # ===========================
-# 1. 設定與關鍵字資料庫
+# 1. 擴充新聞來源 (為了達到 2 頁內容)
 # ===========================
-
 RSS_URLS = [
     "https://tw.stock.yahoo.com/rss?category=tw-market",       # 台股大盤
     "https://tw.stock.yahoo.com/rss?category=tech",            # 科技產業
     "https://tw.stock.yahoo.com/rss?category=intl-markets",    # 國際股市
-    "https://news.cnyes.com/rss/cnyes/all",                    # 鉅亨網
-    "https://money.udn.com/rssfeed/news/1001/5588",            # 經濟日報-國際
+    "https://news.cnyes.com/rss/cnyes/all",                    # 鉅亨網-頭條
+    "https://news.cnyes.com/rss/cnyes/stock",                  # 鉅亨網-台股
+    "https://money.udn.com/rssfeed/news/1001/5590",            # 經濟日報-產業
+    "https://money.udn.com/rssfeed/news/1001/5591",            # 經濟日報-證券
 ]
 
-# 分類關鍵字 (權重計分法：比對到越多關鍵字越準確)
-CATEGORIES = {
-    "electronics": [
-        "台積電", "聯發科", "鴻海", "廣達", "緯創", "技嘉", "仁寶", "華碩", "宏碁",
-        "半導體", "晶圓", "IC", "AI", "伺服器", "散熱", "PCB", "被動元件", "記憶體",
-        "面板", "群創", "友達", "聯電", "力積電", "世界先進", "封測", "日月光",
-        "輝達", "Nvidia", "AMD", "英特爾", "Intel", "蘋果", "Apple", "供應鏈",
-        "信驊", "創意", "世芯", "矽智財", "IP", "光學", "大立光", "玉晶光"
-    ],
-    "finance_传产": [
-        "金融", "金控", "銀行", "壽險", "國泰", "富邦", "中信", "兆豐",
-        "鋼鐵", "中鋼", "塑化", "台塑", "南亞", "水泥", "台泥", "亞泥",
-        "航運", "長榮", "陽明", "萬海", "航空", "長榮航", "華航",
-        "紡織", "儒鴻", "聚陽", "電機", "重電", "士電", "華城", "中興電",
-        "營建", "房市", "生技", "藥", "觀光", "餐飲"
-    ],
-    "international": [
-        "美股", "道瓊", "那斯達克", "費半", "標普", "S&P", "ADR",
-        "聯準會", "Fed", "鮑爾", "降息", "升息", "CPI", "PPI", "通膨",
-        "外資", "美元", "匯率", "台幣", "歐股", "日股", "港股", "陸股", "ETF"
-    ]
-}
-
-# 情緒字典 (針對台股用語優化)
+# ===========================
+# 2. 關鍵字與評分邏輯 (更嚴格)
+# ===========================
 SENTIMENT_DICT = {
     "bullish": [
-        "漲", "飆", "揚", "攻", "噴", "旺", "熱", "強", "升", "高", 
+        "漲", "飆", "揚", "攻", "噴", "旺", "熱", "強", "升", "高", "頂", 
         "紅", "多頭", "買超", "加碼", "利多", "樂觀", "成長", "創高", 
-        "填息", "完勝", "進補", "受惠", "轉強", "復甦", "點火", "撐盤"
+        "填息", "完勝", "進補", "受惠", "轉強", "復甦", "點火", "撐盤",
+        "大賺", "獲利", "新高", "搶手", "反彈", "看好", "目標價", "法說"
     ],
     "bearish": [
         "跌", "挫", "黑", "弱", "降", "低", "空", "賣超", "調節", "減碼", 
         "利空", "保守", "衰退", "破底", "貼息", "重挫", "縮水", "砍單", 
-        "不如預期", "示警", "隱憂", "壓力", "失守", "翻黑", "跳水"
+        "不如預期", "示警", "隱憂", "壓力", "失守", "翻黑", "跳水", 
+        "疑慮", "下修", "利潤減", "虧損", "賣壓"
     ]
 }
 
-# 投資名言
-QUOTES = [
-    "行情總在絕望中誕生，在半信半疑中成長。",
-    "不要與聯準會作對 (Don't fight the Fed).",
-    "別人恐懼時我貪婪，別人貪婪時我恐懼。",
-    "風險來自於你不知道自己在做什麼。",
-    "你是要吃得好(Buy High)，還是要睡得好(Sleep Well)？"
-]
+# 增加產業關鍵字以利自動分類 (視覺用)
+CATEGORIES = {
+    "elec": ["台積", "半導體", "電子", "AI", "廣達", "緯創", "技嘉", "鴻海", "聯發科", "晶圓", "IC", "蘋概", "光學"],
+    "finance": ["金控", "銀行", "壽險", "富邦", "國泰", "中信"],
+    "old": ["航運", "長榮", "鋼鐵", "中鋼", "塑化", "紡織", "水泥", "重電"],
+}
 
 # ===========================
-# 2. 核心功能函式
+# 3. 核心函式
 # ===========================
 
 def clean_title(title):
@@ -70,168 +50,150 @@ def clean_title(title):
     title = re.sub(r" - Yahoo.*", "", title)
     title = re.sub(r" - 鉅亨.*", "", title)
     title = re.sub(r" - 經濟.*", "", title)
-    return title
+    title = re.sub(r"\(.*?\)", "", title) # 移除括號內容
+    return title.strip()
 
 def calculate_sentiment(title):
     """
-    計算標題的多空分數
-    回傳: (分數, 標籤, 顏色代碼)
-    台股邏輯：紅色是漲(利多)，綠色是跌(利空)
+    回傳: (分數, 標籤, 顏色)
     """
     score = 0
-    # 簡單的詞頻加減分
-    for word in SENTIMENT_DICT["bullish"]:
-        if word in title: score += 1
-    for word in SENTIMENT_DICT["bearish"]:
-        if word in title: score -= 1.5  # 利空字眼通常權重重一點
-
-    # 判斷結果
-    if score >= 1:
-        return score, "利多 🐂", "#ffcccc", "#cc0000" # 淺紅底, 深紅字
-    elif score <= -1:
-        return score, "利空 🐻", "#ccffcc", "#006600" # 淺綠底, 深綠字
-    else:
-        return score, "中立 😐", "#f0f0f0", "#666666" # 灰底
-
-def classify_news_item(title):
-    """判斷一則新聞屬於哪個分類"""
-    # 優先判斷是否為「國際/總經」
-    for k in CATEGORIES["international"]:
-        if k in title: return "intl"
+    title_check = title.replace("不畏", "") # 排除雙重否定誤判
     
-    # 判斷電子
-    for k in CATEGORIES["electronics"]:
-        if k in title: return "elec"
-        
-    # 判斷金融傳產
-    for k in CATEGORIES["finance_传产"]:
-        if k in title: return "non_elec"
-        
-    # 預設歸類
-    return "market"
+    for word in SENTIMENT_DICT["bullish"]:
+        if word in title_check: score += 1
+    for word in SENTIMENT_DICT["bearish"]:
+        if word in title_check: score -= 1.2  # 利空權重加重
+
+    # 嚴格判斷：必須要有分數才算，0分就是中立
+    if score > 0:
+        return score, "利多 🐂", "#ffebee", "#c62828" # 紅底紅字
+    elif score < 0:
+        return score, "利空 🐻", "#e8f5e9", "#2e7d32" # 綠底綠字
+    else:
+        return 0, "中立", "gray", "gray"
+
+def classify_category(title):
+    for key, keywords in CATEGORIES.items():
+        for k in keywords:
+            if k in title: return key
+    return "other"
 
 # ===========================
-# 3. 主程式邏輯
+# 4. 主程式
 # ===========================
 
 def main():
-    print("啟動財經新聞爬蟲...")
+    print("啟動加強版爬蟲...")
     all_news = []
     seen_links = set()
 
-    # 1. 抓取所有來源
+    # 1. 暴力抓取 (每源抓 20 則，確保量大)
     for url in RSS_URLS:
         try:
             feed = feedparser.parse(url)
-            for entry in feed.entries:
+            for entry in feed.entries[:20]: # 增加抓取數量
                 if entry.link in seen_links: continue
                 seen_links.add(entry.link)
                 
                 title = clean_title(entry.title)
-                score, tag, bg_color, text_color = calculate_sentiment(title)
-                category = classify_news_item(title)
+                score, tag, bg, text = calculate_sentiment(title)
+                
+                # 【關鍵修改】直接過濾掉中立新聞 (分數為0的不收錄)
+                if score == 0: 
+                    continue
                 
                 all_news.append({
                     "title": title,
                     "link": entry.link,
                     "score": score,
                     "tag": tag,
-                    "bg_color": bg_color,
-                    "text_color": text_color,
-                    "category": category
+                    "bg": bg,
+                    "text": text,
+                    "cat": classify_category(title)
                 })
         except Exception as e:
-            print(f"Error: {e}")
+            print(f"Error fetching {url}: {e}")
 
-    # 2. 分類整理
-    data = {
-        "focus": [], "market": [], "elec": [], "non_elec": [], "intl": [], "bearish": []
-    }
+    # 2. 分流：多方 vs 空方
+    bullish_news = [n for n in all_news if n['score'] > 0]
+    bearish_news = [n for n in all_news if n['score'] < 0]
 
-    # 依照分數排序 (分數絕對值越高的越重要)
-    all_news.sort(key=lambda x: abs(x['score']), reverse=True)
+    # 3. 排序 (強勢的在最上面，慘烈的在最下面)
+    bullish_news.sort(key=lambda x: x['score'], reverse=True) # 分數高到低
+    bearish_news.sort(key=lambda x: x['score']) # 分數低到高 (越負越慘)
 
-    for item in all_news:
-        # 特別規則：如果是超級利空 (分數 <= -1.5)，直接複製一份到「利空區」
-        if item['score'] <= -1.5:
-            data['bearish'].append(item)
-
-        # 正常分類
-        if item['category'] == 'intl':
-            data['intl'].append(item)
-        elif item['category'] == 'elec':
-            data['elec'].append(item)
-        elif item['category'] == 'non_elec':
-            data['non_elec'].append(item)
-        else:
-            data['market'].append(item)
-
-    # 取前幾名高分/重要的新聞當作「焦點」
-    data['focus'] = data['market'][:3] + data['elec'][:2] 
-
-    # 3. 生成 HTML
+    # 4. 生成 HTML (多方在前，空方在最後)
     today_date = datetime.now().strftime('%Y/%m/%d')
-    quote = random.choice(QUOTES)
-
-    def generate_list(items, limit=8):
-        html = ""
-        for i, item in enumerate(items[:limit]):
-            # 這是每一行新聞的 HTML 結構
-            html += f"""
-            <li style="display: flex; align-items: center; justify-content: space-between; padding: 8px 0; border-bottom: 1px dashed #eee;">
+    
+    # 輔助函式：產生列表 HTML
+    def generate_html_list(news_list, title, color_code):
+        if not news_list: return ""
+        
+        list_html = ""
+        for i, item in enumerate(news_list):
+            list_html += f"""
+            <li style="display: flex; align-items: flex-start; justify-content: space-between; padding: 10px 0; border-bottom: 1px dashed #ddd;">
                 <div style="flex: 1;">
-                    <span style="font-weight: bold; margin-right: 5px; color: #888;">{i+1}.</span>
-                    <a href="{item['link']}" target="_blank" style="text-decoration: none; color: #333; font-size: 15px;">{item['title']}</a>
+                    <span style="font-weight: bold; margin-right: 8px; color: #999; font-size: 0.9em;">{i+1}.</span>
+                    <a href="{item['link']}" target="_blank" style="text-decoration: none; color: #333; font-size: 16px; line-height: 1.5;">{item['title']}</a>
                 </div>
-                <div style="margin-left: 10px; padding: 2px 8px; border-radius: 4px; font-size: 12px; font-weight: bold; background-color: {item['bg_color']}; color: {item['text_color']}; white-space: nowrap;">
-                    {item['tag']} {item['score'] if item['score'] != 0 else ''}
+                <div style="margin-left: 15px; padding: 4px 10px; border-radius: 4px; font-size: 13px; font-weight: bold; background-color: {item['bg']}; color: {item['text']}; white-space: nowrap; height: fit-content;">
+                    {item['tag']}
                 </div>
             </li>
             """
-        return html if html else "<li style='color:#999'>目前無相關新聞</li>"
+        
+        return f"""
+        <div style="margin-bottom: 40px; page-break-inside: avoid;">
+            <div style="background: {color_code}; color: white; padding: 10px 15px; font-size: 18px; font-weight: bold; border-radius: 5px 5px 0 0;">
+                {title} (共 {len(news_list)} 則)
+            </div>
+            <ul style="list-style: none; padding: 15px; margin: 0; background: #fff; border: 1px solid #eee; border-top: none; box-shadow: 0 2px 5px rgba(0,0,0,0.05);">
+                {list_html}
+            </ul>
+        </div>
+        """
 
+    # 5. 組合最終頁面
     html_content = f"""
     <!DOCTYPE html>
     <html lang="zh-TW">
     <head>
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <title>每日財經多空日報</title>
+        <title>深度多空日報</title>
         <style>
-            body {{ font-family: "Microsoft JhengHei", sans-serif; background: #525659; margin: 0; padding: 20px; }}
-            .paper {{ background: white; max-width: 850px; margin: 0 auto; padding: 40px; box-shadow: 0 0 15px rgba(0,0,0,0.3); }}
-            h1 {{ color: #b71c1c; border-bottom: 3px solid #b71c1c; padding-bottom: 10px; }}
-            .section-title {{ background: #f5f5f5; padding: 8px 12px; border-left: 5px solid #333; font-weight: bold; margin-top: 25px; margin-bottom: 10px; display: flex; justify-content: space-between; }}
-            ul {{ list-style: none; padding: 0; margin: 0; }}
-            a:hover {{ text-decoration: underline !important; color: #b71c1c !important; }}
-            .footer {{ margin-top: 40px; border-top: 1px solid #ccc; padding-top: 20px; text-align: center; color: #666; font-size: 0.9em; }}
+            body {{ font-family: "Microsoft JhengHei", "Segoe UI", sans-serif; background: #f0f2f5; margin: 0; padding: 20px; }}
+            .container {{ max-width: 900px; margin: 0 auto; background: #fff; padding: 50px; box-shadow: 0 0 20px rgba(0,0,0,0.1); min-height: 2000px; }} /* 強制高度模擬2頁 */
+            h1 {{ text-align: center; color: #1a237e; border-bottom: 4px double #1a237e; padding-bottom: 15px; margin-bottom: 30px; }}
+            .meta {{ text-align: center; color: #666; margin-bottom: 40px; font-size: 1.1em; }}
+            a:hover {{ text-decoration: underline !important; color: #d32f2f !important; }}
+            .quote {{ text-align: center; font-style: italic; color: #555; margin: 30px 0; padding: 20px; background: #fafafa; border-left: 5px solid #666; }}
+            
+            @media print {{
+                body {{ background: white; }}
+                .container {{ box-shadow: none; width: 100%; max-width: 100%; padding: 0; }}
+            }}
         </style>
     </head>
     <body>
-        <div class="paper">
-            <div style="display: flex; justify-content: space-between; align-items: end;">
-                <h1>📈 每日財經多空日報</h1>
-                <span style="color: #666; font-size: 1.1em; font-weight: bold; padding-bottom: 15px;">{today_date}</span>
+        <div class="container">
+            <h1>📊 深度財經多空日報 (Pro)</h1>
+            <div class="meta">日期：{today_date} | 資料來源：Yahoo/鉅亨/經濟日報 | 篩選模式：嚴格多空</div>
+
+            {generate_html_list(bullish_news, "🚀 多方強勢焦點 (Bullish News)", "#c62828")}
+
+            <div class="quote">
+                “行情總在絕望中誕生，在半信半疑中成長，在憧憬中成熟，在希望中毀滅。”
             </div>
 
-            <div class="section-title" style="border-left-color: #d32f2f;">🔥 重點頭條 (Focus)</div>
-            <ul>{generate_list(data['focus'], 5)}</ul>
+            <br><br>
 
-            <div class="section-title" style="border-left-color: #1976d2;">⚡ 電子產業 (Tech)</div>
-            <ul>{generate_list(data['elec'], 8)}</ul>
+            {generate_html_list(bearish_news, "📉 市場利空與風險警示 (Bearish / Risks)", "#2e7d32")}
 
-            <div class="section-title" style="border-left-color: #388e3c;">🏭 金融與傳產 (Non-Tech)</div>
-            <ul>{generate_list(data['non_elec'], 6)}</ul>
-
-            <div class="section-title" style="border-left-color: #fbc02d;">🌎 國際總經 (Global)</div>
-            <ul>{generate_list(data['intl'], 6)}</ul>
-            
-            <div class="section-title" style="border-left-color: #000; background: #ffebee;">⚠️ 市場利空警示 (Bearish Alerts)</div>
-            <ul>{generate_list(data['bearish'], 5)}</ul>
-
-            <div class="footer">
-                <p style="font-style: italic; font-weight: bold;">“ {quote} ”</p>
-                <p>資料來源：Yahoo 股市、鉅亨網 | 自動生成系統</p>
+            <div style="text-align: center; color: #aaa; margin-top: 50px; font-size: 0.8em; border-top: 1px solid #eee; padding-top: 20px;">
+                End of Report - Generated by GitHub Actions
             </div>
         </div>
     </body>
@@ -241,7 +203,7 @@ def main():
     with open("index.html", "w", encoding="utf-8") as f:
         f.write(html_content)
     
-    print("日報生成完畢！")
+    print(f"報告生成完畢：多方 {len(bullish_news)} 則，空方 {len(bearish_news)} 則。")
 
 if __name__ == "__main__":
     main()
