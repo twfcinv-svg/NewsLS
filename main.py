@@ -2,72 +2,79 @@ import feedparser
 from datetime import datetime, timedelta, timezone
 import re
 import random
+import time
 
 # ===========================
-# 1. 究極新聞來源 (個股來源大幅擴充)
+# 1. 究極新聞來源
 # ===========================
 RSS_URLS = [
-    # --- Yahoo 奇摩股市 (量大) ---
-    "https://tw.stock.yahoo.com/rss?category=tw-market",       # 台股盤勢
-    "https://tw.stock.yahoo.com/rss?category=tech",            # 科技產業
-    "https://tw.stock.yahoo.com/rss?category=tradtional",      # 傳產
-    "https://tw.stock.yahoo.com/rss?category=finance",         # 金融
-    "https://tw.stock.yahoo.com/rss?category=intl-markets",    # 國際股市
-    "https://tw.stock.yahoo.com/rss?category=research",        # 研究報告
+    # Yahoo 奇摩股市
+    "https://tw.stock.yahoo.com/rss?category=tw-market",       
+    "https://tw.stock.yahoo.com/rss?category=tech",            
+    "https://tw.stock.yahoo.com/rss?category=tradtional",      
+    "https://tw.stock.yahoo.com/rss?category=finance",         
+    "https://tw.stock.yahoo.com/rss?category=intl-markets",    
+    "https://tw.stock.yahoo.com/rss?category=research",        
 
-    # --- 鉅亨網 CnYes (個股專區) ---
-    "https://news.cnyes.com/rss/cnyes/stock",                  # 台股新聞 (含個股)
-    "https://news.cnyes.com/rss/cnyes/all",                    # 頭條
-    "https://news.cnyes.com/rss/cnyes/industry",               # 產業動態
+    # 鉅亨網 CnYes
+    "https://news.cnyes.com/rss/cnyes/stock",                  
+    "https://news.cnyes.com/rss/cnyes/all",                    
+    "https://news.cnyes.com/rss/cnyes/industry",               
 
-    # --- 經濟日報 & 工商時報 (證券面) ---
-    "https://money.udn.com/rssfeed/news/1001/5591",            # 證券 (個股多)
-    "https://money.udn.com/rssfeed/news/1001/5590",            # 產業
-    "https://ctee.com.tw/feed",                                # 工商時報
+    # 經濟日報 & 工商時報
+    "https://money.udn.com/rssfeed/news/1001/5591",            
+    "https://money.udn.com/rssfeed/news/1001/5590",            
+    "https://ctee.com.tw/feed",                                
 
-    # --- MoneyDJ 理財網 (個股焦點) ---
+    # MoneyDJ / 中時 / 自由 / ETToday / PTT
     "https://www.moneydj.com/rss/newstrust.aspx?rsid=MB010000", 
-    
-    # --- 中時 & 自由 & ETToday (個股) ---
     "https://www.chinatimes.com/rss/realtimenews-finance.xml", 
     "https://news.ltn.com.tw/rss/business.xml",                
     "https://feeds.feedburner.com/ettoday/finance",            
-    
-    # --- PTT Stock 版 (最快散戶情報) ---
     "https://rss.ptt.cc/Stock.xml",
 ]
 
 # ===========================
-# 2. 關鍵字過濾系統
+# 2. 關鍵字過濾與分類系統
 # ===========================
 
-# [白名單] 必須包含這些字才保留
-INVESTMENT_KEYWORDS = [
+# [個股優先名單] 只要出現這些字，絕對歸類為「個股」(即使標題有三大法人)
+STOCK_KEYWORDS = [
+    # 權值股
+    "台積", "鴻海", "聯發科", "廣達", "緯創", "技嘉", "中華電", "富邦金", "國泰金", "台塑", "南亞",
+    # 熱門股/中小型
+    "力積電", "華通", "神盾", "安國", "智原", "創意", "世芯", "緯穎", "奇鋐", "雙鴻", "建準", 
+    "聯電", "華碩", "宏碁", "微星", "長榮", "陽明", "萬海", "長榮航", "華航", "亞翔", "中興電", "華城", "士電",
+    "群創", "友達", "彩晶", "聯詠", "瑞昱", "聯發科", "信驊", "大立光", "玉晶光", "欣興", "南電", "景碩",
+    # 產業/概念
+    "CoWoS", "AI", "散熱", "IP", "IC", "PCB", "被動元件", "記憶體", "面板", "網通", "低軌", "電動車",
+    # 代碼特徵
+    "2330", "2317", "2454", "3008", "3035", "3037", "2382", "3231", "2603", "2609", "2615"
+]
+
+# [一般投資關鍵字] 用來過濾非財經新聞
+INVESTMENT_KEYWORDS = STOCK_KEYWORDS + [
     "股", "債", "券", "金控", "銀行", "ETF", "基金", "外資", "法人", "投信", "自營", "主力",
     "買超", "賣超", "多頭", "空頭", "漲", "跌", "盤", "指數", "加權", "櫃買", "期貨", "選擇權",
     "道瓊", "那斯達克", "標普", "費半", "ADR", "匯率", "美元", "央行", "升息", "降息", "通膨", "CPI",
     "營收", "獲利", "EPS", "盈餘", "毛利", "股利", "配息", "除權", "填息", "殖利率", "法說", 
-    "季報", "年報", "月報", "財報", "展望", "目標價", "評等", "庫存", "接單", "訂單", "產能",
-    "台積", "鴻海", "聯發科", "AI", "半導體", "晶圓", "伺服器", "散熱", "CoWoS", "IP",
-    "IC", "PCB", "被動元件", "記憶體", "面板", "網通", "低軌", "電動車", "車用",
-    "航運", "貨櫃", "散裝", "鋼鐵", "塑化", "重電", "生技", "軍工", "營建", "觀光",
-    "2330", "2317", "2454" # 常見代碼
+    "季報", "年報", "月報", "財報", "展望", "目標價", "評等", "庫存", "接單", "訂單", "產能"
 ]
 
-# [黑名單] 標題有這些字直接剔除
+# [黑名單] 剔除雜訊
 EXCLUDE_KEYWORDS = [
     "徵才", "招募", "求職", "面試", "員工", "薪資", "年終", "分紅", "尾牙", "開缺", "工程師", "人才",
     "藝人", "網紅", "男星", "女星", "豪宅", "理財術", "存股術", "買房", "房貸", "後悔", "翻身", "致富", "百萬",
     "油價", "汽油", "柴油", "加油", "開車", "每公升", "調漲", "調降", "路況", "氣象", "颱風", "放假",
-    "詐騙", "假冒", "專家傳授", "教你", "懶人包", "閒聊", "公告", "新聞", "標的" # PTT常見雜訊
+    "詐騙", "假冒", "專家傳授", "教你", "懶人包", "閒聊", "公告", "新聞", "標的"
 ]
 
-# [大盤關鍵字] 用來區分是否為個股
+# [嚴格大盤關鍵字] 只有在「不包含」上述個股關鍵字時，才生效
 MACRO_KEYWORDS = [
     "大盤", "台股", "加權", "指數", "櫃買", "道瓊", "那斯達克", "標普", "費半", 
-    "外資", "三大法人", "投信", "央行", "聯準會", "Fed", "升息", "降息", "通膨", 
+    "三大法人", "投信", "外資", "央行", "聯準會", "Fed", "升息", "降息", "通膨", 
     "CPI", "匯率", "新台幣", "美元", "美股", "亞股", "歐股", "盤前", "盤後", 
-    "收盤", "開盤", "行情", "龍年", "蛇年", "封關", "開紅盤"
+    "收盤", "開盤", "行情", "龍年", "蛇年", "封關", "開紅盤", "台指期"
 ]
 
 # ===========================
@@ -138,17 +145,26 @@ def calculate_sentiment_score(title):
     return round(score, 1)
 
 def is_individual_stock(title):
-    # 如果標題包含大盤關鍵字，就歸類為大盤
+    # 1. 優先檢查：如果有具體個股名稱，絕對是個股 (Priority High)
+    for kw in STOCK_KEYWORDS:
+        if kw in title: return True
+        
+    # 2. 檢查是否為大盤 (Priority Low)
     for kw in MACRO_KEYWORDS:
         if kw in title: return False
-    # 否則預設為個股/產業
+        
+    # 3. 預設歸類為個股/產業
     return True
 
 def main():
-    print("啟動 V10 雙層分類引擎...")
+    print("啟動 V12 智能過濾引擎 (12H + 個股優先)...")
     all_news = []
     seen_links = set()
     total_raw_count = 0
+    skipped_old_count = 0
+
+    # 設定時間門檻 (12小時前)
+    time_threshold = datetime.utcnow() - timedelta(hours=12)
 
     for url in RSS_URLS:
         try:
@@ -158,6 +174,14 @@ def main():
                 if entry.link in seen_links: continue
                 seen_links.add(entry.link)
                 
+                # [時間過濾] 檢查文章發布時間
+                if hasattr(entry, 'published_parsed') and entry.published_parsed:
+                    # 將 struct_time 轉為 datetime
+                    published_dt = datetime.fromtimestamp(time.mktime(entry.published_parsed))
+                    if published_dt < time_threshold:
+                        skipped_old_count += 1
+                        continue # 太舊了，跳過
+                
                 title = clean_title(entry.title)
                 
                 if not filter_news(title): continue
@@ -165,10 +189,9 @@ def main():
                 score = calculate_sentiment_score(title)
                 if score == 0: continue
                 
-                # 判斷是大盤還是個股
+                # 判斷分類 (優先權邏輯已修正)
                 news_type = "individual" if is_individual_stock(title) else "macro"
                 
-                # 顏色
                 if score > 0:
                     color = "#b71c1c" # 紅
                     bg_color = "#fff5f5"
@@ -183,14 +206,14 @@ def main():
                     "score": score,
                     "color": color,
                     "bg": bg_color,
-                    "type": news_type # 新增屬性
+                    "type": news_type
                 })
-        except: pass
+        except Exception as e:
+            print(f"Error: {e}")
 
-    # 分類邏輯：多空 -> 大盤/個股
+    # 分類
     bull_macro = sorted([n for n in all_news if n['score'] > 0 and n['type'] == 'macro'], key=lambda x: x['score'], reverse=True)
     bull_stock = sorted([n for n in all_news if n['score'] > 0 and n['type'] == 'individual'], key=lambda x: x['score'], reverse=True)
-    
     bear_macro = sorted([n for n in all_news if n['score'] < 0 and n['type'] == 'macro'], key=lambda x: x['score'])
     bear_stock = sorted([n for n in all_news if n['score'] < 0 and n['type'] == 'individual'], key=lambda x: x['score'])
 
@@ -224,7 +247,7 @@ def main():
     <head>
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <title>投資情報快篩 V10</title>
+        <title>投資情報快篩 V12</title>
         <style>
             body {{ font-family: "Microsoft JhengHei", sans-serif; background: #fff; margin: 0; padding: 20px; color: #333; }}
             .container {{ max-width: 1100px; margin: 0 auto; }}
@@ -232,6 +255,7 @@ def main():
             h1 {{ margin: 0; font-size: 22px; color: #000; }}
             .controls {{ display: flex; gap: 10px; align-items: center; }}
             .btn-pdf {{ background: #333; color: white; border: none; padding: 6px 12px; border-radius: 4px; cursor: pointer; font-size: 14px; }}
+            .update-time {{ color: #d32f2f; font-weight: bold; font-size: 14px; margin-right: 15px; }}
             
             .section-main {{ margin-top: 30px; border: 1px solid #ddd; border-radius: 5px; overflow: hidden; }}
             .section-title {{ padding: 10px 15px; font-weight: bold; color: white; font-size: 1.1em; display: flex; justify-content: space-between; }}
@@ -255,15 +279,15 @@ def main():
     <body>
         <div class="container">
             <header>
-                <h1>📊 投資情報快篩 (個股強化版)</h1>
+                <h1>📊 投資情報快篩</h1>
                 <div class="controls">
-                    <span style="color:#d32f2f; font-weight:bold; font-size:14px; margin-right:15px;">更新：{now_tw}</span>
+                    <span class="update-time">更新：{now_tw}</span>
                     <button class="btn-pdf" onclick="window.print()">🖨️ PDF</button>
                 </div>
             </header>
             
             <div style="background:#f8f9fa; padding:8px; text-align:center; font-size:0.9em; border-radius:4px; margin-bottom:20px; color:#555;">
-                母體掃描: {total_raw_count} 則 | 已過濾雜訊 | 資料來源含 Yahoo, 鉅亨, 經濟, 工商, PTT
+                母體掃描: {total_raw_count} 則 (已過濾 {skipped_old_count} 則逾時舊聞) | 資料來源含 Yahoo, 鉅亨, 經濟, 工商, PTT
             </div>
 
             <div class="section-main">
@@ -275,14 +299,26 @@ def main():
                 <div class="sub-section">
                     <div class="sub-title">🌎 大盤 & 總體經濟</div>
                     <table>
-                        {generate_rows(bull_macro)}
+                        <thead>
+                            <tr>
+                                <th style="text-align:center;">#</th>
+                                <th>來源</th>
+                                <th>新聞標題</th>
+                                <th style="text-align:right;">分數</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {generate_rows(bull_macro)}
+                        </tbody>
                     </table>
                 </div>
                 
                 <div class="sub-section">
                     <div class="sub-title">🏢 個股 & 產業動態</div>
                     <table>
-                        {generate_rows(bull_stock)}
+                        <tbody>
+                            {generate_rows(bull_stock)}
+                        </tbody>
                     </table>
                 </div>
             </div>
@@ -296,20 +332,32 @@ def main():
                 <div class="sub-section">
                     <div class="sub-title">🌎 大盤 & 總體經濟</div>
                     <table>
-                        {generate_rows(bear_macro)}
+                         <thead>
+                            <tr>
+                                <th style="text-align:center;">#</th>
+                                <th>來源</th>
+                                <th>新聞標題</th>
+                                <th style="text-align:right;">分數</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {generate_rows(bear_macro)}
+                        </tbody>
                     </table>
                 </div>
                 
                 <div class="sub-section">
                     <div class="sub-title">🏢 個股 & 產業動態</div>
                     <table>
-                        {generate_rows(bear_stock)}
+                        <tbody>
+                            {generate_rows(bear_stock)}
+                        </tbody>
                     </table>
                 </div>
             </div>
 
             <div style="text-align: center; color: #ccc; font-size: 11px; margin-top: 30px;">
-                Generated by GitHub Actions | V10 Individual Stock Enhanced
+                Generated by GitHub Actions | V12 Time-Filtered
             </div>
         </div>
     </body>
@@ -318,7 +366,7 @@ def main():
 
     with open("index.html", "w", encoding="utf-8") as f:
         f.write(html_content)
-    print("Done.")
+    print(f"Done. Processed {total_raw_count} items, skipped {skipped_old_count} old items.")
 
 if __name__ == "__main__":
     main()
