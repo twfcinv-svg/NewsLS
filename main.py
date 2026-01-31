@@ -37,7 +37,7 @@ RSS_URLS = [
 ]
 
 # ===========================
-# 2. 關鍵字系統
+# 2. 關鍵字系統 (擴充白名單)
 # ===========================
 
 STOCK_KEYWORDS = [
@@ -49,12 +49,16 @@ STOCK_KEYWORDS = [
     "2330", "2317", "2454", "3008", "3035", "3037", "2382", "3231", "2603", "2609", "2615"
 ]
 
+# [擴充] 增加更多通用財經詞彙，提高篩選留存率
 INVESTMENT_KEYWORDS = STOCK_KEYWORDS + [
     "股", "債", "券", "金控", "銀行", "ETF", "基金", "外資", "法人", "投信", "自營", "主力",
     "買超", "賣超", "多頭", "空頭", "漲", "跌", "盤", "指數", "加權", "櫃買", "期貨", "選擇權",
     "道瓊", "那斯達克", "標普", "費半", "ADR", "匯率", "美元", "央行", "升息", "降息", "通膨", "CPI",
     "營收", "獲利", "EPS", "盈餘", "毛利", "股利", "配息", "除權", "填息", "殖利率", "法說", 
-    "季報", "年報", "月報", "財報", "展望", "目標價", "評等", "庫存", "接單", "訂單", "產能", "輝達"
+    "季報", "年報", "月報", "財報", "展望", "目標價", "評等", "庫存", "接單", "訂單", "產能", "輝達",
+    # 新增通用詞
+    "行情", "走勢", "動態", "概況", "預估", "預測", "分析", "觀點", "研究", "報告", "供應鏈", "需求", "報價", 
+    "擴產", "擴廠", "設廠", "資本支出", "景氣", "復甦", "衰退", "風險", "避險"
 ]
 
 EXCLUDE_KEYWORDS = [
@@ -71,13 +75,28 @@ MACRO_KEYWORDS = [
     "收盤", "開盤", "行情", "龍年", "蛇年", "封關", "開紅盤", "台指期"
 ]
 
+# ===========================
+# 3. 多空權重字典 (V15 智慧校正)
+# ===========================
 SENTIMENT_DICT = {
-    "bull_strong": ["漲停", "飆", "噴出", "大漲", "創高", "新高", "完勝", "大賺", "搶手", "暴漲", "報喜", "噴發", "熱錢", "軋空", "避風港", "抗跌"],
-    "bull_normal": ["漲", "揚", "攻", "旺", "強", "升", "紅", "買超", "加碼", "利多", "樂觀", "成長", "填息", "進補", "受惠", "復甦", "點火", "獲利", "看好", "目標價", "法說", "發威", "撐盤", "收紅", "擴產", "防禦", "高股息", "護盤"],
+    # 強力多 (+2.5) -> 新增：逢低、布局、搶進
+    "bull_strong": ["漲停", "飆", "噴出", "大漲", "創高", "新高", "完勝", "大賺", "搶手", "暴漲", "報喜", "噴發", "熱錢", "軋空", "避風港", "抗跌", "逢低", "布局", "搶進", "包地"],
+    
+    # 普通多 (+1.0) -> 新增：契作、卡位
+    "bull_normal": ["漲", "揚", "攻", "旺", "強", "升", "紅", "買超", "加碼", "利多", "樂觀", "成長", "填息", "進補", "受惠", "復甦", "點火", "獲利", "看好", "目標價", "法說", "發威", "撐盤", "收紅", "擴產", "防禦", "高股息", "護盤", "契作", "卡位", "站買方", "撐腰"],
+    
+    # 微多 (+0.5)
     "bull_weak": ["微漲", "小漲", "回穩", "反彈", "收斂", "趨緩", "收復", "站上", "有守"],
-    "bear_strong": ["跌停", "崩", "暴跌", "重挫", "破底", "殺盤", "跳水", "大跌", "重摔", "血洗", "股災"],
-    "bear_normal": ["跌", "挫", "黑", "弱", "降", "低", "空", "賣超", "調節", "減碼", "利空", "保守", "衰退", "貼息", "縮水", "砍單", "不如預期", "示警", "隱憂", "壓力", "失守", "翻黑", "疑慮", "下修", "虧損", "賣壓", "收黑", "裁員"],
-    "bear_weak": ["微跌", "小跌", "震盪", "整理", "觀望", "疲軟"],
+
+    # 強利空 (-2.5) -> 新增：慎防、變盤
+    "bear_strong": ["跌停", "崩", "暴跌", "重挫", "破底", "殺盤", "跳水", "大跌", "重摔", "血洗", "股災", "慎防", "變盤"],
+    
+    # 普通空 (-1.5) -> 加重扣分，新增：留意、回檔、震盪、獲利了結、春節
+    "bear_normal": ["跌", "挫", "黑", "弱", "降", "低", "空", "賣超", "調節", "減碼", "利空", "保守", "衰退", "貼息", "縮水", "砍單", "不如預期", "示警", "隱憂", "壓力", "失守", "翻黑", "疑慮", "下修", "虧損", "賣壓", "收黑", "裁員", "留意", "回檔", "震盪", "修正", "獲利了結", "春節", "過年", "長假", "觀望"],
+    
+    # 微空 (-0.5)
+    "bear_weak": ["微跌", "小跌", "整理", "疲軟"],
+    
     "negation": ["不", "未", "無", "非", "免", "抗", "防", "止", "終止", "收斂", "無懼"]
 }
 
@@ -130,7 +149,10 @@ def calculate_sentiment_score(title):
     for w in SENTIMENT_DICT["bear_strong"]:
         if w in title: score -= 2.5 if not is_negated(w, title) else -2.0
     for w in SENTIMENT_DICT["bear_normal"]:
-        if w in title: score -= 1.2 if not is_negated(w, title) else -0.5
+        # 改為 -1.5 讓保守訊號更明顯
+        if w in title: score -= 1.5 if not is_negated(w, title) else -0.5
+    for w in SENTIMENT_DICT["bear_weak"]:
+        if w in title: score -= 0.5
     return round(score, 1)
 
 def is_individual_stock(title):
@@ -140,37 +162,26 @@ def is_individual_stock(title):
         if kw in title: return False
     return True
 
-# 新增：生成文字雲 HTML
 def generate_wordcloud_html(all_titles):
-    # 1. 定義要統計的詞庫 (個股 + 大盤 + 產業)
-    target_words = STOCK_KEYWORDS + MACRO_KEYWORDS + ["營收", "獲利", "法說", "配息", "填息", "輝達"]
-    
-    # 2. 統計頻率
+    target_words = STOCK_KEYWORDS + MACRO_KEYWORDS + ["營收", "獲利", "法說", "配息", "填息", "輝達", "布局", "回檔"]
     full_text = " ".join(all_titles)
     counter = Counter()
     for word in target_words:
         count = full_text.count(word)
-        if count > 1: # 至少出現2次才顯示
+        if count > 1:
             counter[word] = count
-            
-    # 3. 取前 30 名熱詞
     top_words = counter.most_common(30)
     if not top_words: return ""
 
-    # 4. 生成 HTML
     html_spans = ""
     max_count = top_words[0][1]
-    
     colors = ["#d32f2f", "#1976d2", "#388e3c", "#f57c00", "#555555", "#7b1fa2"]
     
     for word, count in top_words:
-        # 計算字體大小 (1em ~ 2.5em)
         size = 1.0 + (count / max_count) * 1.5
-        # 隨機顏色 (或根據詞性)
         color = random.choice(colors)
-        if word in ["漲停", "大漲", "創高"]: color = "#d32f2f"
-        if word in ["跌停", "重挫", "破底"]: color = "#388e3c"
-        
+        if word in ["漲停", "大漲", "創高", "布局"]: color = "#d32f2f"
+        if word in ["跌停", "重挫", "破底", "回檔"]: color = "#388e3c"
         html_spans += f'<span style="font-size: {size:.2f}em; color: {color}; margin: 5px 10px; opacity: 0.9;">{word} <sup style="font-size:0.5em; color:#ccc;">{count}</sup></span>'
     
     return f"""
@@ -180,7 +191,7 @@ def generate_wordcloud_html(all_titles):
     """
 
 def main():
-    print("啟動 V14 文字雲引擎...")
+    print("啟動 V15 智慧校正引擎 (擴大篩選 + 權重優化)...")
     all_news = []
     seen_links = set()
     seen_titles = set()
@@ -239,13 +250,11 @@ def main():
                 })
         except: pass
 
-    # 準備資料
     bull_macro = sorted([n for n in all_news if n['score'] > 0 and n['type'] == 'macro'], key=lambda x: x['score'], reverse=True)
     bull_stock = sorted([n for n in all_news if n['score'] > 0 and n['type'] == 'individual'], key=lambda x: x['score'], reverse=True)
     bear_macro = sorted([n for n in all_news if n['score'] < 0 and n['type'] == 'macro'], key=lambda x: x['score'])
     bear_stock = sorted([n for n in all_news if n['score'] < 0 and n['type'] == 'individual'], key=lambda x: x['score'])
 
-    # 生成文字雲
     all_filtered_titles = [n['title'] for n in all_news]
     wordcloud_html = generate_wordcloud_html(all_filtered_titles)
 
@@ -278,7 +287,7 @@ def main():
     <head>
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <title>投資情報快篩 V14</title>
+        <title>投資情報快篩 V15</title>
         <style>
             body {{ font-family: "Microsoft JhengHei", sans-serif; background: #f4f4f4; margin: 0; padding: 20px; color: #333; }}
             .container {{ max-width: 1100px; margin: 0 auto; background: #fff; padding: 20px; border-radius: 8px; box-shadow: 0 0 10px rgba(0,0,0,0.05); }}
@@ -391,7 +400,7 @@ def main():
             </div>
 
             <div style="text-align: center; color: #ccc; font-size: 11px; margin-top: 30px;">
-                Generated by GitHub Actions | V14 Word Cloud
+                Generated by GitHub Actions | V15 Smart Weighting
             </div>
         </div>
     </body>
@@ -400,7 +409,7 @@ def main():
 
     with open("index.html", "w", encoding="utf-8") as f:
         f.write(html_content)
-    print(f"Done. Wordcloud Generated.")
+    print(f"Done. Raw: {total_raw_count}, Filtered Out: {skipped_old_count+skipped_dup_count}")
 
 if __name__ == "__main__":
     main()
