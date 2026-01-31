@@ -3,12 +3,14 @@ from datetime import datetime, timedelta, timezone
 import re
 import random
 import time
+import math
+from collections import Counter
 
 # ===========================
 # 1. 究極新聞來源
 # ===========================
 RSS_URLS = [
-    # Yahoo 奇摩股市
+    # Yahoo
     "https://tw.stock.yahoo.com/rss?category=tw-market",       
     "https://tw.stock.yahoo.com/rss?category=tech",            
     "https://tw.stock.yahoo.com/rss?category=tradtional",      
@@ -16,17 +18,17 @@ RSS_URLS = [
     "https://tw.stock.yahoo.com/rss?category=intl-markets",    
     "https://tw.stock.yahoo.com/rss?category=research",        
 
-    # 鉅亨網 CnYes
+    # 鉅亨網
     "https://news.cnyes.com/rss/cnyes/stock",                  
     "https://news.cnyes.com/rss/cnyes/all",                    
     "https://news.cnyes.com/rss/cnyes/industry",               
 
-    # 經濟日報 & 工商時報
+    # 經濟/工商
     "https://money.udn.com/rssfeed/news/1001/5591",            
     "https://money.udn.com/rssfeed/news/1001/5590",            
     "https://ctee.com.tw/feed",                                
 
-    # MoneyDJ / 中時 / 自由 / ETToday / PTT
+    # 其他
     "https://www.moneydj.com/rss/newstrust.aspx?rsid=MB010000", 
     "https://www.chinatimes.com/rss/realtimenews-finance.xml", 
     "https://news.ltn.com.tw/rss/business.xml",                
@@ -35,33 +37,26 @@ RSS_URLS = [
 ]
 
 # ===========================
-# 2. 關鍵字過濾與分類系統
+# 2. 關鍵字系統
 # ===========================
 
-# [個股優先名單] 只要出現這些字，絕對歸類為「個股」(即使標題有三大法人)
 STOCK_KEYWORDS = [
-    # 權值股
     "台積", "鴻海", "聯發科", "廣達", "緯創", "技嘉", "中華電", "富邦金", "國泰金", "台塑", "南亞",
-    # 熱門股/中小型
     "力積電", "華通", "神盾", "安國", "智原", "創意", "世芯", "緯穎", "奇鋐", "雙鴻", "建準", 
     "聯電", "華碩", "宏碁", "微星", "長榮", "陽明", "萬海", "長榮航", "華航", "亞翔", "中興電", "華城", "士電",
     "群創", "友達", "彩晶", "聯詠", "瑞昱", "聯發科", "信驊", "大立光", "玉晶光", "欣興", "南電", "景碩",
-    # 產業/概念
     "CoWoS", "AI", "散熱", "IP", "IC", "PCB", "被動元件", "記憶體", "面板", "網通", "低軌", "電動車",
-    # 代碼特徵
     "2330", "2317", "2454", "3008", "3035", "3037", "2382", "3231", "2603", "2609", "2615"
 ]
 
-# [一般投資關鍵字] 用來過濾非財經新聞
 INVESTMENT_KEYWORDS = STOCK_KEYWORDS + [
     "股", "債", "券", "金控", "銀行", "ETF", "基金", "外資", "法人", "投信", "自營", "主力",
     "買超", "賣超", "多頭", "空頭", "漲", "跌", "盤", "指數", "加權", "櫃買", "期貨", "選擇權",
     "道瓊", "那斯達克", "標普", "費半", "ADR", "匯率", "美元", "央行", "升息", "降息", "通膨", "CPI",
     "營收", "獲利", "EPS", "盈餘", "毛利", "股利", "配息", "除權", "填息", "殖利率", "法說", 
-    "季報", "年報", "月報", "財報", "展望", "目標價", "評等", "庫存", "接單", "訂單", "產能"
+    "季報", "年報", "月報", "財報", "展望", "目標價", "評等", "庫存", "接單", "訂單", "產能", "輝達"
 ]
 
-# [黑名單] 剔除雜訊
 EXCLUDE_KEYWORDS = [
     "徵才", "招募", "求職", "面試", "員工", "薪資", "年終", "分紅", "尾牙", "開缺", "工程師", "人才",
     "藝人", "網紅", "男星", "女星", "豪宅", "理財術", "存股術", "買房", "房貸", "後悔", "翻身", "致富", "百萬",
@@ -69,7 +64,6 @@ EXCLUDE_KEYWORDS = [
     "詐騙", "假冒", "專家傳授", "教你", "懶人包", "閒聊", "公告", "新聞", "標的"
 ]
 
-# [嚴格大盤關鍵字] 只有在「不包含」上述個股關鍵字時，才生效
 MACRO_KEYWORDS = [
     "大盤", "台股", "加權", "指數", "櫃買", "道瓊", "那斯達克", "標普", "費半", 
     "三大法人", "投信", "外資", "央行", "聯準會", "Fed", "升息", "降息", "通膨", 
@@ -77,18 +71,13 @@ MACRO_KEYWORDS = [
     "收盤", "開盤", "行情", "龍年", "蛇年", "封關", "開紅盤", "台指期"
 ]
 
-# ===========================
-# 3. 多空權重字典
-# ===========================
 SENTIMENT_DICT = {
     "bull_strong": ["漲停", "飆", "噴出", "大漲", "創高", "新高", "完勝", "大賺", "搶手", "暴漲", "報喜", "噴發", "熱錢", "軋空", "避風港", "抗跌"],
     "bull_normal": ["漲", "揚", "攻", "旺", "強", "升", "紅", "買超", "加碼", "利多", "樂觀", "成長", "填息", "進補", "受惠", "復甦", "點火", "獲利", "看好", "目標價", "法說", "發威", "撐盤", "收紅", "擴產", "防禦", "高股息", "護盤"],
     "bull_weak": ["微漲", "小漲", "回穩", "反彈", "收斂", "趨緩", "收復", "站上", "有守"],
-
     "bear_strong": ["跌停", "崩", "暴跌", "重挫", "破底", "殺盤", "跳水", "大跌", "重摔", "血洗", "股災"],
     "bear_normal": ["跌", "挫", "黑", "弱", "降", "低", "空", "賣超", "調節", "減碼", "利空", "保守", "衰退", "貼息", "縮水", "砍單", "不如預期", "示警", "隱憂", "壓力", "失守", "翻黑", "疑慮", "下修", "虧損", "賣壓", "收黑", "裁員"],
     "bear_weak": ["微跌", "小跌", "震盪", "整理", "觀望", "疲軟"],
-    
     "negation": ["不", "未", "無", "非", "免", "抗", "防", "止", "終止", "收斂", "無懼"]
 }
 
@@ -145,25 +134,60 @@ def calculate_sentiment_score(title):
     return round(score, 1)
 
 def is_individual_stock(title):
-    # 1. 優先檢查：如果有具體個股名稱，絕對是個股 (Priority High)
     for kw in STOCK_KEYWORDS:
         if kw in title: return True
-        
-    # 2. 檢查是否為大盤 (Priority Low)
     for kw in MACRO_KEYWORDS:
         if kw in title: return False
-        
-    # 3. 預設歸類為個股/產業
     return True
 
+# 新增：生成文字雲 HTML
+def generate_wordcloud_html(all_titles):
+    # 1. 定義要統計的詞庫 (個股 + 大盤 + 產業)
+    target_words = STOCK_KEYWORDS + MACRO_KEYWORDS + ["營收", "獲利", "法說", "配息", "填息", "輝達"]
+    
+    # 2. 統計頻率
+    full_text = " ".join(all_titles)
+    counter = Counter()
+    for word in target_words:
+        count = full_text.count(word)
+        if count > 1: # 至少出現2次才顯示
+            counter[word] = count
+            
+    # 3. 取前 30 名熱詞
+    top_words = counter.most_common(30)
+    if not top_words: return ""
+
+    # 4. 生成 HTML
+    html_spans = ""
+    max_count = top_words[0][1]
+    
+    colors = ["#d32f2f", "#1976d2", "#388e3c", "#f57c00", "#555555", "#7b1fa2"]
+    
+    for word, count in top_words:
+        # 計算字體大小 (1em ~ 2.5em)
+        size = 1.0 + (count / max_count) * 1.5
+        # 隨機顏色 (或根據詞性)
+        color = random.choice(colors)
+        if word in ["漲停", "大漲", "創高"]: color = "#d32f2f"
+        if word in ["跌停", "重挫", "破底"]: color = "#388e3c"
+        
+        html_spans += f'<span style="font-size: {size:.2f}em; color: {color}; margin: 5px 10px; opacity: 0.9;">{word} <sup style="font-size:0.5em; color:#ccc;">{count}</sup></span>'
+    
+    return f"""
+    <div style="background: white; padding: 20px; border-radius: 8px; box-shadow: 0 2px 5px rgba(0,0,0,0.05); margin-bottom: 20px; text-align: center; line-height: 1.8; display: flex; flex-wrap: wrap; justify-content: center; align-items: baseline;">
+        {html_spans}
+    </div>
+    """
+
 def main():
-    print("啟動 V12 智能過濾引擎 (12H + 個股優先)...")
+    print("啟動 V14 文字雲引擎...")
     all_news = []
     seen_links = set()
+    seen_titles = set()
     total_raw_count = 0
     skipped_old_count = 0
+    skipped_dup_count = 0
 
-    # 設定時間門檻 (12小時前)
     time_threshold = datetime.utcnow() - timedelta(hours=12)
 
     for url in RSS_URLS:
@@ -171,32 +195,37 @@ def main():
             feed = feedparser.parse(url)
             for entry in feed.entries: 
                 total_raw_count += 1
-                if entry.link in seen_links: continue
-                seen_links.add(entry.link)
                 
-                # [時間過濾] 檢查文章發布時間
+                if entry.link in seen_links: continue
+                
                 if hasattr(entry, 'published_parsed') and entry.published_parsed:
-                    # 將 struct_time 轉為 datetime
                     published_dt = datetime.fromtimestamp(time.mktime(entry.published_parsed))
                     if published_dt < time_threshold:
                         skipped_old_count += 1
-                        continue # 太舊了，跳過
+                        continue
                 
                 title = clean_title(entry.title)
+                title_fingerprint = re.sub(r"[^\w]", "", title)
+                
+                if title_fingerprint in seen_titles: 
+                    skipped_dup_count += 1
+                    continue
                 
                 if not filter_news(title): continue
 
                 score = calculate_sentiment_score(title)
                 if score == 0: continue
                 
-                # 判斷分類 (優先權邏輯已修正)
+                seen_links.add(entry.link)
+                seen_titles.add(title_fingerprint)
+                
                 news_type = "individual" if is_individual_stock(title) else "macro"
                 
                 if score > 0:
-                    color = "#b71c1c" # 紅
+                    color = "#b71c1c"
                     bg_color = "#fff5f5"
                 else:
-                    color = "#1b5e20" # 綠
+                    color = "#1b5e20"
                     bg_color = "#f1f8e9"
 
                 all_news.append({
@@ -208,16 +237,18 @@ def main():
                     "bg": bg_color,
                     "type": news_type
                 })
-        except Exception as e:
-            print(f"Error: {e}")
+        except: pass
 
-    # 分類
+    # 準備資料
     bull_macro = sorted([n for n in all_news if n['score'] > 0 and n['type'] == 'macro'], key=lambda x: x['score'], reverse=True)
     bull_stock = sorted([n for n in all_news if n['score'] > 0 and n['type'] == 'individual'], key=lambda x: x['score'], reverse=True)
     bear_macro = sorted([n for n in all_news if n['score'] < 0 and n['type'] == 'macro'], key=lambda x: x['score'])
     bear_stock = sorted([n for n in all_news if n['score'] < 0 and n['type'] == 'individual'], key=lambda x: x['score'])
 
-    # 時間
+    # 生成文字雲
+    all_filtered_titles = [n['title'] for n in all_news]
+    wordcloud_html = generate_wordcloud_html(all_filtered_titles)
+
     tz_tw = timezone(timedelta(hours=8))
     now_tw = datetime.now(tz_tw).strftime('%Y/%m/%d %H:%M:%S')
     
@@ -247,10 +278,10 @@ def main():
     <head>
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <title>投資情報快篩 V12</title>
+        <title>投資情報快篩 V14</title>
         <style>
-            body {{ font-family: "Microsoft JhengHei", sans-serif; background: #fff; margin: 0; padding: 20px; color: #333; }}
-            .container {{ max-width: 1100px; margin: 0 auto; }}
+            body {{ font-family: "Microsoft JhengHei", sans-serif; background: #f4f4f4; margin: 0; padding: 20px; color: #333; }}
+            .container {{ max-width: 1100px; margin: 0 auto; background: #fff; padding: 20px; border-radius: 8px; box-shadow: 0 0 10px rgba(0,0,0,0.05); }}
             header {{ border-bottom: 2px solid #333; margin-bottom: 20px; padding-bottom: 10px; display: flex; justify-content: space-between; align-items: center; }}
             h1 {{ margin: 0; font-size: 22px; color: #000; }}
             .controls {{ display: flex; gap: 10px; align-items: center; }}
@@ -270,8 +301,8 @@ def main():
             
             @media print {{
                 .btn-pdf {{ display: none; }}
-                body {{ padding: 0; }}
-                .container {{ max-width: 100%; }}
+                body {{ padding: 0; background: #fff; }}
+                .container {{ max-width: 100%; box-shadow: none; }}
                 .section-main {{ page-break-inside: avoid; }}
             }}
         </style>
@@ -286,8 +317,11 @@ def main():
                 </div>
             </header>
             
+            <div style="text-align: left; font-weight: bold; color: #555; margin-bottom: 5px;">☁️ 市場熱詞 (Hot Keywords)</div>
+            {wordcloud_html}
+            
             <div style="background:#f8f9fa; padding:8px; text-align:center; font-size:0.9em; border-radius:4px; margin-bottom:20px; color:#555;">
-                母體掃描: {total_raw_count} 則 (已過濾 {skipped_old_count} 則逾時舊聞) | 資料來源含 Yahoo, 鉅亨, 經濟, 工商, PTT
+                母體掃描: {total_raw_count} 則 (過濾: {skipped_old_count} 則舊聞 / {skipped_dup_count} 則重複) | 資料來源含 Yahoo, 鉅亨, 經濟, 工商, PTT
             </div>
 
             <div class="section-main">
@@ -357,7 +391,7 @@ def main():
             </div>
 
             <div style="text-align: center; color: #ccc; font-size: 11px; margin-top: 30px;">
-                Generated by GitHub Actions | V12 Time-Filtered
+                Generated by GitHub Actions | V14 Word Cloud
             </div>
         </div>
     </body>
@@ -366,7 +400,7 @@ def main():
 
     with open("index.html", "w", encoding="utf-8") as f:
         f.write(html_content)
-    print(f"Done. Processed {total_raw_count} items, skipped {skipped_old_count} old items.")
+    print(f"Done. Wordcloud Generated.")
 
 if __name__ == "__main__":
     main()
