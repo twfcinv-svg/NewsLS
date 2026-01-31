@@ -2,8 +2,9 @@ name: Daily News Update
 
 on:
   schedule:
-    - cron: '0 */4 * * *' # 每 4 小時執行一次
-  workflow_dispatch:      # 允許手動執行
+    # 這裡改成了每 30 分鐘跑一次
+    - cron: '*/30 * * * *'
+  workflow_dispatch:
 
 permissions:
   contents: write
