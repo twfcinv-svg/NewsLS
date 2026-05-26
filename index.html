@@ -17,7 +17,7 @@
         .section-title { padding: 10px 15px; font-weight: bold; color: white; font-size: 1.1em; display: flex; justify-content: space-between; }
         
         /* 專區色彩設定 */
-        .etf-title { background: #007A87; } /* 專業藍綠色系 */
+        .etf-title { background: #007A87; } 
         .bull-title { background: #c62828; }
         .bear-title { background: #2e7d32; }
         
@@ -28,14 +28,17 @@
         th { text-align: left; padding: 8px; background: #fafafa; color: #666; font-size: 0.85em; border-bottom: 1px solid #eee; }
         td { padding: 6px; }
         
-        /* 表格列的交替底色與樣式 */
         .row-etf { border-bottom: 1px solid #eee; background-color: #f0f7f8; }
         .row-bull { border-bottom: 1px solid #eee; background-color: #fff5f5; }
         .row-bear { border-bottom: 1px solid #eee; background-color: #f1f8e9; }
+        
         .col-id { color: #666; font-size: 0.8em; text-align: center; width: 30px; }
         .col-source { color: #888; font-size: 0.85em; width: 80px; }
         .col-title a { text-decoration: none; color: #333; font-weight: 500; display: block; line-height: 1.4; font-size: 14px; }
         .col-score { text-align: right; width: 50px; font-family: monospace; font-weight: bold; font-size: 1.1em; }
+        
+        .score-bull { color: #b71c1c; }
+        .score-bear { color: #1b5e20; }
         
         @media print {
             .btn-pdf { display: none; }
@@ -50,18 +53,19 @@
         <header>
             <h1>📊 投資情報快篩</h1>
             <div class="controls">
-                <span class="update-time" id="updateTime">更新：讀取中...</span>
+                <span class="update-time" id="updateTime">更新：資料讀取中...</span>
                 <button class="btn-pdf" onclick="window.print()">🖨️ PDF</button>
             </div>
         </header>
         
         <div style="text-align: left; font-weight: bold; color: #555; margin-bottom: 5px;">☁️ 市場熱詞 (Hot Keywords)</div>
         <div style="background: white; padding: 20px; border-radius: 8px; box-shadow: 0 2px 5px rgba(0,0,0,0.05); margin-bottom: 20px; text-align: center; line-height: 1.8; display: flex; flex-wrap: wrap; justify-content: center; align-items: baseline;">
-            <span style="font-size: 2.50em; color: #1976d2; margin: 5px 10px; opacity: 0.9;">台股 <sup style="font-size:0.5em; color:#ccc;">30</sup></span><span style="font-size: 1.70em; color: #d32f2f; margin: 5px 10px; opacity: 0.9;">AI <sup style="font-size:0.5em; color:#ccc;">14</sup></span><span style="font-size: 1.50em; color: #7b1fa2; margin: 5px 10px; opacity: 0.9;">台積 <sup style="font-size:0.5em; color:#ccc;">10</sup></span><span style="font-size: 1.50em; color: #1976d2; margin: 5px 10px; opacity: 0.9;">外資 <sup style="font-size:0.5em; color:#ccc;">10</sup></span><span style="font-size: 1.35em; color: #388e3c; margin: 5px 10px; opacity: 0.9;">獲利 <sup style="font-size:0.5em; color:#ccc;">7</sup></span><span style="font-size: 1.25em; color: #d32f2f; margin: 5px 10px; opacity: 0.9;">布局 <sup style="font-size:0.5em; color:#ccc;">5</sup></span><span style="font-size: 1.20em; color: #7b1fa2; margin: 5px 10px; opacity: 0.9;">聯發科 <sup style="font-size:0.5em; color:#ccc;">4</sup></span><span style="font-size: 1.20em; color: #7b1fa2; margin: 5px 10px; opacity: 0.9;">面板 <sup style="font-size:0.5em; color:#ccc;">4</sup></span><span style="font-size: 1.20em; color: #7b1fa2; margin: 5px 10px; opacity: 0.9;">三大法人 <sup style="font-size:0.5em; color:#ccc;">4</sup></span><span style="font-size: 1.15em; color: #f57c00; margin: 5px 10px; opacity: 0.9;">群創 <sup style="font-size:0.5em; color:#ccc;">3</sup></span><span style="font-size: 1.15em; color: #388e3c; margin: 5px 10px; opacity: 0.9;">友達 <sup style="font-size:0.5em; color:#ccc;">3</sup></span><span style="font-size: 1.15em; color: #555555; margin: 5px 10px; opacity: 0.9;">指數 <sup style="font-size:0.5em; color:#ccc;">3</sup></span><span style="font-size: 1.15em; color: #388e3c; margin: 5px 10px; opacity: 0.9;">新台幣 <sup style="font-size:0.5em; color:#ccc;">3</sup></span><span style="font-size: 1.15em; color: #7b1fa2; margin: 5px 10px; opacity: 0.9;">美股 <sup style="font-size:0.5em; color:#ccc;">3</sup></span><span style="font-size: 1.10em; color: #555555; margin: 5px 10px; opacity: 0.9;">富邦金 <sup style="font-size:0.5em; color:#ccc;">2</sup></span><span style="font-size: 1.10em; color: #388e3c; margin: 5px 10px; opacity: 0.9;">南亞 <sup style="font-size:0.5em; color:#ccc;">2</sup></span><span style="font-size: 1.10em; color: #555555; margin: 5px 10px; opacity: 0.9;">力積電 <sup style="font-size:0.5em; color:#ccc;">2</sup></span><span style="font-size: 1.10em; color: #1976d2; margin: 5px 10px; opacity: 0.9;">彩晶 <sup style="font-size:0.5em; color:#ccc;">2</sup></span><span style="font-size: 1.10em; color: #f57c00; margin: 5px 10px; opacity: 0.9;">美元 <sup style="font-size:0.5em; color:#ccc;">2</sup></span><span style="font-size: 1.10em; color: #555555; margin: 5px 10px; opacity: 0.9;">法說 <sup style="font-size:0.5em; color:#ccc;">2</sup></span>
+            <span style="font-size: 2.50em; color: #1976d2; margin: 5px 10px; opacity: 0.9;">台股 <sup style="font-size:0.5em; color:#ccc;">30</sup></span><span style="font-size: 1.70em; color: #d32f2f; margin: 5px 10px; opacity: 0.9;">AI <sup style="font-size:0.5em; color:#ccc;">14</sup></span><span style="font-size: 1.50em; color: #7b1fa2; margin: 5px 10px; opacity: 0.9;">台積 <sup style="font-size:0.5em; color:#ccc;">10</sup></span><span style="font-size: 1.50em; color: #1976d2; margin: 5px 10px; opacity: 0.9;">外資 <sup style="font-size:0.5em; color:#ccc;">10</sup></span>
+            <span style="font-size: 1.35em; color: #388e3c; margin: 5px 10px; opacity: 0.9;">ETF <sup style="font-size:0.5em; color:#ccc;">8</sup></span><span style="font-size: 1.25em; color: #d32f2f; margin: 5px 10px; opacity: 0.9;">布局 <sup style="font-size:0.5em; color:#ccc;">5</sup></span><span style="font-size: 1.20em; color: #7b1fa2; margin: 5px 10px; opacity: 0.9;">聯發科 <sup style="font-size:0.5em; color:#ccc;">4</sup></span>
         </div>
         
         <div style="background:#f8f9fa; padding:8px; text-align:center; font-size:0.9em; border-radius:4px; margin-bottom:20px; color:#555;">
-            母體掃描: 430 則 (過濾: 46 則舊聞 / 1 則重複) | 資料來源含 Yahoo, 鉅亨, 經濟, 工商, PTT
+            母體掃描: 動態監控中 | 資料來源含 Yahoo, 鉅亨, 經濟, 工商, PTT
         </div>
 
         <div class="section-main">
@@ -80,179 +84,50 @@
                         </tr>
                     </thead>
                     <tbody id="etfTableBody">
-                    </tbody>
-                </table>
-            </div>
-        </div>
-
-        <div class="section-main">
-            <div class="section-title bull-title">
-                <span>🔥 多方訊號 (Bullish)</span>
-                <span>共 54 筆</span>
-            </div>
-            
-            <div class="sub-section">
-                <div class="sub-title">🌎 大盤 & 總體經濟</div>
-                <table>
-                    <tbody>
-                        <tr class="row-bull"><td class="col-id">1</td><td class="col-source">Yahoo股市</td><td class="col-title"><a href="..." target="_blank">台股狂飆「誰在賠錢」？專家點名4類人：避免高槓桿操作</a></td><td class="col-score" style="color: #b71c1c;">+2.5</td></tr>
-                        <tr class="row-bull"><td class="col-id">2</td><td class="col-source">自由財經</td><td class="col-title"><a href="..." target="_blank">外資買不停台股閃現4萬4！這檔電子2天敲逾12萬張最搶手 75萬股東大豐收</a></td><td class="col-score" style="color: #b71c1c;">+2.5</td></tr>
-                        <tr class="row-bull"><td class="col-id">3</td><td class="col-source">Yahoo股市</td><td class="col-title"><a href="..." target="_blank">國泰投信看好台股6月延續多頭氣勢，捕捉COMPUTEX帶來產業利多</a></td><td class="col-score" style="color: #b71c1c;">+2.0</td></tr>
-                        <tr class="row-bull"><td class="col-id">4</td><td class="col-source">Yahoo股市</td><td class="col-title"><a href="..." target="_blank">外資連四買、台股市值登全球第五，新台幣週二偏強整理，再升1.9分</a></td><td class="col-score" style="color: #b71c1c;">+1.5</td></tr>
-                        <tr class="row-bull"><td class="col-id">5</td><td class="col-source">Yahoo股市</td><td class="col-title"><a href="..." target="_blank">台股衝衝衝！經長：台灣已是「中等大國」 今年經濟成長率至少7%</a></td><td class="col-score" style="color: #b71c1c;">+1.0</td></tr>
-                        <tr class="row-bull"><td class="col-id">6</td><td class="col-source">Yahoo股市</td><td class="col-title"><a href="..." target="_blank">台股創高仍失利？投資人哀「買什麼賠什麼」虧損5萬 股民驚嘆：這種盤還能賠</a></td><td class="col-score" style="color: #b71c1c;">+1.0</td></tr>
-                        <tr class="row-bull"><td class="col-id">7</td><td class="col-source">Yahoo股市</td><td class="col-title"><a href="..." target="_blank">三大法人買超台股473.94億元</a></td><td class="col-score" style="color: #b71c1c;">+1.0</td></tr>
-                        <tr class="row-bull"><td class="col-id">8</td><td class="col-source">Yahoo股市</td><td class="col-title"><a href="..." target="_blank">台股4萬4得而復失 三大法人續站多方買超473.94億元</a></td><td class="col-score" style="color: #b71c1c;">+1.0</td></tr>
-                        <tr class="row-bull"><td class="col-id">9</td><td class="col-source">Yahoo股市</td><td class="col-title"><a href="..." target="_blank">彰銀法說1》樂看國發會2500億美元赴美融保添助力 評估鳳凰城設點</a></td><td class="col-score" style="color: #b71c1c;">+1.0</td></tr>
-                        <tr class="row-bull"><td class="col-id">10</td><td class="col-source">Yahoo股市</td><td class="col-title"><a href="..." target="_blank">5/26新台幣兌美元匯率以31.451元作收，升值1.9分</a></td><td class="col-score" style="color: #b71c1c;">+1.0</td></tr>
-                        <tr class="row-bull"><td class="col-id">11</td><td class="col-source">自由財經</td><td class="col-title"><a href="..." target="_blank">合庫金首席經濟學家徐千婷看台股有三大支撐 估台灣今年經濟成長率8％以上</a></td><td class="col-score" style="color: #b71c1c;">+1.0</td></tr>
-                        <tr class="row-bull"><td class="col-id">12</td><td class="col-source">自由財經</td><td class="col-title"><a href="..." target="_blank">外資續匯入！新台幣連5紅收31.451元</a></td><td class="col-score" style="color: #b71c1c;">+1.0</td></tr>
-                        <tr class="row-bull"><td class="col-id">13</td><td class="col-source">自由財經</td><td class="col-title"><a href="..." target="_blank">通膨升溫、外匯承壓 斯里蘭卡央行暴力升息4碼</a></td><td class="col-score" style="color: #b71c1c;">+1.0</td></tr>
-                    </tbody>
-                </table>
-            </div>
-            
-            <div class="sub-section">
-                <div class="sub-title">🏢 個股 & 產業動態</div>
-                <table>
-                    <tbody>
-                        <tr class="row-bull"><td class="col-id">1</td><td class="col-source">經濟日報</td><td class="col-title"><a href="..." target="_blank">「有沒有記憶體？」華邦電漲停創高 外資掃貨狂潮要再發動了？</a></td><td class="col-score" style="color: #b71c1c;">+6.0</td></tr>
-                        <tr class="row-bull"><td class="col-id">2</td><td class="col-source">Yahoo股市</td><td class="col-title"><a href="..." target="_blank">LINE Pay股東會報喜 海外布局推向日本、東南亞</a></td><td class="col-score" style="color: #b71c1c;">+5.0</td></tr>
-                        <tr class="row-bull"><td class="col-id">3</td><td class="col-source">Yahoo股市</td><td class="col-title"><a href="..." target="_blank">台積電今年飆漲49% 台股躍升全球第5大股市</a></td><td class="col-score" style="color: #b71c1c;">+4.5</td></tr>
-                        <tr class="row-bull"><td class="col-id">4</td><td class="col-source">ETtoday</td><td class="col-title"><a href="..." target="_blank">快訊／台積電漲15元至2325 台股上漲逾400點創高站上「44K」</a></td><td class="col-score" style="color: #b71c1c;">+4.0</td></tr>
-                        <tr class="row-bull"><td class="col-id">5</td><td class="col-source">經濟日報</td><td class="col-title"><a href="..." target="_blank">精誠資訊強化 AI 代理布局 聯手百林商智推自動化軟體機器人</a></td><td class="col-score" style="color: #b71c1c;">+3.5</td></tr>
-                        <tr class="row-bull"><td class="col-id">6</td><td class="col-source">自由財經</td><td class="col-title"><a href="..." target="_blank">合庫金前四月獲利創新高  總經理期許今年獲利再創佳績</a></td><td class="col-score" style="color: #b71c1c;">+3.5</td></tr>
-                        <tr class="row-bull"><td class="col-id">7</td><td class="col-source">自由財經</td><td class="col-title"><a href="..." target="_blank">明泰持續深化AI資料中心布局 可望重回成長軌道</a></td><td class="col-score" style="color: #b71c1c;">+3.5</td></tr>
-                        <tr class="row-bull"><td class="col-id">8</td><td class="col-source">ETtoday</td><td class="col-title"><a href="..." target="_blank">金融股撐台股！富邦金破百刷紀錄、市值排名回升 中信金觸新高</a></td><td class="col-score" style="color: #b71c1c;">+3.5</td></tr>
-                        <tr class="row-bull"><td class="col-id">9</td><td class="col-source">ETtoday</td><td class="col-title"><a href="..." target="_blank">越關越大尾！尚茂連漲22根漲停 挾小股本從票面衝到百元價</a></td><td class="col-score" style="color: #b71c1c;">+3.5</td></tr>
-                        <tr class="row-bull"><td class="col-id">10</td><td class="col-source">自由財經</td><td class="col-title"><a href="..." target="_blank">泓格半導體設備需求旺到擴產 AI測試成最大成長引擎</a></td><td class="col-score" style="color: #b71c1c;">+3.0</td></tr>
-                        <tr class="row-bull"><td class="col-id">11</td><td class="col-source">Yahoo股市</td><td class="col-title"><a href="..." target="_blank">不敗教主曝台積電像拖油瓶 改買2類股...大賺7位數</a></td><td class="col-score" style="color: #b71c1c;">+2.5</td></tr>
-                        <tr class="row-bull"><td class="col-id">12</td><td class="col-source">Yahoo股市</td><td class="col-title"><a href="..." target="_blank">量子題材熄火？仁寶英業達連飆三天後急殺半根停板 分析師揭翻多條件</a></td><td class="col-score" style="color: #b71c1c;">+2.5</td></tr>
-                        <tr class="row-bull"><td class="col-id">13</td><td class="col-source">經濟日報</td><td class="col-title"><a href="..." target="_blank">正新股東會／全面改選董事、羅才仁重掌董座 新團隊力拚全球智慧布局</a></td><td class="col-score" style="color: #b71c1c;">+2.5</td></tr>
-                        <tr class="row-bull"><td class="col-id">14</td><td class="col-source">經濟日報</td><td class="col-title"><a href="..." target="_blank">興農股東會／劉雲松接任董事長 持續深化集團經營布局</a></td><td class="col-score" style="color: #b71c1c;">+2.5</td></tr>
-                        <tr class="row-bull"><td class="col-id">15</td><td class="col-source">自由財經</td><td class="col-title"><a href="..." target="_blank">仁寶飆高大暴走！兇手是這群人 27萬股東被扒一層皮</a></td><td class="col-score" style="color: #b71c1c;">+2.5</td></tr>
-                        <tr class="row-bull"><td class="col-id">16</td><td class="col-source">Yahoo股市</td><td class="col-title"><a href="..." target="_blank">台股炸1.47兆新天量！富邦金「破百」難撐盤 面板雙虎落平陽剩彩晶獨漲</a></td><td class="col-score" style="color: #b71c1c;">+2.0</td></tr>
-                        <tr class="row-bull"><td class="col-id">17</td><td class="col-source">經濟日報</td><td class="col-title"><a href="..." target="_blank">穩得股東會／下半年受惠元件類產品接單暢旺 全年將優於去年</a></td><td class="col-score" style="color: #b71c1c;">+2.0</td></tr>
-                        <tr class="row-bull"><td class="col-id">18</td><td class="col-source">經濟日報</td><td class="col-title"><a href="..." target="_blank">捷敏股東會／搭 AI 伺服器電源架構升級 強化散熱製程技術</a></td><td class="col-score" style="color: #b71c1c;">+2.0</td></tr>
-                        <tr class="row-bull"><td class="col-id">19</td><td class="col-source">自由財經</td><td class="col-title"><a href="..." target="_blank">彰銀首季獲利年增26％  財管、海外業務雙引擎續升溫</a></td><td class="col-score" style="color: #b71c1c;">+2.0</td></tr>
-                        <tr class="row-bull"><td class="col-id">20</td><td class="col-source">ETtoday</td><td class="col-title"><a href="..." target="_blank">台股4萬3還有上升空間！吳嘉隆預言將衝到5萬2 台積電有望飆3500</a></td><td class="col-score" style="color: #b71c1c;">+2.0</td></tr>
-                        <tr class="row-bull"><td class="col-id">21</td><td class="col-source">ETtoday</td><td class="col-title"><a href="..." target="_blank">股匯齊揚！外資強補494億元 華邦電、力積電大買逾7萬張</a></td><td class="col-score" style="color: #b71c1c;">+2.0</td></tr>
-                        <tr class="row-bull"><td class="col-id">22</td><td class="col-source">Yahoo股市</td><td class="col-title"><a href="..." target="_blank">權值股它最猛！聯發科攜元太搶攻AI閱讀器商機「噴783億成交額霸榜」</a></td><td class="col-score" style="color: #b71c1c;">+1.0</td></tr>
-                        <tr class="row-bull"><td class="col-id">23</td><td class="col-source">Yahoo股市</td><td class="col-title"><a href="..." target="_blank">揚秦股東會通過配發6元股利</a></td><td class="col-score" style="color: #b71c1c;">+1.0</td></tr>
-                        <tr class="row-bull"><td class="col-id">24</td><td class="col-source">Yahoo股市</td><td class="col-title"><a href="..." target="_blank">聯發科與元太合作 搶攻彩色電子書市場</a></td><td class="col-score" style="color: #b71c1c;">+1.0</td></tr>
-                        <tr class="row-bull"><td class="col-id">25</td><td class="col-source">Yahoo股市</td><td class="col-title"><a href="..." target="_blank">東南亞面臨AI代理人浪潮挑戰 治理框架急需升級</a></td><td class="col-score" style="color: #b71c1c;">+1.0</td></tr>
-                        <tr class="row-bull"><td class="col-id">26</td><td class="col-source">經濟日報</td><td class="col-title"><a href="..." target="_blank">無人機物流拚常態化 民航局推24條廊道、強化風險管理</a></td><td class="col-score" style="color: #b71c1c;">+1.0</td></tr>
-                        <tr class="row-bull"><td class="col-id">27</td><td class="col-source">經濟日報</td><td class="col-title"><a href="..." target="_blank">長榮航太股東會／通過配發現金股利5元 看好新年度營運表現</a></td><td class="col-score" style="color: #b71c1c;">+1.0</td></tr>
-                        <tr class="row-bull"><td class="col-id">28</td><td class="col-source">經濟日報</td><td class="col-title"><a href="..." target="_blank">胡連股東會／第1季庫存調整結束 4月起到7月業績一路上揚</a></td><td class="col-score" style="color: #b71c1c;">+1.0</td></tr>
-                        <tr class="row-bull"><td class="col-id">29</td><td class="col-source">經濟日報</td><td class="col-title"><a href="..." target="_blank">外資買超355億元但竟狂賣面板股 群創、友達、彩晶合計遭倒貨逾40萬張</a></td><td class="col-score" style="color: #b71c1c;">+1.0</td></tr>
-                        <tr class="row-bull"><td class="col-id">30</td><td class="col-source">經濟日報</td><td class="col-title"><a href="..." target="_blank">瑞軒獲利／自結4月 EPS 0.03元</a></td><td class="col-score" style="color: #b71c1c;">+1.0</td></tr>
-                        <tr class="row-bull"><td class="col-id">31</td><td class="col-source">經濟日報</td><td class="col-title"><a href="..." target="_blank">科嶠獲利／自結4月 EPS 0.15元</a></td><td class="col-score" style="color: #b71c1c;">+1.0</td></tr>
-                        <tr class="row-bull"><td class="col-id">32</td><td class="col-source">自由財經</td><td class="col-title"><a href="..." target="_blank">三洋實業股東會通過每股配息6元 看好未來五年營運無虞</a></td><td class="col-score" style="color: #b71c1c;">+1.0</td></tr>
-                        <tr class="row-bull"><td class="col-id">33</td><td class="col-source">自由財經</td><td class="col-title"><a href="..." target="_blank">COMPUTEX瘋AI 貿協黃志芳：泡沫化是資本市場擔憂 產業動能強</a></td><td class="col-score" style="color: #b71c1c;">+1.0</td></tr>
-                        <tr class="row-bull"><td class="col-id">34</td><td class="col-source">ETtoday</td><td class="col-title"><a href="..." target="_blank">台塑化煉油事業重返成長軌道 多元採購確保料源穩定</a></td><td class="col-score" style="color: #b71c1c;">+1.0</td></tr>
-                        <tr class="row-bull"><td class="col-id">35</td><td class="col-source">ETtoday</td><td class="col-title"><a href="..." target="_blank">台積電像拖油瓶？ 不敗教主借8位數「改買2類股」：已獲利7位數</a></td><td class="col-score" style="color: #b71c1c;">+1.0</td></tr>
-                        <tr class="row-bull"><td class="col-id">36</td><td class="col-source">ETtoday</td><td class="col-title"><a href="..." target="_blank">瘋漲的貨櫃運價 德魯里不預期持續上漲太久、攬貨業看6月中回落</a></td><td class="col-score" style="color: #b71c1c;">+1.0</td></tr>
-                        <tr class="row-bull"><td class="col-id">37</td><td class="col-source">ETtoday</td><td class="col-title"><a href="..." target="_blank">外資上調「台積電、聯發科」目標價 股民震驚了</a></td><td class="col-score" style="color: #b71c1c;">+1.0</td></tr>
-                        <tr class="row-bull"><td class="col-id">38</td><td class="col-source">ETtoday</td><td class="col-title"><a href="..." target="_blank">美股AI硬體股瘋漲！財經專家揭資金追逐「最底層的基礎設施」</a></td><td class="col-score" style="color: #b71c1c;">+1.0</td></tr>
-                        <tr class="row-bull"><td class="col-id">39</td><td class="col-source">ETtoday</td><td class="col-title"><a href="..." target="_blank">貨櫃運輸被評價格上漲服務卻惡化 航商表示無奈</a></td><td class="col-score" style="color: #b71c1c;">+1.0</td></tr>
-                        <tr class="row-bull"><td class="col-id">40</td><td class="col-source">Yahoo股市</td><td class="col-title"><a href="..." target="_blank">《放．專題》AI讓台灣第一次站上世界中心？台股超車印度背後 其實是一場「國運重組」</a></td><td class="col-score" style="color: #b71c1c;">+0.5</td></tr>
-                        <tr class="row-bull"><td class="col-id">41</td><td class="col-source">自由財經</td><td class="col-title"><a href="..." target="_blank">俄烏戰爭帶動無人機需求！台灣出口暴增20倍 搶攻非紅供應鏈商機</a></td><td class="col-score" style="color: #b71c1c;">+0.5</td></tr>
-                    </tbody>
-                </table>
-            </div>
-        </div>
-
-        <div class="section-main">
-            <div class="section-title bear-title">
-                <span>📉 空方訊號 (Bearish)</span>
-                <span>共 27 筆</span>
-            </div>
-            
-            <div class="sub-section">
-                <div class="sub-title">🌎 大盤 & 總體經濟</div>
-                <table>
-                    <tbody>
-                        <tr class="row-bear"><td class="col-id">1</td><td class="col-source">Yahoo股市</td><td class="col-title"><a href="..." target="_blank">美股狂歡要落幕？兩大壞數據示警崩盤近了 網酸：喊2萬崩到現在快5萬</a></td><td class="col-score" style="color: #1b5e20;">-4.0</td></tr>
-                        <tr class="row-bear"><td class="col-id">2</td><td class="col-source">Yahoo股市</td><td class="col-title"><a href="..." target="_blank">高盛示警美股「夏季震盪」將至！債市壓力浮現、標普500連漲8週恐進入波動期</a></td><td class="col-score" style="color: #1b5e20;">-3.5</td></tr>
-                        <tr class="row-bear"><td class="col-id">3</td><td class="col-source">Yahoo股市</td><td class="col-title"><a href="..." target="_blank">台股衝4萬4史高後翻黑！三大法人擲473億進場打水漂 股民笑：準備在擎天崗洗碗</a></td><td class="col-score" style="color: #1b5e20;">-3.0</td></tr>
-                        <tr class="row-bear"><td class="col-id">4</td><td class="col-source">Yahoo股市</td><td class="col-title"><a href="..." target="_blank">日經指數週二震盪下滑162.1點或0.25%，三菱商事、愛德萬股價疲弱</a></td><td class="col-score" style="color: #1b5e20;">-3.0</td></tr>
-                        <tr class="row-bear"><td class="col-id">5</td><td class="col-source">Yahoo股市</td><td class="col-title"><a href="..." target="_blank">【Yahoo早盤】台股登4萬4創高後跳水翻黑 分析師白易弘勸「慎追」：收高不易</a></td><td class="col-score" style="color: #1b5e20;">-3.0</td></tr>
-                        <tr class="row-bear"><td class="col-id">6</td><td class="col-source">Yahoo股市</td><td class="col-title"><a href="..." target="_blank">《台股盤後》量增收跌119點，44K得而復失</a></td><td class="col-score" style="color: #1b5e20;">-1.5</td></tr>
-                        <tr class="row-bear"><td class="col-id">7</td><td class="col-source">Yahoo股市</td><td class="col-title"><a href="..." target="_blank">台股高檔震盪還能追？！ 專家估最高挑戰5萬3，親曝美債抄底術</a></td><td class="col-score" style="color: #1b5e20;">-1.5</td></tr>
-                        <tr class="row-bear"><td class="col-id">8</td><td class="col-source">Yahoo股市</td><td class="col-title"><a href="..." target="_blank">永豐期貨：台股高檔震盪加劇，量能變化成關鍵</a></td><td class="col-score" style="color: #1b5e20;">-1.5</td></tr>
-                        <tr class="row-bear"><td class="col-id">9</td><td class="col-source">自由財經</td><td class="col-title"><a href="..." target="_blank">台股震盪逾700點！72萬存股族逆勢衝高 最大推手是「它」</a></td><td class="col-score" style="color: #1b5e20;">-1.5</td></tr>
-                        <tr class="row-bear"><td class="col-id">10</td><td class="col-source">Yahoo股市</td><td class="col-title"><a href="..." target="_blank">彰銀法說2》看Fed年底有望小幅降息 拚全年換匯交易收益逾40億元</a></td><td class="col-score" style="color: #1b5e20;">-0.5</td></tr>
-                        <tr class="row-bear"><td class="col-id">11</td><td class="col-source">Yahoo股市</td><td class="col-title"><a href="..." target="_blank">大宗商品類股領漲，道瓊歐洲600指數盤初上漲0.08%，主要股市漲跌互見</a></td><td class="col-score" style="color: #1b5e20;">-0.5</td></tr>
-                        <tr class="row-bear"><td class="col-id">12</td><td class="col-source">經濟日報</td><td class="col-title"><a href="..." target="_blank">台股下跌119點 三大法人逆勢買超473億元</a></td><td class="col-score" style="color: #1b5e20;">-0.5</td></tr>
-                    </tbody>
-                </table>
-            </div>
-            
-            <div class="sub-section">
-                <div class="sub-title">🏢 個股 & 產業動態</div>
-                <table>
-                    <tbody>
-                        <tr class="row-bear"><td class="col-id">1</td><td class="col-source">經濟日報</td><td class="col-title"><a href="..." target="_blank">群創爆145萬張成交量收45.7元、跌6.92% 友達重挫跌停</a></td><td class="col-score" style="color: #1b5e20;">-8.0</td></tr>
-                        <tr class="row-bear"><td class="col-id">2</td><td class="col-source">Yahoo股市</td><td class="col-title"><a href="..." target="_blank">【Hot台股】群創重摔7%爆110萬張天量...網問「躲關小黑屋？」 分析師：短線先跑</a></td><td class="col-score" style="color: #1b5e20;">-4.0</td></tr>
-                        <tr class="row-bear"><td class="col-id">3</td><td class="col-source">Yahoo股市</td><td class="col-title"><a href="..." target="_blank">國巨「關禁閉」一度重挫8%...分析師曝一關鍵看多：看看聯發科</a></td><td class="col-score" style="color: #1b5e20;">-4.0</td></tr>
-                        <tr class="row-bear"><td class="col-id">4</td><td class="col-source">ETtoday</td><td class="col-title"><a href="..." target="_blank">龍頭國巨遭分盤處置！ 被動元件熄火 3檔摜跌停</a></td><td class="col-score" style="color: #1b5e20;">-4.0</td></tr>
-                        <tr class="row-bear"><td class="col-id">5</td><td class="col-source">Yahoo股市</td><td class="col-title"><a href="..." target="_blank">台股爆量收跌 外資加碼聯電、力積電！倒貨面板雙雄 友達慘跌停</a></td><td class="col-score" style="color: #1b5e20;">-3.0</td></tr>
-                        <tr class="row-bear"><td class="col-id">6</td><td class="col-source">Yahoo股市</td><td class="col-title"><a href="..." target="_blank">因應AI第一件事就裁員？ 黃仁勳看不下去：這藉口太懶惰</a></td><td class="col-score" style="color: #1b5e20;">-1.5</td></tr>
-                        <tr class="row-bear"><td class="col-id">7</td><td class="col-source">Yahoo股市</td><td class="col-title"><a href="..." target="_blank">科技終將取代人類？CEO把裁員歸咎於AI 黃仁勳罕見說重話：懶惰無理</a></td><td class="col-score" style="color: #1b5e20;">-1.5</td></tr>
-                        <tr class="row-bear"><td class="col-id">8</td><td class="col-source">經濟日報</td><td class="col-title"><a href="..." target="_blank">中美晶股東會／搶占太空太陽能商機 只要客戶願意下單都樂意承接</a></td><td class="col-score" style="color: #1b5e20;">-1.5</td></tr>
-                        <tr class="row-bear"><td class="col-id">9</td><td class="col-source">經濟日報</td><td class="col-title"><a href="..." target="_blank">台股擂台／「佛系產業教練」白易弘：指數高檔震盪 AI 產業趨勢方興未艾</a></td><td class="col-score" style="color: #1b5e20;">-1.5</td></tr>
-                        <tr class="row-bear"><td class="col-id">10</td><td class="col-source">自由財經</td><td class="col-title"><a href="..." target="_blank">過去1年價格跌幅最大「20款二手車」 這款最多掉價10.4萬元</a></td><td class="col-score" style="color: #1b5e20;">-1.5</td></tr>
-                        <tr class="row-bear"><td class="col-id">11</td><td class="col-source">ETtoday</td><td class="col-title"><a href="..." target="_blank">外資大買台股355億！反手重砍面板股 買賣超10檔一次看</a></td><td class="col-score" style="color: #1b5e20;">-1.5</td></tr>
-                        <tr class="row-bear"><td class="col-id">12</td><td class="col-source">ETtoday</td><td class="col-title"><a href="..." target="_blank">快訊／台股收跌119.03點、「44k」得而復失 台積電跌40元</a></td><td class="col-score" style="color: #1b5e20;">-1.5</td></tr>
-                        <tr class="row-bear"><td class="col-id">13</td><td class="col-source">ETtoday</td><td class="col-title"><a href="..." target="_blank">「四貸同堂」瘋炒股！ 專家提南韓示警：AI只到第三局</a></td><td class="col-score" style="color: #1b5e20;">-1.5</td></tr>
-                        <tr class="row-bear"><td class="col-id">14</td><td class="col-source">Yahoo股市</td><td class="col-title"><a href="..." target="_blank">《日股》獲利了結、創高後回檔，日經跌0.25%</a></td><td class="col-score" style="color: #1b5e20;">-1.0</td></tr>
-                        <tr class="row-bear"><td class="col-id">15</td><td class="col-source">Yahoo股市</td><td class="col-title"><a href="..." target="_blank">黃仁勳批「裁員歸咎AI」不負責任 看好5年後工作機會更多</a></td><td class="col-score" style="color: #1b5e20;">-0.5</td></tr>
-                    </tbody>
+                        </tbody>
                 </table>
             </div>
         </div>
 
         <div style="text-align: center; color: #ccc; font-size: 11px; margin-top: 30px;">
-            Generated by GitHub Actions | V15 Smart Weighting (Updated Format)
+            Generated by GitHub Actions | V15 Dynamic Dashboard
         </div>
     </div>
 
     <script>
         document.addEventListener('DOMContentLoaded', () => {
-            // 自動填入當下存取網頁的時間
             const now = new Date();
             document.getElementById('updateTime').innerText = `更新：${now.toLocaleString('zh-TW')}`;
 
-            // 發送請求讀取機器人產生的 JSON 檔案
+            // 發送請求讀取同資料夾下的 etf_news_history.json
             fetch('etf_news_history.json')
-                .then(response => response.json())
+                .then(response => {
+                    if (!response.ok) throw new Error('網路回應不成功');
+                    return response.json();
+                })
                 .then(data => {
-                    document.getElementById('etfCount').innerText = `共 ${data.length} 筆`;
+                    document.getElementById('etfCount').innerText = `共 ${data.length} 筆 (最新儲存)`;
                     const tbody = document.getElementById('etfTableBody');
+                    tbody.innerHTML = ''; // 清空預設內容
                     
-                    // 清空預設內容
-                    tbody.innerHTML = '';
-                    
-                    // 迴圈動態建立表格
                     data.forEach((item, index) => {
-                        // 利用您的原始顏色設定：正分紅色 #b71c1c，負分綠色 #1b5e20
-                        let scoreColorClass = item.score > 0 ? 'color: #b71c1c;' : 'color: #1b5e20;';
+                        let scoreColorClass = item.score > 0 ? 'score-bull' : 'score-bear';
                         let scoreText = item.score > 0 ? `+${item.score}` : item.score;
 
                         let tr = document.createElement('tr');
-                        tr.className = 'row-etf'; // 套用您寫好的樣式
+                        tr.className = 'row-etf';
                         tr.innerHTML = `
                             <td class="col-id">${index + 1}</td>
                             <td class="col-source">${item.source}</td>
                             <td class="col-title"><a href="${item.url}" target="_blank">${item.title}</a></td>
-                            <td class="col-score" style="${scoreColorClass}">${scoreText}</td>
+                            <td class="col-score ${scoreColorClass}">${scoreText}</td>
                         `;
                         tbody.appendChild(tr);
                     });
                 })
                 .catch(error => {
                     console.error('無法載入 JSON 資料:', error);
-                    document.getElementById('etfTableBody').innerHTML = '<tr><td colspan="4" style="text-align:center; color:#999; padding: 15px;">目前尚無 ETF 歷史資料，等待機器人更新...</td></tr>';
+                    document.getElementById('etfTableBody').innerHTML = '<tr><td colspan="4" style="text-align:center; color:#999; padding:20px;">⚠️ 尚未產生 ETF 歷史資料檔案，請等待機器人執行爬蟲。</td></tr>';
                 });
         });
     </script>
