@@ -28,11 +28,10 @@ RSS_URLS = [
     "https://rss.ptt.cc/Stock.xml",
 ]
 
-# 儲存的 CSV 檔名
 CSV_FILE = "investment_news.csv"
 
 # ===========================
-# 2. 關鍵字系統
+# 2. 關鍵字系統 (已修復 ETF 遺漏問題)
 # ===========================
 STOCK_KEYWORDS = [
     "台積", "鴻海", "聯發科", "廣達", "緯創", "技嘉", "中華電", "富邦金", "國泰金", "台塑", "南亞",
@@ -42,11 +41,19 @@ STOCK_KEYWORDS = [
     "CoWoS", "AI", "散熱", "IP", "IC", "PCB", "被動元件", "記憶體", "面板", "網通", "低軌", "電動車"
 ]
 
-INVESTMENT_KEYWORDS = STOCK_KEYWORDS + [
-    "股", "債", "券", "金控", "銀行", "ETF", "基金", "外資", "法人", "投信", "自營", "主力",
-    "買超", "賣超", "多頭", "空頭", "漲", "跌", "盤", "指數", "加權", "櫃買", "期貨", "選擇權",
-    "道瓊", "那斯達克", "標普", "費半", "ADR", "匯率", "美元", "央行", "升息", "降息", "通膨", "CPI",
-    "營收", "獲利", "EPS", "盈餘", "毛利", "股利", "配息", "除權", "填息", "殖利率", "法說"
+MACRO_KEYWORDS = ["大盤", "台股", "加權", "指數", "櫃買", "道瓊", "那斯達克", "標普", "費半", "三大法人", "投信", "外資", "央行", "Fed", "升息", "降息", "通膨", "CPI", "匯率"]
+
+# 【修復1】建立完整的 ETF 關鍵字清單
+ETF_KEYWORDS = [
+    "ETF", "0050", "0056", "00878", "00919", "00929", "00939", "00940", "00941", "00936", "00631L", 
+    "高股息", "正2", "反1", "主動式ETF", "配息", "除息", "填息", "成分股", "換股", "殖利率", "受益人", "溢價", "折價"
+]
+
+# 【修復2】確保 ETF 關鍵字被加入總白名單中，避免第一關就被當垃圾丟掉
+INVESTMENT_KEYWORDS = STOCK_KEYWORDS + MACRO_KEYWORDS + ETF_KEYWORDS + [
+    "股", "債", "券", "金控", "銀行", "基金", "外資", "法人", "自營", "主力",
+    "買超", "賣超", "多頭", "空頭", "漲", "跌", "盤", "期貨", "選擇權",
+    "營收", "獲利", "EPS", "盈餘", "毛利", "股利", "法說"
 ]
 
 EXCLUDE_KEYWORDS = [
@@ -56,16 +63,12 @@ EXCLUDE_KEYWORDS = [
     "詐騙", "假冒", "專家傳授", "教你", "懶人包", "閒聊", "公告", "新聞", "標的"
 ]
 
-MACRO_KEYWORDS = ["大盤", "台股", "加權", "指數", "櫃買", "道瓊", "那斯達克", "標普", "費半", "三大法人", "投信", "外資", "央行", "Fed", "升息", "降息", "通膨", "CPI", "匯率"]
-
-ETF_KEYWORDS = ["ETF", "0050", "0056", "00878", "00919", "00929", "00939", "00940", "00941", "00631L", "高股息", "正2", "反1"]
-
 # ===========================
 # 3. 權重字典
 # ===========================
 SENTIMENT_DICT = {
     "bull_strong": ["漲停", "飆", "噴出", "大漲", "創高", "新高", "完勝", "大賺", "搶手", "暴漲", "報喜", "噴發", "熱錢", "軋空", "避風港", "抗跌", "逢低", "布局", "搶進"],
-    "bull_normal": ["漲", "揚", "攻", "旺", "強", "升", "紅", "買超", "加碼", "利多", "樂觀", "成長", "填息", "進補", "受惠", "復甦", "點火", "獲利", "看好", "目標價", "法說", "發威", "撐盤", "收紅", "擴產", "防禦", "高股息", "護盤"],
+    "bull_normal": ["漲", "揚", "攻", "旺", "強", "升", "紅", "買超", "加碼", "利多", "樂觀", "成長", "進補", "受惠", "復甦", "點火", "獲利", "看好", "目標價", "法說", "發威", "撐盤", "收紅", "擴產", "防禦", "護盤"],
     "bull_weak": ["微漲", "小漲", "回穩", "反彈", "收斂", "趨緩", "收復", "站上", "有守"],
     "bear_strong": ["跌停", "崩", "暴跌", "重挫", "破底", "殺盤", "跳水", "大跌", "重摔", "血洗", "股災", "慎防", "變盤"],
     "bear_normal": ["跌", "挫", "黑", "弱", "降", "低", "空", "賣超", "調節", "減碼", "利空", "保守", "衰退", "貼息", "縮水", "砍單", "不如預期", "示警", "隱憂", "壓力", "失守", "翻黑", "疑慮", "下修", "虧損", "賣壓", "收黑", "裁員", "留意", "回檔", "震盪", "修正", "獲利了結", "觀望"],
@@ -96,8 +99,10 @@ def identify_source(link):
     return "網路新聞"
 
 def filter_news(title):
+    # 排除垃圾字眼
     for bad_word in EXCLUDE_KEYWORDS:
         if bad_word in title: return False
+    # 確認是否在投資白名單內
     for good_word in INVESTMENT_KEYWORDS:
         if good_word in title: return True
     return False
@@ -128,6 +133,7 @@ def calculate_sentiment_score(title):
 
 def categorize_news(title):
     title_upper = title.upper()
+    # 優先判斷是否為 ETF
     for kw in ETF_KEYWORDS:
         if kw in title_upper: return "ETF"
     
@@ -143,7 +149,6 @@ def categorize_news(title):
 # 5. CSV 讀寫與去重處理
 # ===========================
 def load_existing_urls():
-    """讀取現有 CSV，建立已抓取過的網址清單 (去重用)"""
     urls = set()
     if os.path.exists(CSV_FILE):
         with open(CSV_FILE, 'r', encoding='utf-8-sig') as f:
@@ -153,18 +158,13 @@ def load_existing_urls():
     return urls
 
 def append_to_csv(new_items):
-    """將新資料加到 CSV 檔案最後面"""
     file_exists = os.path.exists(CSV_FILE)
     fieldnames = ['爬取時間', '分類', '多空分數', '來源', '新聞標題', '網址']
     
-    # utf-8-sig 讓 Excel 開啟時不會中文亂碼
     with open(CSV_FILE, 'a', encoding='utf-8-sig', newline='') as f:
         writer = csv.DictWriter(f, fieldnames=fieldnames)
-        
-        # 如果檔案不存在，先寫入標題列
         if not file_exists:
             writer.writeheader()
-            
         for item in new_items:
             writer.writerow(item)
 
@@ -172,14 +172,15 @@ def append_to_csv(new_items):
 # 主程式
 # ===========================
 def main():
-    print(f"啟動新聞爬蟲 CSV 匯出引擎...")
+    print(f"啟動新聞爬蟲 CSV 匯出引擎 (已優化 ETF 抓取邏輯)...")
     
     seen_urls_in_csv = load_existing_urls()
     new_data_to_save = []
-    
     seen_links_this_run = set()
+    
     total_raw_count = 0
     skipped_old_count = 0
+    etf_count = 0
     
     time_threshold = datetime.utcnow() - timedelta(hours=12)
     tz_tw = timezone(timedelta(hours=8))
@@ -191,14 +192,12 @@ def main():
             for entry in feed.entries: 
                 total_raw_count += 1
                 
-                # 1. 檢查這次爬取有沒有重複
+                # 去重處理
                 if entry.link in seen_links_this_run: continue
                 seen_links_this_run.add(entry.link)
-                
-                # 2. 檢查 CSV 裡面是不是已經存過了 (歷史去重)
                 if entry.link in seen_urls_in_csv: continue
                 
-                # 3. 檢查時間 (太舊的新聞不要)
+                # 時間過濾
                 if hasattr(entry, 'published_parsed') and entry.published_parsed:
                     published_dt = datetime.fromtimestamp(time.mktime(entry.published_parsed))
                     if published_dt < time_threshold:
@@ -207,15 +206,27 @@ def main():
                 
                 title = clean_title(entry.title)
                 
-                # 4. 關鍵字過濾與分數計算
+                # 白名單過濾
                 if not filter_news(title): continue
-                score = calculate_sentiment_score(title)
-                if score == 0: continue
                 
-                # 5. 整理要存入 CSV 的欄位格式
+                # 取得分類與分數
+                category = categorize_news(title)
+                score = calculate_sentiment_score(title)
+                
+                # 【修復3】ETF 專屬保底機制：如果是 ETF 新聞，但缺乏情緒字眼 (score==0)
+                # 強制給予 0.5 的基礎熱度分，避免被程式當成廢文丟掉！
+                if score == 0:
+                    if category == "ETF":
+                        score = 0.5 
+                    else:
+                        continue # 其他沒有多空情緒的新聞依然丟棄
+                
+                if category == "ETF":
+                    etf_count += 1
+
                 new_data_to_save.append({
                     '爬取時間': now_tw,
-                    '分類': categorize_news(title),
+                    '分類': category,
                     '多空分數': score,
                     '來源': identify_source(entry.link),
                     '新聞標題': title,
@@ -226,8 +237,10 @@ def main():
 
     # 將過濾後的新資料寫入 CSV
     if new_data_to_save:
+        # 按照分數由高至低排一下序再存入
+        new_data_to_save = sorted(new_data_to_save, key=lambda x: x['多空分數'], reverse=True)
         append_to_csv(new_data_to_save)
-        print(f"✅ 成功寫入 {len(new_data_to_save)} 筆新新聞至 {CSV_FILE}")
+        print(f"✅ 成功寫入 {len(new_data_to_save)} 筆新新聞至 {CSV_FILE} (其中包含 {etf_count} 筆 ETF 情報)")
     else:
         print(f"⚠️ 本次執行沒有發現新的新聞。")
         
