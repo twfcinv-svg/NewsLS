@@ -1,1273 +1,255 @@
-
-    <!DOCTYPE html>
-    <html lang="zh-TW">
-    <head>
-        <meta charset="UTF-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <title>投資情報快篩 V15</title>
-        <style>
-            body { font-family: "Microsoft JhengHei", sans-serif; background: #f4f4f4; margin: 0; padding: 20px; color: #333; }
-            .container { max-width: 1100px; margin: 0 auto; background: #fff; padding: 20px; border-radius: 8px; box-shadow: 0 0 10px rgba(0,0,0,0.05); }
-            header { border-bottom: 2px solid #333; margin-bottom: 20px; padding-bottom: 10px; display: flex; justify-content: space-between; align-items: center; }
-            h1 { margin: 0; font-size: 22px; color: #000; }
-            .controls { display: flex; gap: 10px; align-items: center; }
-            .btn-pdf { background: #333; color: white; border: none; padding: 6px 12px; border-radius: 4px; cursor: pointer; font-size: 14px; }
-            .update-time { color: #d32f2f; font-weight: bold; font-size: 14px; margin-right: 15px; }
-            
-            .section-main { margin-top: 30px; border: 1px solid #ddd; border-radius: 5px; overflow: hidden; }
-            .section-title { padding: 10px 15px; font-weight: bold; color: white; font-size: 1.1em; display: flex; justify-content: space-between; }
-            .bull-title { background: #c62828; }
-            .bear-title { background: #2e7d32; }
-            
-            .sub-section { padding: 0; }
-            .sub-title { background: #f0f0f0; color: #333; padding: 6px 15px; font-weight: bold; font-size: 0.95em; border-bottom: 1px solid #ddd; border-top: 1px solid #ddd; }
-            
-            table { width: 100%; border-collapse: collapse; }
-            th { text-align: left; padding: 8px; background: #fafafa; color: #666; font-size: 0.85em; border-bottom: 1px solid #eee; }
-            
-            @media print {
-                .btn-pdf { display: none; }
-                body { padding: 0; background: #fff; }
-                .container { max-width: 100%; box-shadow: none; }
-                .section-main { page-break-inside: avoid; }
-            }
-        </style>
-    </head>
-    <body>
-        <div class="container">
-            <header>
-                <h1>📊 投資情報快篩</h1>
-                <div class="controls">
-                    <span class="update-time">更新：2026/05/26 18:33:27</span>
-                    <button class="btn-pdf" onclick="window.print()">🖨️ PDF</button>
-                </div>
-            </header>
-            
-            <div style="text-align: left; font-weight: bold; color: #555; margin-bottom: 5px;">☁️ 市場熱詞 (Hot Keywords)</div>
-            
-    <div style="background: white; padding: 20px; border-radius: 8px; box-shadow: 0 2px 5px rgba(0,0,0,0.05); margin-bottom: 20px; text-align: center; line-height: 1.8; display: flex; flex-wrap: wrap; justify-content: center; align-items: baseline;">
-        <span style="font-size: 2.50em; color: #1976d2; margin: 5px 10px; opacity: 0.9;">台股 <sup style="font-size:0.5em; color:#ccc;">30</sup></span><span style="font-size: 1.70em; color: #d32f2f; margin: 5px 10px; opacity: 0.9;">AI <sup style="font-size:0.5em; color:#ccc;">14</sup></span><span style="font-size: 1.50em; color: #7b1fa2; margin: 5px 10px; opacity: 0.9;">台積 <sup style="font-size:0.5em; color:#ccc;">10</sup></span><span style="font-size: 1.50em; color: #1976d2; margin: 5px 10px; opacity: 0.9;">外資 <sup style="font-size:0.5em; color:#ccc;">10</sup></span><span style="font-size: 1.35em; color: #388e3c; margin: 5px 10px; opacity: 0.9;">獲利 <sup style="font-size:0.5em; color:#ccc;">7</sup></span><span style="font-size: 1.25em; color: #d32f2f; margin: 5px 10px; opacity: 0.9;">布局 <sup style="font-size:0.5em; color:#ccc;">5</sup></span><span style="font-size: 1.20em; color: #7b1fa2; margin: 5px 10px; opacity: 0.9;">聯發科 <sup style="font-size:0.5em; color:#ccc;">4</sup></span><span style="font-size: 1.20em; color: #7b1fa2; margin: 5px 10px; opacity: 0.9;">面板 <sup style="font-size:0.5em; color:#ccc;">4</sup></span><span style="font-size: 1.20em; color: #7b1fa2; margin: 5px 10px; opacity: 0.9;">三大法人 <sup style="font-size:0.5em; color:#ccc;">4</sup></span><span style="font-size: 1.15em; color: #f57c00; margin: 5px 10px; opacity: 0.9;">群創 <sup style="font-size:0.5em; color:#ccc;">3</sup></span><span style="font-size: 1.15em; color: #388e3c; margin: 5px 10px; opacity: 0.9;">友達 <sup style="font-size:0.5em; color:#ccc;">3</sup></span><span style="font-size: 1.15em; color: #555555; margin: 5px 10px; opacity: 0.9;">指數 <sup style="font-size:0.5em; color:#ccc;">3</sup></span><span style="font-size: 1.15em; color: #388e3c; margin: 5px 10px; opacity: 0.9;">新台幣 <sup style="font-size:0.5em; color:#ccc;">3</sup></span><span style="font-size: 1.15em; color: #7b1fa2; margin: 5px 10px; opacity: 0.9;">美股 <sup style="font-size:0.5em; color:#ccc;">3</sup></span><span style="font-size: 1.10em; color: #555555; margin: 5px 10px; opacity: 0.9;">富邦金 <sup style="font-size:0.5em; color:#ccc;">2</sup></span><span style="font-size: 1.10em; color: #388e3c; margin: 5px 10px; opacity: 0.9;">南亞 <sup style="font-size:0.5em; color:#ccc;">2</sup></span><span style="font-size: 1.10em; color: #555555; margin: 5px 10px; opacity: 0.9;">力積電 <sup style="font-size:0.5em; color:#ccc;">2</sup></span><span style="font-size: 1.10em; color: #1976d2; margin: 5px 10px; opacity: 0.9;">彩晶 <sup style="font-size:0.5em; color:#ccc;">2</sup></span><span style="font-size: 1.10em; color: #f57c00; margin: 5px 10px; opacity: 0.9;">美元 <sup style="font-size:0.5em; color:#ccc;">2</sup></span><span style="font-size: 1.10em; color: #555555; margin: 5px 10px; opacity: 0.9;">法說 <sup style="font-size:0.5em; color:#ccc;">2</sup></span>
-    </div>
-    
-            
-            <div style="background:#f8f9fa; padding:8px; text-align:center; font-size:0.9em; border-radius:4px; margin-bottom:20px; color:#555;">
-                母體掃描: 430 則 (過濾: 46 則舊聞 / 1 則重複) | 資料來源含 Yahoo, 鉅亨, 經濟, 工商, PTT
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>投資情報快篩 V15</title>
+    <style>
+        body { font-family: "Microsoft JhengHei", sans-serif; background: #f4f4f4; margin: 0; padding: 20px; color: #333; }
+        .container { max-width: 1100px; margin: 0 auto; background: #fff; padding: 20px; border-radius: 8px; box-shadow: 0 0 10px rgba(0,0,0,0.05); }
+        header { border-bottom: 2px solid #333; margin-bottom: 20px; padding-bottom: 10px; display: flex; justify-content: space-between; align-items: center; }
+        h1 { margin: 0; font-size: 22px; color: #000; }
+        .controls { display: flex; gap: 10px; align-items: center; }
+        .btn-pdf { background: #333; color: white; border: none; padding: 6px 12px; border-radius: 4px; cursor: pointer; font-size: 14px; }
+        .update-time { color: #d32f2f; font-weight: bold; font-size: 14px; margin-right: 15px; }
+        
+        .section-main { margin-top: 30px; border: 1px solid #ddd; border-radius: 5px; overflow: hidden; }
+        .section-title { padding: 10px 15px; font-weight: bold; color: white; font-size: 1.1em; display: flex; justify-content: space-between; }
+        
+        /* 專區色彩設定 */
+        .etf-title { background: #007A87; } /* 專業藍綠色系 */
+        .bull-title { background: #c62828; }
+        .bear-title { background: #2e7d32; }
+        
+        .sub-section { padding: 0; }
+        .sub-title { background: #f0f0f0; color: #333; padding: 6px 15px; font-weight: bold; font-size: 0.95em; border-bottom: 1px solid #ddd; border-top: 1px solid #ddd; }
+        
+        table { width: 100%; border-collapse: collapse; }
+        th { text-align: left; padding: 8px; background: #fafafa; color: #666; font-size: 0.85em; border-bottom: 1px solid #eee; }
+        td { padding: 6px; }
+        
+        /* 表格列的交替底色與樣式 */
+        .row-etf { border-bottom: 1px solid #eee; background-color: #f0f7f8; }
+        .row-bull { border-bottom: 1px solid #eee; background-color: #fff5f5; }
+        .row-bear { border-bottom: 1px solid #eee; background-color: #f1f8e9; }
+        .col-id { color: #666; font-size: 0.8em; text-align: center; width: 30px; }
+        .col-source { color: #888; font-size: 0.85em; width: 80px; }
+        .col-title a { text-decoration: none; color: #333; font-weight: 500; display: block; line-height: 1.4; font-size: 14px; }
+        .col-score { text-align: right; width: 50px; font-family: monospace; font-weight: bold; font-size: 1.1em; }
+        
+        @media print {
+            .btn-pdf { display: none; }
+            body { padding: 0; background: #fff; }
+            .container { max-width: 100%; box-shadow: none; }
+            .section-main { page-break-inside: avoid; margin-top: 15px; }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>📊 投資情報快篩</h1>
+            <div class="controls">
+                <span class="update-time">更新：2026/05/26 18:33:27</span>
+                <button class="btn-pdf" onclick="window.print()">🖨️ PDF</button>
             </div>
+        </header>
+        
+        <div style="text-align: left; font-weight: bold; color: #555; margin-bottom: 5px;">☁️ 市場熱詞 (Hot Keywords)</div>
+        <div style="background: white; padding: 20px; border-radius: 8px; box-shadow: 0 2px 5px rgba(0,0,0,0.05); margin-bottom: 20px; text-align: center; line-height: 1.8; display: flex; flex-wrap: wrap; justify-content: center; align-items: baseline;">
+            <span style="font-size: 2.50em; color: #1976d2; margin: 5px 10px; opacity: 0.9;">台股 <sup style="font-size:0.5em; color:#ccc;">30</sup></span><span style="font-size: 1.70em; color: #d32f2f; margin: 5px 10px; opacity: 0.9;">AI <sup style="font-size:0.5em; color:#ccc;">14</sup></span><span style="font-size: 1.50em; color: #7b1fa2; margin: 5px 10px; opacity: 0.9;">台積 <sup style="font-size:0.5em; color:#ccc;">10</sup></span><span style="font-size: 1.50em; color: #1976d2; margin: 5px 10px; opacity: 0.9;">外資 <sup style="font-size:0.5em; color:#ccc;">10</sup></span><span style="font-size: 1.35em; color: #388e3c; margin: 5px 10px; opacity: 0.9;">獲利 <sup style="font-size:0.5em; color:#ccc;">7</sup></span><span style="font-size: 1.25em; color: #d32f2f; margin: 5px 10px; opacity: 0.9;">布局 <sup style="font-size:0.5em; color:#ccc;">5</sup></span><span style="font-size: 1.20em; color: #7b1fa2; margin: 5px 10px; opacity: 0.9;">聯發科 <sup style="font-size:0.5em; color:#ccc;">4</sup></span><span style="font-size: 1.20em; color: #7b1fa2; margin: 5px 10px; opacity: 0.9;">面板 <sup style="font-size:0.5em; color:#ccc;">4</sup></span><span style="font-size: 1.20em; color: #7b1fa2; margin: 5px 10px; opacity: 0.9;">三大法人 <sup style="font-size:0.5em; color:#ccc;">4</sup></span><span style="font-size: 1.15em; color: #f57c00; margin: 5px 10px; opacity: 0.9;">群創 <sup style="font-size:0.5em; color:#ccc;">3</sup></span><span style="font-size: 1.15em; color: #388e3c; margin: 5px 10px; opacity: 0.9;">友達 <sup style="font-size:0.5em; color:#ccc;">3</sup></span><span style="font-size: 1.15em; color: #555555; margin: 5px 10px; opacity: 0.9;">指數 <sup style="font-size:0.5em; color:#ccc;">3</sup></span><span style="font-size: 1.15em; color: #388e3c; margin: 5px 10px; opacity: 0.9;">新台幣 <sup style="font-size:0.5em; color:#ccc;">3</sup></span><span style="font-size: 1.15em; color: #7b1fa2; margin: 5px 10px; opacity: 0.9;">美股 <sup style="font-size:0.5em; color:#ccc;">3</sup></span><span style="font-size: 1.10em; color: #555555; margin: 5px 10px; opacity: 0.9;">富邦金 <sup style="font-size:0.5em; color:#ccc;">2</sup></span><span style="font-size: 1.10em; color: #388e3c; margin: 5px 10px; opacity: 0.9;">南亞 <sup style="font-size:0.5em; color:#ccc;">2</sup></span><span style="font-size: 1.10em; color: #555555; margin: 5px 10px; opacity: 0.9;">力積電 <sup style="font-size:0.5em; color:#ccc;">2</sup></span><span style="font-size: 1.10em; color: #1976d2; margin: 5px 10px; opacity: 0.9;">彩晶 <sup style="font-size:0.5em; color:#ccc;">2</sup></span><span style="font-size: 1.10em; color: #f57c00; margin: 5px 10px; opacity: 0.9;">美元 <sup style="font-size:0.5em; color:#ccc;">2</sup></span><span style="font-size: 1.10em; color: #555555; margin: 5px 10px; opacity: 0.9;">法說 <sup style="font-size:0.5em; color:#ccc;">2</sup></span>
+        </div>
+        
+        <div style="background:#f8f9fa; padding:8px; text-align:center; font-size:0.9em; border-radius:4px; margin-bottom:20px; color:#555;">
+            母體掃描: 430 則 (過濾: 46 則舊聞 / 1 則重複) | 資料來源含 Yahoo, 鉅亨, 經濟, 工商, PTT
+        </div>
 
-            <div class="section-main">
-                <div class="section-title bull-title">
-                    <span>🔥 多方訊號 (Bullish)</span>
-                    <span>共 60 筆</span>
-                </div>
-                
-                <div class="sub-section">
-                    <div class="sub-title">🌎 大盤 & 總體經濟</div>
-                    <table>
-                        <thead>
-                            <tr>
-                                <th style="text-align:center;">#</th>
-                                <th>來源</th>
-                                <th>新聞標題</th>
-                                <th style="text-align:right;">分數</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            
-            <tr style="border-bottom: 1px solid #eee; background-color: #fff5f5;">
-                <td style="padding: 6px; color: #666; font-size: 0.8em; text-align: center; width: 30px;">1</td>
-                <td style="padding: 6px; color: #888; font-size: 0.85em; width: 80px;">Yahoo股市</td>
-                <td style="padding: 6px;">
-                    <a href="https://tw.stock.yahoo.com/news/%E5%8F%B0%E8%82%A1%E7%8B%82%E9%A3%86-%E8%AA%B0%E5%9C%A8%E8%B3%A0%E9%8C%A2-%E5%B0%88%E5%AE%B6%E9%BB%9E%E5%90%8D4%E9%A1%9E%E4%BA%BA-%E9%81%BF%E5%85%8D%E9%AB%98%E6%A7%93%E6%A1%BF%E6%93%8D%E4%BD%9C-092400549.html" target="_blank" style="text-decoration: none; color: #333; font-weight: 500; display: block; line-height: 1.4; font-size: 14px;">
-                        台股狂飆「誰在賠錢」？專家點名4類人：避免高槓桿操作
-                    </a>
-                </td>
-                <td style="padding: 6px; text-align: right; width: 50px; font-family: monospace; font-weight: bold; color: #b71c1c; font-size: 1.1em;">
-                    +2.5
-                </td>
-            </tr>
-            
-            <tr style="border-bottom: 1px solid #eee; background-color: #fff5f5;">
-                <td style="padding: 6px; color: #666; font-size: 0.8em; text-align: center; width: 30px;">2</td>
-                <td style="padding: 6px; color: #888; font-size: 0.85em; width: 80px;">自由財經</td>
-                <td style="padding: 6px;">
-                    <a href="https://ec.ltn.com.tw/article/breakingnews/5450294" target="_blank" style="text-decoration: none; color: #333; font-weight: 500; display: block; line-height: 1.4; font-size: 14px;">
-                        外資買不停台股閃現4萬4！這檔電子2天敲逾12萬張最搶手 75萬股東大豐收
-                    </a>
-                </td>
-                <td style="padding: 6px; text-align: right; width: 50px; font-family: monospace; font-weight: bold; color: #b71c1c; font-size: 1.1em;">
-                    +2.5
-                </td>
-            </tr>
-            
-            <tr style="border-bottom: 1px solid #eee; background-color: #fff5f5;">
-                <td style="padding: 6px; color: #666; font-size: 0.8em; text-align: center; width: 30px;">3</td>
-                <td style="padding: 6px; color: #888; font-size: 0.85em; width: 80px;">Yahoo股市</td>
-                <td style="padding: 6px;">
-                    <a href="https://tw.stock.yahoo.com/news/%E5%9C%8B%E6%B3%B0%E6%8A%95%E4%BF%A1%E7%9C%8B%E5%A5%BD%E5%8F%B0%E8%82%A16%E6%9C%88%E5%BB%B6%E7%BA%8C%E5%A4%9A%E9%A0%AD%E6%B0%A3%E5%8B%A2-%E6%8D%95%E6%8D%89computex%E5%B8%B6%E4%BE%86%E7%94%A2%E6%A5%AD%E5%88%A9%E5%A4%9A-081536793.html" target="_blank" style="text-decoration: none; color: #333; font-weight: 500; display: block; line-height: 1.4; font-size: 14px;">
-                        國泰投信看好台股6月延續多頭氣勢，捕捉COMPUTEX帶來產業利多
-                    </a>
-                </td>
-                <td style="padding: 6px; text-align: right; width: 50px; font-family: monospace; font-weight: bold; color: #b71c1c; font-size: 1.1em;">
-                    +2.0
-                </td>
-            </tr>
-            
-            <tr style="border-bottom: 1px solid #eee; background-color: #fff5f5;">
-                <td style="padding: 6px; color: #666; font-size: 0.8em; text-align: center; width: 30px;">4</td>
-                <td style="padding: 6px; color: #888; font-size: 0.85em; width: 80px;">ETtoday</td>
-                <td style="padding: 6px;">
-                    <a href="https://finance.ettoday.net/news/3171858" target="_blank" style="text-decoration: none; color: #333; font-weight: 500; display: block; line-height: 1.4; font-size: 14px;">
-                        這檔高股息ETF最猛！葉芷娟：00929漲逾45％打敗大盤　近月報酬更勝主動台股ETF
-                    </a>
-                </td>
-                <td style="padding: 6px; text-align: right; width: 50px; font-family: monospace; font-weight: bold; color: #b71c1c; font-size: 1.1em;">
-                    +2.0
-                </td>
-            </tr>
-            
-            <tr style="border-bottom: 1px solid #eee; background-color: #fff5f5;">
-                <td style="padding: 6px; color: #666; font-size: 0.8em; text-align: center; width: 30px;">5</td>
-                <td style="padding: 6px; color: #888; font-size: 0.85em; width: 80px;">Yahoo股市</td>
-                <td style="padding: 6px;">
-                    <a href="https://tw.stock.yahoo.com/news/%E5%A4%96%E8%B3%87%E9%80%A3%E5%9B%9B%E8%B2%B7-%E5%8F%B0%E8%82%A1%E5%B8%82%E5%80%BC%E7%99%BB%E5%85%A8%E7%90%83%E7%AC%AC%E4%BA%94-%E6%96%B0%E5%8F%B0%E5%B9%A3%E9%80%B1%E4%BA%8C%E5%81%8F%E5%BC%B7%E6%95%B4%E7%90%86-%E5%86%8D%E5%8D%871-9%E5%88%86-081650353.html" target="_blank" style="text-decoration: none; color: #333; font-weight: 500; display: block; line-height: 1.4; font-size: 14px;">
-                        外資連四買、台股市值登全球第五，新台幣週二偏強整理，再升1.9分
-                    </a>
-                </td>
-                <td style="padding: 6px; text-align: right; width: 50px; font-family: monospace; font-weight: bold; color: #b71c1c; font-size: 1.1em;">
-                    +1.5
-                </td>
-            </tr>
-            
-            <tr style="border-bottom: 1px solid #eee; background-color: #fff5f5;">
-                <td style="padding: 6px; color: #666; font-size: 0.8em; text-align: center; width: 30px;">6</td>
-                <td style="padding: 6px; color: #888; font-size: 0.85em; width: 80px;">Yahoo股市</td>
-                <td style="padding: 6px;">
-                    <a href="https://tw.news.yahoo.com/%E5%8F%B0%E8%82%A1%E8%A1%9D%E8%A1%9D%E8%A1%9D-%E7%B6%93%E9%95%B7-%E5%8F%B0%E7%81%A3%E5%B7%B2%E6%98%AF-%E4%B8%AD%E7%AD%89%E5%A4%A7%E5%9C%8B-%E4%BB%8A%E5%B9%B4%E7%B6%93%E6%BF%9F%E6%88%90%E9%95%B7%E7%8E%87%E8%87%B3%E5%B0%917-084517245.html" target="_blank" style="text-decoration: none; color: #333; font-weight: 500; display: block; line-height: 1.4; font-size: 14px;">
-                        台股衝衝衝！經長：台灣已是「中等大國」 今年經濟成長率至少7%
-                    </a>
-                </td>
-                <td style="padding: 6px; text-align: right; width: 50px; font-family: monospace; font-weight: bold; color: #b71c1c; font-size: 1.1em;">
-                    +1.0
-                </td>
-            </tr>
-            
-            <tr style="border-bottom: 1px solid #eee; background-color: #fff5f5;">
-                <td style="padding: 6px; color: #666; font-size: 0.8em; text-align: center; width: 30px;">7</td>
-                <td style="padding: 6px; color: #888; font-size: 0.85em; width: 80px;">Yahoo股市</td>
-                <td style="padding: 6px;">
-                    <a href="https://tw.stock.yahoo.com/news/%E5%8F%B0%E8%82%A1%E5%89%B5%E9%AB%98%E4%BB%8D%E5%A4%B1%E5%88%A9-%E6%8A%95%E8%B3%87%E4%BA%BA%E5%93%80-%E8%B2%B7%E4%BB%80%E9%BA%BC%E8%B3%A0%E4%BB%80%E9%BA%BC-%E8%99%A7%E6%90%8D5%E8%90%AC-%E8%82%A1%E6%B0%91%E9%A9%9A%E5%98%86-080000226.html" target="_blank" style="text-decoration: none; color: #333; font-weight: 500; display: block; line-height: 1.4; font-size: 14px;">
-                        台股創高仍失利？投資人哀「買什麼賠什麼」虧損5萬　股民驚嘆：這種盤還能賠
-                    </a>
-                </td>
-                <td style="padding: 6px; text-align: right; width: 50px; font-family: monospace; font-weight: bold; color: #b71c1c; font-size: 1.1em;">
-                    +1.0
-                </td>
-            </tr>
-            
-            <tr style="border-bottom: 1px solid #eee; background-color: #fff5f5;">
-                <td style="padding: 6px; color: #666; font-size: 0.8em; text-align: center; width: 30px;">8</td>
-                <td style="padding: 6px; color: #888; font-size: 0.85em; width: 80px;">Yahoo股市</td>
-                <td style="padding: 6px;">
-                    <a href="https://tw.stock.yahoo.com/news/%E4%B8%89%E5%A4%A7%E6%B3%95%E4%BA%BA%E8%B2%B7%E8%B6%85%E5%8F%B0%E8%82%A1473-94%E5%84%84%E5%85%83-070845244.html" target="_blank" style="text-decoration: none; color: #333; font-weight: 500; display: block; line-height: 1.4; font-size: 14px;">
-                        三大法人買超台股473.94億元
-                    </a>
-                </td>
-                <td style="padding: 6px; text-align: right; width: 50px; font-family: monospace; font-weight: bold; color: #b71c1c; font-size: 1.1em;">
-                    +1.0
-                </td>
-            </tr>
-            
-            <tr style="border-bottom: 1px solid #eee; background-color: #fff5f5;">
-                <td style="padding: 6px; color: #666; font-size: 0.8em; text-align: center; width: 30px;">9</td>
-                <td style="padding: 6px; color: #888; font-size: 0.85em; width: 80px;">Yahoo股市</td>
-                <td style="padding: 6px;">
-                    <a href="https://tw.stock.yahoo.com/news/%E5%8F%B0%E8%82%A14%E8%90%AC4%E5%BE%97%E8%80%8C%E5%BE%A9%E5%A4%B1-%E4%B8%89%E5%A4%A7%E6%B3%95%E4%BA%BA%E7%BA%8C%E7%AB%99%E5%A4%9A%E6%96%B9%E8%B2%B7%E8%B6%85473-94%E5%84%84%E5%85%83-070343251.html" target="_blank" style="text-decoration: none; color: #333; font-weight: 500; display: block; line-height: 1.4; font-size: 14px;">
-                        台股4萬4得而復失 三大法人續站多方買超473.94億元
-                    </a>
-                </td>
-                <td style="padding: 6px; text-align: right; width: 50px; font-family: monospace; font-weight: bold; color: #b71c1c; font-size: 1.1em;">
-                    +1.0
-                </td>
-            </tr>
-            
-            <tr style="border-bottom: 1px solid #eee; background-color: #fff5f5;">
-                <td style="padding: 6px; color: #666; font-size: 0.8em; text-align: center; width: 30px;">10</td>
-                <td style="padding: 6px; color: #888; font-size: 0.85em; width: 80px;">Yahoo股市</td>
-                <td style="padding: 6px;">
-                    <a href="https://tw.stock.yahoo.com/news/%E5%BD%B0%E9%8A%80%E6%B3%95%E8%AA%AA1%E3%80%8B%E6%A8%82%E7%9C%8B%E5%9C%8B%E7%99%BC%E6%9C%832500%E5%84%84%E7%BE%8E%E5%85%83%E8%B5%B4%E7%BE%8E%E8%9E%8D%E4%BF%9D%E6%B7%BB%E5%8A%A9%E5%8A%9B-%E8%A9%95%E4%BC%B0%E9%B3%B3%E5%87%B0%E5%9F%8E%E8%A8%AD%E9%BB%9E-100141082.html" target="_blank" style="text-decoration: none; color: #333; font-weight: 500; display: block; line-height: 1.4; font-size: 14px;">
-                        彰銀法說1》樂看國發會2500億美元赴美融保添助力 評估鳳凰城設點
-                    </a>
-                </td>
-                <td style="padding: 6px; text-align: right; width: 50px; font-family: monospace; font-weight: bold; color: #b71c1c; font-size: 1.1em;">
-                    +1.0
-                </td>
-            </tr>
-            
-            <tr style="border-bottom: 1px solid #eee; background-color: #fff5f5;">
-                <td style="padding: 6px; color: #666; font-size: 0.8em; text-align: center; width: 30px;">11</td>
-                <td style="padding: 6px; color: #888; font-size: 0.85em; width: 80px;">Yahoo股市</td>
-                <td style="padding: 6px;">
-                    <a href="https://tw.stock.yahoo.com/news/5-26%E6%96%B0%E5%8F%B0%E5%B9%A3%E5%85%8C%E7%BE%8E%E5%85%83%E5%8C%AF%E7%8E%87%E4%BB%A531-451%E5%85%83%E4%BD%9C%E6%94%B6-%E5%8D%87%E5%80%BC1-9%E5%88%86-080400165.html" target="_blank" style="text-decoration: none; color: #333; font-weight: 500; display: block; line-height: 1.4; font-size: 14px;">
-                        5/26新台幣兌美元匯率以31.451元作收，升值1.9分
-                    </a>
-                </td>
-                <td style="padding: 6px; text-align: right; width: 50px; font-family: monospace; font-weight: bold; color: #b71c1c; font-size: 1.1em;">
-                    +1.0
-                </td>
-            </tr>
-            
-            <tr style="border-bottom: 1px solid #eee; background-color: #fff5f5;">
-                <td style="padding: 6px; color: #666; font-size: 0.8em; text-align: center; width: 30px;">12</td>
-                <td style="padding: 6px; color: #888; font-size: 0.85em; width: 80px;">自由財經</td>
-                <td style="padding: 6px;">
-                    <a href="https://ec.ltn.com.tw/article/breakingnews/5450319" target="_blank" style="text-decoration: none; color: #333; font-weight: 500; display: block; line-height: 1.4; font-size: 14px;">
-                        合庫金首席經濟學家徐千婷看台股有三大支撐 估台灣今年經濟成長率8％以上
-                    </a>
-                </td>
-                <td style="padding: 6px; text-align: right; width: 50px; font-family: monospace; font-weight: bold; color: #b71c1c; font-size: 1.1em;">
-                    +1.0
-                </td>
-            </tr>
-            
-            <tr style="border-bottom: 1px solid #eee; background-color: #fff5f5;">
-                <td style="padding: 6px; color: #666; font-size: 0.8em; text-align: center; width: 30px;">13</td>
-                <td style="padding: 6px; color: #888; font-size: 0.85em; width: 80px;">自由財經</td>
-                <td style="padding: 6px;">
-                    <a href="https://ec.ltn.com.tw/article/breakingnews/5450279" target="_blank" style="text-decoration: none; color: #333; font-weight: 500; display: block; line-height: 1.4; font-size: 14px;">
-                        外資續匯入！新台幣連5紅收31.451元
-                    </a>
-                </td>
-                <td style="padding: 6px; text-align: right; width: 50px; font-family: monospace; font-weight: bold; color: #b71c1c; font-size: 1.1em;">
-                    +1.0
-                </td>
-            </tr>
-            
-            <tr style="border-bottom: 1px solid #eee; background-color: #fff5f5;">
-                <td style="padding: 6px; color: #666; font-size: 0.8em; text-align: center; width: 30px;">14</td>
-                <td style="padding: 6px; color: #888; font-size: 0.85em; width: 80px;">自由財經</td>
-                <td style="padding: 6px;">
-                    <a href="https://ec.ltn.com.tw/article/breakingnews/5450189" target="_blank" style="text-decoration: none; color: #333; font-weight: 500; display: block; line-height: 1.4; font-size: 14px;">
-                        通膨升溫、外匯承壓 斯里蘭卡央行暴力升息4碼
-                    </a>
-                </td>
-                <td style="padding: 6px; text-align: right; width: 50px; font-family: monospace; font-weight: bold; color: #b71c1c; font-size: 1.1em;">
-                    +1.0
-                </td>
-            </tr>
-            
-                        </tbody>
-                    </table>
-                </div>
-                
-                <div class="sub-section">
-                    <div class="sub-title">🏢 個股 & 產業動態</div>
-                    <table>
-                        <tbody>
-                            
-            <tr style="border-bottom: 1px solid #eee; background-color: #fff5f5;">
-                <td style="padding: 6px; color: #666; font-size: 0.8em; text-align: center; width: 30px;">1</td>
-                <td style="padding: 6px; color: #888; font-size: 0.85em; width: 80px;">經濟日報</td>
-                <td style="padding: 6px;">
-                    <a href="https://money.udn.com/money/story/5607/9526917" target="_blank" style="text-decoration: none; color: #333; font-weight: 500; display: block; line-height: 1.4; font-size: 14px;">
-                        「有沒有記憶體？」華邦電漲停創高 外資掃貨狂潮要再發動了？
-                    </a>
-                </td>
-                <td style="padding: 6px; text-align: right; width: 50px; font-family: monospace; font-weight: bold; color: #b71c1c; font-size: 1.1em;">
-                    +6.0
-                </td>
-            </tr>
-            
-            <tr style="border-bottom: 1px solid #eee; background-color: #fff5f5;">
-                <td style="padding: 6px; color: #666; font-size: 0.8em; text-align: center; width: 30px;">2</td>
-                <td style="padding: 6px; color: #888; font-size: 0.85em; width: 80px;">Yahoo股市</td>
-                <td style="padding: 6px;">
-                    <a href="https://tw.stock.yahoo.com/news/line-pay%E8%82%A1%E6%9D%B1%E6%9C%83%E5%A0%B1%E5%96%9C-%E6%B5%B7%E5%A4%96%E5%B8%83%E5%B1%80%E6%8E%A8%E5%90%91%E6%97%A5%E6%9C%AC-%E6%9D%B1%E5%8D%97%E4%BA%9E-073916213.html" target="_blank" style="text-decoration: none; color: #333; font-weight: 500; display: block; line-height: 1.4; font-size: 14px;">
-                        LINE Pay股東會報喜 海外布局推向日本、東南亞
-                    </a>
-                </td>
-                <td style="padding: 6px; text-align: right; width: 50px; font-family: monospace; font-weight: bold; color: #b71c1c; font-size: 1.1em;">
-                    +5.0
-                </td>
-            </tr>
-            
-            <tr style="border-bottom: 1px solid #eee; background-color: #fff5f5;">
-                <td style="padding: 6px; color: #666; font-size: 0.8em; text-align: center; width: 30px;">3</td>
-                <td style="padding: 6px; color: #888; font-size: 0.85em; width: 80px;">Yahoo股市</td>
-                <td style="padding: 6px;">
-                    <a href="https://tw.news.yahoo.com/%E5%8F%B0%E7%A9%8D%E9%9B%BB%E4%BB%8A%E5%B9%B4%E9%A3%86%E6%BC%B249-%E5%8F%B0%E8%82%A1%E8%BA%8D%E5%8D%87%E5%85%A8%E7%90%83%E7%AC%AC5%E5%A4%A7%E8%82%A1%E5%B8%82-073701158.html" target="_blank" style="text-decoration: none; color: #333; font-weight: 500; display: block; line-height: 1.4; font-size: 14px;">
-                        台積電今年飆漲49%　台股躍升全球第5大股市
-                    </a>
-                </td>
-                <td style="padding: 6px; text-align: right; width: 50px; font-family: monospace; font-weight: bold; color: #b71c1c; font-size: 1.1em;">
-                    +4.5
-                </td>
-            </tr>
-            
-            <tr style="border-bottom: 1px solid #eee; background-color: #fff5f5;">
-                <td style="padding: 6px; color: #666; font-size: 0.8em; text-align: center; width: 30px;">4</td>
-                <td style="padding: 6px; color: #888; font-size: 0.85em; width: 80px;">ETtoday</td>
-                <td style="padding: 6px;">
-                    <a href="https://finance.ettoday.net/news/3172081" target="_blank" style="text-decoration: none; color: #333; font-weight: 500; display: block; line-height: 1.4; font-size: 14px;">
-                        快訊／台積電漲15元至2325　台股上漲逾400點創高站上「44K」
-                    </a>
-                </td>
-                <td style="padding: 6px; text-align: right; width: 50px; font-family: monospace; font-weight: bold; color: #b71c1c; font-size: 1.1em;">
-                    +4.0
-                </td>
-            </tr>
-            
-            <tr style="border-bottom: 1px solid #eee; background-color: #fff5f5;">
-                <td style="padding: 6px; color: #666; font-size: 0.8em; text-align: center; width: 30px;">5</td>
-                <td style="padding: 6px; color: #888; font-size: 0.85em; width: 80px;">經濟日報</td>
-                <td style="padding: 6px;">
-                    <a href="https://money.udn.com/money/story/5612/9526995" target="_blank" style="text-decoration: none; color: #333; font-weight: 500; display: block; line-height: 1.4; font-size: 14px;">
-                        精誠資訊強化 AI 代理布局 聯手百林商智推自動化軟體機器人
-                    </a>
-                </td>
-                <td style="padding: 6px; text-align: right; width: 50px; font-family: monospace; font-weight: bold; color: #b71c1c; font-size: 1.1em;">
-                    +3.5
-                </td>
-            </tr>
-            
-            <tr style="border-bottom: 1px solid #eee; background-color: #fff5f5;">
-                <td style="padding: 6px; color: #666; font-size: 0.8em; text-align: center; width: 30px;">6</td>
-                <td style="padding: 6px; color: #888; font-size: 0.85em; width: 80px;">自由財經</td>
-                <td style="padding: 6px;">
-                    <a href="https://ec.ltn.com.tw/article/breakingnews/5450347" target="_blank" style="text-decoration: none; color: #333; font-weight: 500; display: block; line-height: 1.4; font-size: 14px;">
-                        合庫金前四月獲利創新高  總經理期許今年獲利再創佳績
-                    </a>
-                </td>
-                <td style="padding: 6px; text-align: right; width: 50px; font-family: monospace; font-weight: bold; color: #b71c1c; font-size: 1.1em;">
-                    +3.5
-                </td>
-            </tr>
-            
-            <tr style="border-bottom: 1px solid #eee; background-color: #fff5f5;">
-                <td style="padding: 6px; color: #666; font-size: 0.8em; text-align: center; width: 30px;">7</td>
-                <td style="padding: 6px; color: #888; font-size: 0.85em; width: 80px;">自由財經</td>
-                <td style="padding: 6px;">
-                    <a href="https://ec.ltn.com.tw/article/breakingnews/5450225" target="_blank" style="text-decoration: none; color: #333; font-weight: 500; display: block; line-height: 1.4; font-size: 14px;">
-                        明泰持續深化AI資料中心布局 可望重回成長軌道
-                    </a>
-                </td>
-                <td style="padding: 6px; text-align: right; width: 50px; font-family: monospace; font-weight: bold; color: #b71c1c; font-size: 1.1em;">
-                    +3.5
-                </td>
-            </tr>
-            
-            <tr style="border-bottom: 1px solid #eee; background-color: #fff5f5;">
-                <td style="padding: 6px; color: #666; font-size: 0.8em; text-align: center; width: 30px;">8</td>
-                <td style="padding: 6px; color: #888; font-size: 0.85em; width: 80px;">ETtoday</td>
-                <td style="padding: 6px;">
-                    <a href="https://finance.ettoday.net/news/3172297" target="_blank" style="text-decoration: none; color: #333; font-weight: 500; display: block; line-height: 1.4; font-size: 14px;">
-                        金融股撐台股！富邦金破百刷紀錄、市值排名回升　中信金觸新高
-                    </a>
-                </td>
-                <td style="padding: 6px; text-align: right; width: 50px; font-family: monospace; font-weight: bold; color: #b71c1c; font-size: 1.1em;">
-                    +3.5
-                </td>
-            </tr>
-            
-            <tr style="border-bottom: 1px solid #eee; background-color: #fff5f5;">
-                <td style="padding: 6px; color: #666; font-size: 0.8em; text-align: center; width: 30px;">9</td>
-                <td style="padding: 6px; color: #888; font-size: 0.85em; width: 80px;">ETtoday</td>
-                <td style="padding: 6px;">
-                    <a href="https://finance.ettoday.net/news/3172261" target="_blank" style="text-decoration: none; color: #333; font-weight: 500; display: block; line-height: 1.4; font-size: 14px;">
-                        00929「1天就飆6.35%」漲幅超過整年！投資達人：活躍期才剛開始
-                    </a>
-                </td>
-                <td style="padding: 6px; text-align: right; width: 50px; font-family: monospace; font-weight: bold; color: #b71c1c; font-size: 1.1em;">
-                    +3.5
-                </td>
-            </tr>
-            
-            <tr style="border-bottom: 1px solid #eee; background-color: #fff5f5;">
-                <td style="padding: 6px; color: #666; font-size: 0.8em; text-align: center; width: 30px;">10</td>
-                <td style="padding: 6px; color: #888; font-size: 0.85em; width: 80px;">ETtoday</td>
-                <td style="padding: 6px;">
-                    <a href="https://finance.ettoday.net/news/3172071" target="_blank" style="text-decoration: none; color: #333; font-weight: 500; display: block; line-height: 1.4; font-size: 14px;">
-                        越關越大尾！尚茂連漲22根漲停　挾小股本從票面衝到百元價
-                    </a>
-                </td>
-                <td style="padding: 6px; text-align: right; width: 50px; font-family: monospace; font-weight: bold; color: #b71c1c; font-size: 1.1em;">
-                    +3.5
-                </td>
-            </tr>
-            
-            <tr style="border-bottom: 1px solid #eee; background-color: #fff5f5;">
-                <td style="padding: 6px; color: #666; font-size: 0.8em; text-align: center; width: 30px;">11</td>
-                <td style="padding: 6px; color: #888; font-size: 0.85em; width: 80px;">自由財經</td>
-                <td style="padding: 6px;">
-                    <a href="https://ec.ltn.com.tw/article/breakingnews/5450241" target="_blank" style="text-decoration: none; color: #333; font-weight: 500; display: block; line-height: 1.4; font-size: 14px;">
-                        泓格半導體設備需求旺到擴產 AI測試成最大成長引擎
-                    </a>
-                </td>
-                <td style="padding: 6px; text-align: right; width: 50px; font-family: monospace; font-weight: bold; color: #b71c1c; font-size: 1.1em;">
-                    +3.0
-                </td>
-            </tr>
-            
-            <tr style="border-bottom: 1px solid #eee; background-color: #fff5f5;">
-                <td style="padding: 6px; color: #666; font-size: 0.8em; text-align: center; width: 30px;">12</td>
-                <td style="padding: 6px; color: #888; font-size: 0.85em; width: 80px;">Yahoo股市</td>
-                <td style="padding: 6px;">
-                    <a href="https://tw.news.yahoo.com/%E4%B8%8D%E6%95%97%E6%95%99%E4%B8%BB%E6%9B%9D%E5%8F%B0%E7%A9%8D%E9%9B%BB%E5%83%8F%E6%8B%96%E6%B2%B9%E7%93%B6-%E6%94%B9%E8%B2%B72%E9%A1%9E%E8%82%A1-%E5%A4%A7%E8%B3%BA7%E4%BD%8D%E6%95%B8-084000996.html" target="_blank" style="text-decoration: none; color: #333; font-weight: 500; display: block; line-height: 1.4; font-size: 14px;">
-                        不敗教主曝台積電像拖油瓶 改買2類股...大賺7位數
-                    </a>
-                </td>
-                <td style="padding: 6px; text-align: right; width: 50px; font-family: monospace; font-weight: bold; color: #b71c1c; font-size: 1.1em;">
-                    +2.5
-                </td>
-            </tr>
-            
-            <tr style="border-bottom: 1px solid #eee; background-color: #fff5f5;">
-                <td style="padding: 6px; color: #666; font-size: 0.8em; text-align: center; width: 30px;">13</td>
-                <td style="padding: 6px; color: #888; font-size: 0.85em; width: 80px;">Yahoo股市</td>
-                <td style="padding: 6px;">
-                    <a href="https://tw.stock.yahoo.com/news/%E9%87%8F%E5%AD%90%E9%A1%8C%E6%9D%90%E7%86%84%E7%81%AB%EF%BC%9F%E4%BB%81%E5%AF%B6%E8%8B%B1%E6%A5%AD%E9%81%94%E9%80%A3%E9%A3%86%E4%B8%89%E5%A4%A9%E5%BE%8C%E6%80%A5%E6%AE%BA%E5%8D%8A%E6%A0%B9%E5%81%9C%E6%9D%BF-%E5%88%86%E6%9E%90%E5%B8%AB%E6%8F%AD%E7%BF%BB%E5%A4%9A%E6%A2%9D%E4%BB%B6-015412586.html" target="_blank" style="text-decoration: none; color: #333; font-weight: 500; display: block; line-height: 1.4; font-size: 14px;">
-                        量子題材熄火？仁寶英業達連飆三天後急殺半根停板 分析師揭翻多條件
-                    </a>
-                </td>
-                <td style="padding: 6px; text-align: right; width: 50px; font-family: monospace; font-weight: bold; color: #b71c1c; font-size: 1.1em;">
-                    +2.5
-                </td>
-            </tr>
-            
-            <tr style="border-bottom: 1px solid #eee; background-color: #fff5f5;">
-                <td style="padding: 6px; color: #666; font-size: 0.8em; text-align: center; width: 30px;">14</td>
-                <td style="padding: 6px; color: #888; font-size: 0.85em; width: 80px;">經濟日報</td>
-                <td style="padding: 6px;">
-                    <a href="https://money.udn.com/money/story/5612/9526817" target="_blank" style="text-decoration: none; color: #333; font-weight: 500; display: block; line-height: 1.4; font-size: 14px;">
-                        正新股東會／全面改選董事、羅才仁重掌董座 新團隊力拚全球智慧布局
-                    </a>
-                </td>
-                <td style="padding: 6px; text-align: right; width: 50px; font-family: monospace; font-weight: bold; color: #b71c1c; font-size: 1.1em;">
-                    +2.5
-                </td>
-            </tr>
-            
-            <tr style="border-bottom: 1px solid #eee; background-color: #fff5f5;">
-                <td style="padding: 6px; color: #666; font-size: 0.8em; text-align: center; width: 30px;">15</td>
-                <td style="padding: 6px; color: #888; font-size: 0.85em; width: 80px;">經濟日報</td>
-                <td style="padding: 6px;">
-                    <a href="https://money.udn.com/money/story/5612/9526813" target="_blank" style="text-decoration: none; color: #333; font-weight: 500; display: block; line-height: 1.4; font-size: 14px;">
-                        興農股東會／劉雲松接任董事長 持續深化集團經營布局
-                    </a>
-                </td>
-                <td style="padding: 6px; text-align: right; width: 50px; font-family: monospace; font-weight: bold; color: #b71c1c; font-size: 1.1em;">
-                    +2.5
-                </td>
-            </tr>
-            
-            <tr style="border-bottom: 1px solid #eee; background-color: #fff5f5;">
-                <td style="padding: 6px; color: #666; font-size: 0.8em; text-align: center; width: 30px;">16</td>
-                <td style="padding: 6px; color: #888; font-size: 0.85em; width: 80px;">自由財經</td>
-                <td style="padding: 6px;">
-                    <a href="https://ec.ltn.com.tw/article/breakingnews/5450252" target="_blank" style="text-decoration: none; color: #333; font-weight: 500; display: block; line-height: 1.4; font-size: 14px;">
-                        仁寶飆高大暴走！兇手是這群人 27萬股東被扒一層皮
-                    </a>
-                </td>
-                <td style="padding: 6px; text-align: right; width: 50px; font-family: monospace; font-weight: bold; color: #b71c1c; font-size: 1.1em;">
-                    +2.5
-                </td>
-            </tr>
-            
-            <tr style="border-bottom: 1px solid #eee; background-color: #fff5f5;">
-                <td style="padding: 6px; color: #666; font-size: 0.8em; text-align: center; width: 30px;">17</td>
-                <td style="padding: 6px; color: #888; font-size: 0.85em; width: 80px;">Yahoo股市</td>
-                <td style="padding: 6px;">
-                    <a href="https://tw.stock.yahoo.com/news/%E5%8F%B0%E8%82%A1%E7%82%B8147%E5%85%86%E6%96%B0%E5%A4%A9%E9%87%8F%EF%BC%81%E5%AF%8C%E9%82%A6%E9%87%91%E3%80%8C%E7%A0%B4%E7%99%BE%E3%80%8D%E9%9B%A3%E6%92%90%E7%9B%A4-%E9%9D%A2%E6%9D%BF%E9%9B%99%E8%99%8E%E8%90%BD%E5%B9%B3%E9%99%BD%E5%89%A9%E5%BD%A9%E6%99%B6%E7%8D%A8%E6%BC%B2%EF%BD%9Cyahoo%E8%B2%A1%E7%B6%93%E6%8E%83%E6%8F%8F-092346596.html" target="_blank" style="text-decoration: none; color: #333; font-weight: 500; display: block; line-height: 1.4; font-size: 14px;">
-                        台股炸1.47兆新天量！富邦金「破百」難撐盤 面板雙虎落平陽剩彩晶獨漲｜Yahoo財經掃描
-                    </a>
-                </td>
-                <td style="padding: 6px; text-align: right; width: 50px; font-family: monospace; font-weight: bold; color: #b71c1c; font-size: 1.1em;">
-                    +2.0
-                </td>
-            </tr>
-            
-            <tr style="border-bottom: 1px solid #eee; background-color: #fff5f5;">
-                <td style="padding: 6px; color: #666; font-size: 0.8em; text-align: center; width: 30px;">18</td>
-                <td style="padding: 6px; color: #888; font-size: 0.85em; width: 80px;">經濟日報</td>
-                <td style="padding: 6px;">
-                    <a href="https://money.udn.com/money/story/11074/9526943" target="_blank" style="text-decoration: none; color: #333; font-weight: 500; display: block; line-height: 1.4; font-size: 14px;">
-                        穩得股東會／下半年受惠元件類產品接單暢旺 全年將優於去年
-                    </a>
-                </td>
-                <td style="padding: 6px; text-align: right; width: 50px; font-family: monospace; font-weight: bold; color: #b71c1c; font-size: 1.1em;">
-                    +2.0
-                </td>
-            </tr>
-            
-            <tr style="border-bottom: 1px solid #eee; background-color: #fff5f5;">
-                <td style="padding: 6px; color: #666; font-size: 0.8em; text-align: center; width: 30px;">19</td>
-                <td style="padding: 6px; color: #888; font-size: 0.85em; width: 80px;">經濟日報</td>
-                <td style="padding: 6px;">
-                    <a href="https://money.udn.com/money/story/5710/9526936" target="_blank" style="text-decoration: none; color: #333; font-weight: 500; display: block; line-height: 1.4; font-size: 14px;">
-                        捷敏股東會／搭 AI 伺服器電源架構升級 強化散熱製程技術
-                    </a>
-                </td>
-                <td style="padding: 6px; text-align: right; width: 50px; font-family: monospace; font-weight: bold; color: #b71c1c; font-size: 1.1em;">
-                    +2.0
-                </td>
-            </tr>
-            
-            <tr style="border-bottom: 1px solid #eee; background-color: #fff5f5;">
-                <td style="padding: 6px; color: #666; font-size: 0.8em; text-align: center; width: 30px;">20</td>
-                <td style="padding: 6px; color: #888; font-size: 0.85em; width: 80px;">自由財經</td>
-                <td style="padding: 6px;">
-                    <a href="https://ec.ltn.com.tw/article/breakingnews/5450214" target="_blank" style="text-decoration: none; color: #333; font-weight: 500; display: block; line-height: 1.4; font-size: 14px;">
-                        彰銀首季獲利年增26％   財管、海外業務雙引擎續升溫
-                    </a>
-                </td>
-                <td style="padding: 6px; text-align: right; width: 50px; font-family: monospace; font-weight: bold; color: #b71c1c; font-size: 1.1em;">
-                    +2.0
-                </td>
-            </tr>
-            
-            <tr style="border-bottom: 1px solid #eee; background-color: #fff5f5;">
-                <td style="padding: 6px; color: #666; font-size: 0.8em; text-align: center; width: 30px;">21</td>
-                <td style="padding: 6px; color: #888; font-size: 0.85em; width: 80px;">ETtoday</td>
-                <td style="padding: 6px;">
-                    <a href="https://finance.ettoday.net/news/3172287" target="_blank" style="text-decoration: none; color: #333; font-weight: 500; display: block; line-height: 1.4; font-size: 14px;">
-                        ETF「冷門黑馬」暴漲近80%　超狂經理人被挖出！專家：輾壓級
-                    </a>
-                </td>
-                <td style="padding: 6px; text-align: right; width: 50px; font-family: monospace; font-weight: bold; color: #b71c1c; font-size: 1.1em;">
-                    +2.0
-                </td>
-            </tr>
-            
-            <tr style="border-bottom: 1px solid #eee; background-color: #fff5f5;">
-                <td style="padding: 6px; color: #666; font-size: 0.8em; text-align: center; width: 30px;">22</td>
-                <td style="padding: 6px; color: #888; font-size: 0.85em; width: 80px;">ETtoday</td>
-                <td style="padding: 6px;">
-                    <a href="https://finance.ettoday.net/news/3171957" target="_blank" style="text-decoration: none; color: #333; font-weight: 500; display: block; line-height: 1.4; font-size: 14px;">
-                        台股4萬3還有上升空間！吳嘉隆預言將衝到5萬2　台積電有望飆3500
-                    </a>
-                </td>
-                <td style="padding: 6px; text-align: right; width: 50px; font-family: monospace; font-weight: bold; color: #b71c1c; font-size: 1.1em;">
-                    +2.0
-                </td>
-            </tr>
-            
-            <tr style="border-bottom: 1px solid #eee; background-color: #fff5f5;">
-                <td style="padding: 6px; color: #666; font-size: 0.8em; text-align: center; width: 30px;">23</td>
-                <td style="padding: 6px; color: #888; font-size: 0.85em; width: 80px;">ETtoday</td>
-                <td style="padding: 6px;">
-                    <a href="https://finance.ettoday.net/news/3171907" target="_blank" style="text-decoration: none; color: #333; font-weight: 500; display: block; line-height: 1.4; font-size: 14px;">
-                        股匯齊揚！外資強補494億元　華邦電、力積電大買逾7萬張
-                    </a>
-                </td>
-                <td style="padding: 6px; text-align: right; width: 50px; font-family: monospace; font-weight: bold; color: #b71c1c; font-size: 1.1em;">
-                    +2.0
-                </td>
-            </tr>
-            
-            <tr style="border-bottom: 1px solid #eee; background-color: #fff5f5;">
-                <td style="padding: 6px; color: #666; font-size: 0.8em; text-align: center; width: 30px;">24</td>
-                <td style="padding: 6px; color: #888; font-size: 0.85em; width: 80px;">Yahoo股市</td>
-                <td style="padding: 6px;">
-                    <a href="https://tw.stock.yahoo.com/news/%E4%B8%8D%E5%86%8D%E7%B4%94%E9%9D%A0%E5%8F%B0%E6%8C%87%E6%9C%9F-%E5%85%83%E5%A4%A700631l%E6%94%B9%E6%8A%B1%E5%8F%B0%E7%A9%8D%E9%9B%BB%E7%8F%BE%E8%B2%A840-%E6%88%90%E6%AD%A32-etf%E6%9C%80%E5%BC%B7%E5%90%AB%E7%A9%8D%E7%8E%8B-094826126.html" target="_blank" style="text-decoration: none; color: #333; font-weight: 500; display: block; line-height: 1.4; font-size: 14px;">
-                        不再純靠台指期！元大00631L改抱台積電現貨40% 成正2 ETF最強含積王
-                    </a>
-                </td>
-                <td style="padding: 6px; text-align: right; width: 50px; font-family: monospace; font-weight: bold; color: #b71c1c; font-size: 1.1em;">
-                    +1.0
-                </td>
-            </tr>
-            
-            <tr style="border-bottom: 1px solid #eee; background-color: #fff5f5;">
-                <td style="padding: 6px; color: #666; font-size: 0.8em; text-align: center; width: 30px;">25</td>
-                <td style="padding: 6px; color: #888; font-size: 0.85em; width: 80px;">Yahoo股市</td>
-                <td style="padding: 6px;">
-                    <a href="https://tw.stock.yahoo.com/news/%E6%AC%8A%E5%80%BC%E8%82%A1%E5%AE%83%E6%9C%80%E7%8C%9B-%E8%81%AF%E7%99%BC%E7%A7%91%E6%94%9C%E5%85%83%E5%A4%AA%E6%90%B6%E6%94%BBai%E9%96%B1%E8%AE%80%E5%99%A8%E5%95%86%E6%A9%9F-%E5%99%B4783%E5%84%84%E6%88%90%E4%BA%A4%E9%A1%8D%E9%9C%B8%E6%A6%9C-%E5%A4%96%E8%B3%87%E7%8C%9B%E6%8A%955922%E5%85%83%E9%9C%87%E6%92%BC%E5%BD%88%E5%8A%9B%E6%8C%BA-081000467.html" target="_blank" style="text-decoration: none; color: #333; font-weight: 500; display: block; line-height: 1.4; font-size: 14px;">
-                        權值股它最猛！聯發科攜元太搶攻AI閱讀器商機「噴783億成交額霸榜」　外資猛投5922元震撼彈力挺
-                    </a>
-                </td>
-                <td style="padding: 6px; text-align: right; width: 50px; font-family: monospace; font-weight: bold; color: #b71c1c; font-size: 1.1em;">
-                    +1.0
-                </td>
-            </tr>
-            
-            <tr style="border-bottom: 1px solid #eee; background-color: #fff5f5;">
-                <td style="padding: 6px; color: #666; font-size: 0.8em; text-align: center; width: 30px;">26</td>
-                <td style="padding: 6px; color: #888; font-size: 0.85em; width: 80px;">Yahoo股市</td>
-                <td style="padding: 6px;">
-                    <a href="https://tw.news.yahoo.com/%E6%AD%A3%E4%BA%8C-etf-00631l%E5%8A%A0%E7%A2%BC-%E5%A2%9E%E6%8C%81%E5%8F%B0%E7%A9%8D%E9%9B%BB%E8%87%B34%E6%88%90-080855724.html" target="_blank" style="text-decoration: none; color: #333; font-weight: 500; display: block; line-height: 1.4; font-size: 14px;">
-                        「正二」ETF 00631L加碼！增持台積電至4成
-                    </a>
-                </td>
-                <td style="padding: 6px; text-align: right; width: 50px; font-family: monospace; font-weight: bold; color: #b71c1c; font-size: 1.1em;">
-                    +1.0
-                </td>
-            </tr>
-            
-            <tr style="border-bottom: 1px solid #eee; background-color: #fff5f5;">
-                <td style="padding: 6px; color: #666; font-size: 0.8em; text-align: center; width: 30px;">27</td>
-                <td style="padding: 6px; color: #888; font-size: 0.85em; width: 80px;">Yahoo股市</td>
-                <td style="padding: 6px;">
-                    <a href="https://tw.news.yahoo.com/%E6%8F%9A%E7%A7%A6%E8%82%A1%E6%9D%B1%E6%9C%83%E9%80%9A%E9%81%8E%E9%85%8D%E7%99%BC6%E5%85%83%E8%82%A1%E5%88%A9-080551345.html" target="_blank" style="text-decoration: none; color: #333; font-weight: 500; display: block; line-height: 1.4; font-size: 14px;">
-                        揚秦股東會通過配發6元股利
-                    </a>
-                </td>
-                <td style="padding: 6px; text-align: right; width: 50px; font-family: monospace; font-weight: bold; color: #b71c1c; font-size: 1.1em;">
-                    +1.0
-                </td>
-            </tr>
-            
-            <tr style="border-bottom: 1px solid #eee; background-color: #fff5f5;">
-                <td style="padding: 6px; color: #666; font-size: 0.8em; text-align: center; width: 30px;">28</td>
-                <td style="padding: 6px; color: #888; font-size: 0.85em; width: 80px;">Yahoo股市</td>
-                <td style="padding: 6px;">
-                    <a href="https://tw.news.yahoo.com/%E6%AD%A3%E4%BA%8C-%E5%8F%B0%E8%82%A1etf-00631l%E5%86%8D%E5%8A%A0%E7%A2%BC%E5%8F%B0%E7%A9%8D%E9%9B%BB-%E5%8D%A0%E6%AF%94%E8%B6%85%E9%81%8E4%E6%88%90-065642967.html" target="_blank" style="text-decoration: none; color: #333; font-weight: 500; display: block; line-height: 1.4; font-size: 14px;">
-                        「正二」台股ETF 00631L再加碼台積電！ 占比超過4成
-                    </a>
-                </td>
-                <td style="padding: 6px; text-align: right; width: 50px; font-family: monospace; font-weight: bold; color: #b71c1c; font-size: 1.1em;">
-                    +1.0
-                </td>
-            </tr>
-            
-            <tr style="border-bottom: 1px solid #eee; background-color: #fff5f5;">
-                <td style="padding: 6px; color: #666; font-size: 0.8em; text-align: center; width: 30px;">29</td>
-                <td style="padding: 6px; color: #888; font-size: 0.85em; width: 80px;">Yahoo股市</td>
-                <td style="padding: 6px;">
-                    <a href="https://tw.news.yahoo.com/%E8%81%AF%E7%99%BC%E7%A7%91%E8%88%87%E5%85%83%E5%A4%AA%E5%90%88%E4%BD%9C-%E6%90%B6%E6%94%BB%E5%BD%A9%E8%89%B2%E9%9B%BB%E5%AD%90%E6%9B%B8%E5%B8%82%E5%A0%B4-072118898.html" target="_blank" style="text-decoration: none; color: #333; font-weight: 500; display: block; line-height: 1.4; font-size: 14px;">
-                        聯發科與元太合作　搶攻彩色電子書市場
-                    </a>
-                </td>
-                <td style="padding: 6px; text-align: right; width: 50px; font-family: monospace; font-weight: bold; color: #b71c1c; font-size: 1.1em;">
-                    +1.0
-                </td>
-            </tr>
-            
-            <tr style="border-bottom: 1px solid #eee; background-color: #fff5f5;">
-                <td style="padding: 6px; color: #666; font-size: 0.8em; text-align: center; width: 30px;">30</td>
-                <td style="padding: 6px; color: #888; font-size: 0.85em; width: 80px;">Yahoo股市</td>
-                <td style="padding: 6px;">
-                    <a href="https://tw.stock.yahoo.com/news/%E6%9D%B1%E5%8D%97%E4%BA%9E%E9%9D%A2%E8%87%A8ai%E4%BB%A3%E7%90%86%E4%BA%BA%E6%B5%AA%E6%BD%AE%E6%8C%91%E6%88%B0-%E6%B2%BB%E7%90%86%E6%A1%86%E6%9E%B6%E6%80%A5%E9%9C%80%E5%8D%87%E7%B4%9A-100917107.html" target="_blank" style="text-decoration: none; color: #333; font-weight: 500; display: block; line-height: 1.4; font-size: 14px;">
-                        東南亞面臨AI代理人浪潮挑戰 治理框架急需升級
-                    </a>
-                </td>
-                <td style="padding: 6px; text-align: right; width: 50px; font-family: monospace; font-weight: bold; color: #b71c1c; font-size: 1.1em;">
-                    +1.0
-                </td>
-            </tr>
-            
-            <tr style="border-bottom: 1px solid #eee; background-color: #fff5f5;">
-                <td style="padding: 6px; color: #666; font-size: 0.8em; text-align: center; width: 30px;">31</td>
-                <td style="padding: 6px; color: #888; font-size: 0.85em; width: 80px;">經濟日報</td>
-                <td style="padding: 6px;">
-                    <a href="https://money.udn.com/money/story/5612/9527072" target="_blank" style="text-decoration: none; color: #333; font-weight: 500; display: block; line-height: 1.4; font-size: 14px;">
-                        無人機物流拚常態化 民航局推24條廊道、強化風險管理
-                    </a>
-                </td>
-                <td style="padding: 6px; text-align: right; width: 50px; font-family: monospace; font-weight: bold; color: #b71c1c; font-size: 1.1em;">
-                    +1.0
-                </td>
-            </tr>
-            
-            <tr style="border-bottom: 1px solid #eee; background-color: #fff5f5;">
-                <td style="padding: 6px; color: #666; font-size: 0.8em; text-align: center; width: 30px;">32</td>
-                <td style="padding: 6px; color: #888; font-size: 0.85em; width: 80px;">經濟日報</td>
-                <td style="padding: 6px;">
-                    <a href="https://money.udn.com/money/story/5612/9527071" target="_blank" style="text-decoration: none; color: #333; font-weight: 500; display: block; line-height: 1.4; font-size: 14px;">
-                        長榮航太股東會／通過配發現金股利5元 看好新年度營運表現
-                    </a>
-                </td>
-                <td style="padding: 6px; text-align: right; width: 50px; font-family: monospace; font-weight: bold; color: #b71c1c; font-size: 1.1em;">
-                    +1.0
-                </td>
-            </tr>
-            
-            <tr style="border-bottom: 1px solid #eee; background-color: #fff5f5;">
-                <td style="padding: 6px; color: #666; font-size: 0.8em; text-align: center; width: 30px;">33</td>
-                <td style="padding: 6px; color: #888; font-size: 0.85em; width: 80px;">經濟日報</td>
-                <td style="padding: 6px;">
-                    <a href="https://money.udn.com/money/story/11074/9526949" target="_blank" style="text-decoration: none; color: #333; font-weight: 500; display: block; line-height: 1.4; font-size: 14px;">
-                        胡連股東會／第1季庫存調整結束 4月起到7月業績一路上揚
-                    </a>
-                </td>
-                <td style="padding: 6px; text-align: right; width: 50px; font-family: monospace; font-weight: bold; color: #b71c1c; font-size: 1.1em;">
-                    +1.0
-                </td>
-            </tr>
-            
-            <tr style="border-bottom: 1px solid #eee; background-color: #fff5f5;">
-                <td style="padding: 6px; color: #666; font-size: 0.8em; text-align: center; width: 30px;">34</td>
-                <td style="padding: 6px; color: #888; font-size: 0.85em; width: 80px;">經濟日報</td>
-                <td style="padding: 6px;">
-                    <a href="https://money.udn.com/money/story/5607/9526930" target="_blank" style="text-decoration: none; color: #333; font-weight: 500; display: block; line-height: 1.4; font-size: 14px;">
-                        外資買超355億元但竟狂賣面板股 群創、友達、彩晶合計遭倒貨逾40萬張
-                    </a>
-                </td>
-                <td style="padding: 6px; text-align: right; width: 50px; font-family: monospace; font-weight: bold; color: #b71c1c; font-size: 1.1em;">
-                    +1.0
-                </td>
-            </tr>
-            
-            <tr style="border-bottom: 1px solid #eee; background-color: #fff5f5;">
-                <td style="padding: 6px; color: #666; font-size: 0.8em; text-align: center; width: 30px;">35</td>
-                <td style="padding: 6px; color: #888; font-size: 0.85em; width: 80px;">經濟日報</td>
-                <td style="padding: 6px;">
-                    <a href="https://money.udn.com/money/story/5710/9526760" target="_blank" style="text-decoration: none; color: #333; font-weight: 500; display: block; line-height: 1.4; font-size: 14px;">
-                        瑞軒獲利／自結4月 EPS 0.03元
-                    </a>
-                </td>
-                <td style="padding: 6px; text-align: right; width: 50px; font-family: monospace; font-weight: bold; color: #b71c1c; font-size: 1.1em;">
-                    +1.0
-                </td>
-            </tr>
-            
-            <tr style="border-bottom: 1px solid #eee; background-color: #fff5f5;">
-                <td style="padding: 6px; color: #666; font-size: 0.8em; text-align: center; width: 30px;">36</td>
-                <td style="padding: 6px; color: #888; font-size: 0.85em; width: 80px;">經濟日報</td>
-                <td style="padding: 6px;">
-                    <a href="https://money.udn.com/money/story/11074/9526691" target="_blank" style="text-decoration: none; color: #333; font-weight: 500; display: block; line-height: 1.4; font-size: 14px;">
-                        科嶠獲利／自結4月 EPS 0.15元
-                    </a>
-                </td>
-                <td style="padding: 6px; text-align: right; width: 50px; font-family: monospace; font-weight: bold; color: #b71c1c; font-size: 1.1em;">
-                    +1.0
-                </td>
-            </tr>
-            
-            <tr style="border-bottom: 1px solid #eee; background-color: #fff5f5;">
-                <td style="padding: 6px; color: #666; font-size: 0.8em; text-align: center; width: 30px;">37</td>
-                <td style="padding: 6px; color: #888; font-size: 0.85em; width: 80px;">自由財經</td>
-                <td style="padding: 6px;">
-                    <a href="https://ec.ltn.com.tw/article/breakingnews/5450380" target="_blank" style="text-decoration: none; color: #333; font-weight: 500; display: block; line-height: 1.4; font-size: 14px;">
-                        三洋實業股東會通過每股配息6元 看好未來五年營運無虞
-                    </a>
-                </td>
-                <td style="padding: 6px; text-align: right; width: 50px; font-family: monospace; font-weight: bold; color: #b71c1c; font-size: 1.1em;">
-                    +1.0
-                </td>
-            </tr>
-            
-            <tr style="border-bottom: 1px solid #eee; background-color: #fff5f5;">
-                <td style="padding: 6px; color: #666; font-size: 0.8em; text-align: center; width: 30px;">38</td>
-                <td style="padding: 6px; color: #888; font-size: 0.85em; width: 80px;">自由財經</td>
-                <td style="padding: 6px;">
-                    <a href="https://ec.ltn.com.tw/article/breakingnews/5450317" target="_blank" style="text-decoration: none; color: #333; font-weight: 500; display: block; line-height: 1.4; font-size: 14px;">
-                        COMPUTEX瘋AI 貿協黃志芳：泡沫化是資本市場擔憂 產業動能強
-                    </a>
-                </td>
-                <td style="padding: 6px; text-align: right; width: 50px; font-family: monospace; font-weight: bold; color: #b71c1c; font-size: 1.1em;">
-                    +1.0
-                </td>
-            </tr>
-            
-            <tr style="border-bottom: 1px solid #eee; background-color: #fff5f5;">
-                <td style="padding: 6px; color: #666; font-size: 0.8em; text-align: center; width: 30px;">39</td>
-                <td style="padding: 6px; color: #888; font-size: 0.85em; width: 80px;">ETtoday</td>
-                <td style="padding: 6px;">
-                    <a href="https://finance.ettoday.net/news/3172278" target="_blank" style="text-decoration: none; color: #333; font-weight: 500; display: block; line-height: 1.4; font-size: 14px;">
-                        台塑化煉油事業重返成長軌道　多元採購確保料源穩定
-                    </a>
-                </td>
-                <td style="padding: 6px; text-align: right; width: 50px; font-family: monospace; font-weight: bold; color: #b71c1c; font-size: 1.1em;">
-                    +1.0
-                </td>
-            </tr>
-            
-            <tr style="border-bottom: 1px solid #eee; background-color: #fff5f5;">
-                <td style="padding: 6px; color: #666; font-size: 0.8em; text-align: center; width: 30px;">40</td>
-                <td style="padding: 6px; color: #888; font-size: 0.85em; width: 80px;">ETtoday</td>
-                <td style="padding: 6px;">
-                    <a href="https://finance.ettoday.net/news/3172193" target="_blank" style="text-decoration: none; color: #333; font-weight: 500; display: block; line-height: 1.4; font-size: 14px;">
-                        台積電像拖油瓶？　不敗教主借8位數「改買2類股」：已獲利7位數
-                    </a>
-                </td>
-                <td style="padding: 6px; text-align: right; width: 50px; font-family: monospace; font-weight: bold; color: #b71c1c; font-size: 1.1em;">
-                    +1.0
-                </td>
-            </tr>
-            
-            <tr style="border-bottom: 1px solid #eee; background-color: #fff5f5;">
-                <td style="padding: 6px; color: #666; font-size: 0.8em; text-align: center; width: 30px;">41</td>
-                <td style="padding: 6px; color: #888; font-size: 0.85em; width: 80px;">ETtoday</td>
-                <td style="padding: 6px;">
-                    <a href="https://finance.ettoday.net/news/3172005" target="_blank" style="text-decoration: none; color: #333; font-weight: 500; display: block; line-height: 1.4; font-size: 14px;">
-                        瘋漲的貨櫃運價　德魯里不預期持續上漲太久、攬貨業看6月中回落
-                    </a>
-                </td>
-                <td style="padding: 6px; text-align: right; width: 50px; font-family: monospace; font-weight: bold; color: #b71c1c; font-size: 1.1em;">
-                    +1.0
-                </td>
-            </tr>
-            
-            <tr style="border-bottom: 1px solid #eee; background-color: #fff5f5;">
-                <td style="padding: 6px; color: #666; font-size: 0.8em; text-align: center; width: 30px;">42</td>
-                <td style="padding: 6px; color: #888; font-size: 0.85em; width: 80px;">ETtoday</td>
-                <td style="padding: 6px;">
-                    <a href="https://finance.ettoday.net/news/3172033" target="_blank" style="text-decoration: none; color: #333; font-weight: 500; display: block; line-height: 1.4; font-size: 14px;">
-                        外資上調「台積電、聯發科」目標價　股民震驚了
-                    </a>
-                </td>
-                <td style="padding: 6px; text-align: right; width: 50px; font-family: monospace; font-weight: bold; color: #b71c1c; font-size: 1.1em;">
-                    +1.0
-                </td>
-            </tr>
-            
-            <tr style="border-bottom: 1px solid #eee; background-color: #fff5f5;">
-                <td style="padding: 6px; color: #666; font-size: 0.8em; text-align: center; width: 30px;">43</td>
-                <td style="padding: 6px; color: #888; font-size: 0.85em; width: 80px;">ETtoday</td>
-                <td style="padding: 6px;">
-                    <a href="https://finance.ettoday.net/news/3171981" target="_blank" style="text-decoration: none; color: #333; font-weight: 500; display: block; line-height: 1.4; font-size: 14px;">
-                        美股AI硬體股瘋漲！財經專家揭資金追逐「最底層的基礎設施」
-                    </a>
-                </td>
-                <td style="padding: 6px; text-align: right; width: 50px; font-family: monospace; font-weight: bold; color: #b71c1c; font-size: 1.1em;">
-                    +1.0
-                </td>
-            </tr>
-            
-            <tr style="border-bottom: 1px solid #eee; background-color: #fff5f5;">
-                <td style="padding: 6px; color: #666; font-size: 0.8em; text-align: center; width: 30px;">44</td>
-                <td style="padding: 6px; color: #888; font-size: 0.85em; width: 80px;">ETtoday</td>
-                <td style="padding: 6px;">
-                    <a href="https://finance.ettoday.net/news/3171963" target="_blank" style="text-decoration: none; color: #333; font-weight: 500; display: block; line-height: 1.4; font-size: 14px;">
-                        貨櫃運輸被評價格上漲服務卻惡化　航商表示無奈
-                    </a>
-                </td>
-                <td style="padding: 6px; text-align: right; width: 50px; font-family: monospace; font-weight: bold; color: #b71c1c; font-size: 1.1em;">
-                    +1.0
-                </td>
-            </tr>
-            
-            <tr style="border-bottom: 1px solid #eee; background-color: #fff5f5;">
-                <td style="padding: 6px; color: #666; font-size: 0.8em; text-align: center; width: 30px;">45</td>
-                <td style="padding: 6px; color: #888; font-size: 0.85em; width: 80px;">Yahoo股市</td>
-                <td style="padding: 6px;">
-                    <a href="https://tw.news.yahoo.com/%E6%94%BE-%E5%B0%88%E9%A1%8C-ai%E8%AE%93%E5%8F%B0%E7%81%A3%E7%AC%AC-%E6%AC%A1%E7%AB%99%E4%B8%8A%E4%B8%96%E7%95%8C%E4%B8%AD%E5%BF%83-%E5%8F%B0%E8%82%A1%E8%B6%85%E8%BB%8A%E5%8D%B0%E5%BA%A6%E8%83%8C%E5%BE%8C-075323490.html" target="_blank" style="text-decoration: none; color: #333; font-weight: 500; display: block; line-height: 1.4; font-size: 14px;">
-                        《放．專題》AI讓台灣第一次站上世界中心？台股超車印度背後　其實是一場「國運重組」
-                    </a>
-                </td>
-                <td style="padding: 6px; text-align: right; width: 50px; font-family: monospace; font-weight: bold; color: #b71c1c; font-size: 1.1em;">
-                    +0.5
-                </td>
-            </tr>
-            
-            <tr style="border-bottom: 1px solid #eee; background-color: #fff5f5;">
-                <td style="padding: 6px; color: #666; font-size: 0.8em; text-align: center; width: 30px;">46</td>
-                <td style="padding: 6px; color: #888; font-size: 0.85em; width: 80px;">自由財經</td>
-                <td style="padding: 6px;">
-                    <a href="https://ec.ltn.com.tw/article/breakingnews/5450324" target="_blank" style="text-decoration: none; color: #333; font-weight: 500; display: block; line-height: 1.4; font-size: 14px;">
-                        俄烏戰爭帶動無人機需求！台灣出口暴增20倍 搶攻非紅供應鏈商機
-                    </a>
-                </td>
-                <td style="padding: 6px; text-align: right; width: 50px; font-family: monospace; font-weight: bold; color: #b71c1c; font-size: 1.1em;">
-                    +0.5
-                </td>
-            </tr>
-            
-                        </tbody>
-                    </table>
-                </div>
+        <div class="section-main">
+            <div class="section-title etf-title">
+                <span>📈 ETF 專區 (ETF Watchlist)</span>
+                <span>共 7 筆</span>
             </div>
-
-            <div class="section-main">
-                <div class="section-title bear-title">
-                    <span>📉 空方訊號 (Bearish)</span>
-                    <span>共 28 筆</span>
-                </div>
-                
-                <div class="sub-section">
-                    <div class="sub-title">🌎 大盤 & 總體經濟</div>
-                    <table>
-                         <thead>
-                            <tr>
-                                <th style="text-align:center;">#</th>
-                                <th>來源</th>
-                                <th>新聞標題</th>
-                                <th style="text-align:right;">分數</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            
-            <tr style="border-bottom: 1px solid #eee; background-color: #f1f8e9;">
-                <td style="padding: 6px; color: #666; font-size: 0.8em; text-align: center; width: 30px;">1</td>
-                <td style="padding: 6px; color: #888; font-size: 0.85em; width: 80px;">Yahoo股市</td>
-                <td style="padding: 6px;">
-                    <a href="https://tw.news.yahoo.com/%E7%BE%8E%E8%82%A1%E7%8B%82%E6%AD%A1%E8%A6%81%E8%90%BD%E5%B9%95-%E5%85%A9%E5%A4%A7%E5%A3%9E%E6%95%B8%E6%93%9A%E7%A4%BA%E8%AD%A6%E5%B4%A9%E7%9B%A4%E8%BF%91%E4%BA%86-%E7%B6%B2%E9%85%B8-%E5%96%8A2%E8%90%AC%E5%B4%A9%E5%88%B0%E7%8F%BE%E5%9C%A8%E5%BF%AB5%E8%90%AC-084517950.html" target="_blank" style="text-decoration: none; color: #333; font-weight: 500; display: block; line-height: 1.4; font-size: 14px;">
-                        美股狂歡要落幕？兩大壞數據示警崩盤近了 網酸：喊2萬崩到現在快5萬
-                    </a>
-                </td>
-                <td style="padding: 6px; text-align: right; width: 50px; font-family: monospace; font-weight: bold; color: #1b5e20; font-size: 1.1em;">
-                    -4.0
-                </td>
-            </tr>
-            
-            <tr style="border-bottom: 1px solid #eee; background-color: #f1f8e9;">
-                <td style="padding: 6px; color: #666; font-size: 0.8em; text-align: center; width: 30px;">2</td>
-                <td style="padding: 6px; color: #888; font-size: 0.85em; width: 80px;">Yahoo股市</td>
-                <td style="padding: 6px;">
-                    <a href="https://tw.stock.yahoo.com/news/%E9%AB%98%E7%9B%9B%E7%A4%BA%E8%AD%A6%E7%BE%8E%E8%82%A1-%E5%A4%8F%E5%AD%A3%E9%9C%87%E7%9B%AA-%E5%B0%87%E8%87%B3-%E5%82%B5%E5%B8%82%E5%A3%93%E5%8A%9B%E6%B5%AE%E7%8F%BE-%E6%A8%99%E6%99%AE500%E9%80%A3%E6%BC%B28%E9%80%B1%E6%81%90%E9%80%B2%E5%85%A5%E6%B3%A2%E5%8B%95%E6%9C%9F-092002687.html" target="_blank" style="text-decoration: none; color: #333; font-weight: 500; display: block; line-height: 1.4; font-size: 14px;">
-                        高盛示警美股「夏季震盪」將至！債市壓力浮現、標普500連漲8週恐進入波動期
-                    </a>
-                </td>
-                <td style="padding: 6px; text-align: right; width: 50px; font-family: monospace; font-weight: bold; color: #1b5e20; font-size: 1.1em;">
-                    -3.5
-                </td>
-            </tr>
-            
-            <tr style="border-bottom: 1px solid #eee; background-color: #f1f8e9;">
-                <td style="padding: 6px; color: #666; font-size: 0.8em; text-align: center; width: 30px;">3</td>
-                <td style="padding: 6px; color: #888; font-size: 0.85em; width: 80px;">Yahoo股市</td>
-                <td style="padding: 6px;">
-                    <a href="https://tw.stock.yahoo.com/news/%E5%8F%B0%E8%82%A1%E8%A1%9D4%E8%90%AC4%E5%8F%B2%E9%AB%98%E5%BE%8C%E7%BF%BB%E9%BB%91-%E4%B8%89%E5%A4%A7%E6%B3%95%E4%BA%BA%E6%93%B2473%E5%84%84%E9%80%B2%E5%A0%B4%E6%89%93%E6%B0%B4%E6%BC%82-%E8%82%A1%E6%B0%91%E7%AC%91-%E6%BA%96%E5%82%99%E5%9C%A8%E6%93%8E%E5%A4%A9%E5%B4%97%E6%B4%97%E7%A2%97-085000756.html" target="_blank" style="text-decoration: none; color: #333; font-weight: 500; display: block; line-height: 1.4; font-size: 14px;">
-                        台股衝4萬4史高後翻黑！三大法人擲473億進場打水漂　股民笑：準備在擎天崗洗碗
-                    </a>
-                </td>
-                <td style="padding: 6px; text-align: right; width: 50px; font-family: monospace; font-weight: bold; color: #1b5e20; font-size: 1.1em;">
-                    -3.0
-                </td>
-            </tr>
-            
-            <tr style="border-bottom: 1px solid #eee; background-color: #f1f8e9;">
-                <td style="padding: 6px; color: #666; font-size: 0.8em; text-align: center; width: 30px;">4</td>
-                <td style="padding: 6px; color: #888; font-size: 0.85em; width: 80px;">Yahoo股市</td>
-                <td style="padding: 6px;">
-                    <a href="https://tw.stock.yahoo.com/news/%E6%97%A5%E7%B6%93%E6%8C%87%E6%95%B8%E9%80%B1%E4%BA%8C%E9%9C%87%E7%9B%AA%E4%B8%8B%E6%BB%91162-1%E9%BB%9E%E6%88%960-25-%E4%B8%89%E8%8F%B1%E5%95%86%E4%BA%8B-%E6%84%9B%E5%BE%B7%E8%90%AC%E8%82%A1%E5%83%B9%E7%96%B2%E5%BC%B1-065738979.html" target="_blank" style="text-decoration: none; color: #333; font-weight: 500; display: block; line-height: 1.4; font-size: 14px;">
-                        日經指數週二震盪下滑162.1點或0.25%，三菱商事、愛德萬股價疲弱
-                    </a>
-                </td>
-                <td style="padding: 6px; text-align: right; width: 50px; font-family: monospace; font-weight: bold; color: #1b5e20; font-size: 1.1em;">
-                    -3.0
-                </td>
-            </tr>
-            
-            <tr style="border-bottom: 1px solid #eee; background-color: #f1f8e9;">
-                <td style="padding: 6px; color: #666; font-size: 0.8em; text-align: center; width: 30px;">5</td>
-                <td style="padding: 6px; color: #888; font-size: 0.85em; width: 80px;">Yahoo股市</td>
-                <td style="padding: 6px;">
-                    <a href="https://tw.stock.yahoo.com/news/%E3%80%90yahoo%E6%97%A9%E7%9B%A4%E3%80%91%E5%8F%B0%E8%82%A1%E7%99%BB4%E8%90%AC4%E5%89%B5%E9%AB%98%E5%BE%8C%E8%B7%B3%E6%B0%B4%E7%BF%BB%E9%BB%91-%E5%88%86%E6%9E%90%E5%B8%AB%E7%99%BD%E6%98%93%E5%BC%98%E5%8B%B8%E3%80%8C%E6%85%8E%E8%BF%BD%E3%80%8D%EF%BC%9A%E6%94%B6%E9%AB%98%E4%B8%8D%E6%98%93-014048967.html" target="_blank" style="text-decoration: none; color: #333; font-weight: 500; display: block; line-height: 1.4; font-size: 14px;">
-                        【Yahoo早盤】台股登4萬4創高後跳水翻黑 分析師白易弘勸「慎追」：收高不易
-                    </a>
-                </td>
-                <td style="padding: 6px; text-align: right; width: 50px; font-family: monospace; font-weight: bold; color: #1b5e20; font-size: 1.1em;">
-                    -3.0
-                </td>
-            </tr>
-            
-            <tr style="border-bottom: 1px solid #eee; background-color: #f1f8e9;">
-                <td style="padding: 6px; color: #666; font-size: 0.8em; text-align: center; width: 30px;">6</td>
-                <td style="padding: 6px; color: #888; font-size: 0.85em; width: 80px;">Yahoo股市</td>
-                <td style="padding: 6px;">
-                    <a href="https://tw.stock.yahoo.com/news/%E5%8F%B0%E8%82%A1%E7%9B%A4%E5%BE%8C-%E9%87%8F%E5%A2%9E%E6%94%B6%E8%B7%8C119%E9%BB%9E-44k%E5%BE%97%E8%80%8C%E5%BE%A9%E5%A4%B1-080400226.html" target="_blank" style="text-decoration: none; color: #333; font-weight: 500; display: block; line-height: 1.4; font-size: 14px;">
-                        《台股盤後》量增收跌119點，44K得而復失
-                    </a>
-                </td>
-                <td style="padding: 6px; text-align: right; width: 50px; font-family: monospace; font-weight: bold; color: #1b5e20; font-size: 1.1em;">
-                    -1.5
-                </td>
-            </tr>
-            
-            <tr style="border-bottom: 1px solid #eee; background-color: #f1f8e9;">
-                <td style="padding: 6px; color: #666; font-size: 0.8em; text-align: center; width: 30px;">7</td>
-                <td style="padding: 6px; color: #888; font-size: 0.85em; width: 80px;">Yahoo股市</td>
-                <td style="padding: 6px;">
-                    <a href="https://tw.news.yahoo.com/%E5%8F%B0%E8%82%A1%E9%AB%98%E6%AA%94%E9%9C%87%E7%9B%AA%E9%82%84%E8%83%BD%E8%BF%BD-%E5%B0%88%E5%AE%B6%E4%BC%B0%E6%9C%80%E9%AB%98%E6%8C%91%E6%88%B05%E8%90%AC3-%E8%A6%AA%E6%9B%9D%E7%BE%8E%E5%82%B5%E6%8A%84%E5%BA%95%E8%A1%93-075100550.html" target="_blank" style="text-decoration: none; color: #333; font-weight: 500; display: block; line-height: 1.4; font-size: 14px;">
-                        台股高檔震盪還能追？！　專家估最高挑戰5萬3，親曝美債抄底術
-                    </a>
-                </td>
-                <td style="padding: 6px; text-align: right; width: 50px; font-family: monospace; font-weight: bold; color: #1b5e20; font-size: 1.1em;">
-                    -1.5
-                </td>
-            </tr>
-            
-            <tr style="border-bottom: 1px solid #eee; background-color: #f1f8e9;">
-                <td style="padding: 6px; color: #666; font-size: 0.8em; text-align: center; width: 30px;">8</td>
-                <td style="padding: 6px; color: #888; font-size: 0.85em; width: 80px;">Yahoo股市</td>
-                <td style="padding: 6px;">
-                    <a href="https://tw.stock.yahoo.com/news/%E6%B0%B8%E8%B1%90%E6%9C%9F%E8%B2%A8-%E5%8F%B0%E8%82%A1%E9%AB%98%E6%AA%94%E9%9C%87%E7%9B%AA%E5%8A%A0%E5%8A%87-%E9%87%8F%E8%83%BD%E8%AE%8A%E5%8C%96%E6%88%90%E9%97%9C%E9%8D%B5-073718188.html" target="_blank" style="text-decoration: none; color: #333; font-weight: 500; display: block; line-height: 1.4; font-size: 14px;">
-                        永豐期貨：台股高檔震盪加劇，量能變化成關鍵
-                    </a>
-                </td>
-                <td style="padding: 6px; text-align: right; width: 50px; font-family: monospace; font-weight: bold; color: #1b5e20; font-size: 1.1em;">
-                    -1.5
-                </td>
-            </tr>
-            
-            <tr style="border-bottom: 1px solid #eee; background-color: #f1f8e9;">
-                <td style="padding: 6px; color: #666; font-size: 0.8em; text-align: center; width: 30px;">9</td>
-                <td style="padding: 6px; color: #888; font-size: 0.85em; width: 80px;">Yahoo股市</td>
-                <td style="padding: 6px;">
-                    <a href="https://tw.stock.yahoo.com/news/%E8%BF%8E%E6%88%B0%E5%8F%B0%E8%82%A1%E9%AB%98%E6%AA%94%E9%9C%87%E7%9B%AA-%E4%B8%BB%E5%8B%95%E5%BC%8Fetf%E5%8A%A0%E5%85%A5%E6%8E%A9%E8%AD%B7%E6%80%A7%E8%B2%B7%E6%AC%8A-070602667.html" target="_blank" style="text-decoration: none; color: #333; font-weight: 500; display: block; line-height: 1.4; font-size: 14px;">
-                        迎戰台股高檔震盪 主動式ETF加入掩護性買權
-                    </a>
-                </td>
-                <td style="padding: 6px; text-align: right; width: 50px; font-family: monospace; font-weight: bold; color: #1b5e20; font-size: 1.1em;">
-                    -1.5
-                </td>
-            </tr>
-            
-            <tr style="border-bottom: 1px solid #eee; background-color: #f1f8e9;">
-                <td style="padding: 6px; color: #666; font-size: 0.8em; text-align: center; width: 30px;">10</td>
-                <td style="padding: 6px; color: #888; font-size: 0.85em; width: 80px;">自由財經</td>
-                <td style="padding: 6px;">
-                    <a href="https://ec.ltn.com.tw/article/breakingnews/5450221" target="_blank" style="text-decoration: none; color: #333; font-weight: 500; display: block; line-height: 1.4; font-size: 14px;">
-                        台股震盪逾700點！72萬存股族逆勢衝高 最大推手是「它」
-                    </a>
-                </td>
-                <td style="padding: 6px; text-align: right; width: 50px; font-family: monospace; font-weight: bold; color: #1b5e20; font-size: 1.1em;">
-                    -1.5
-                </td>
-            </tr>
-            
-            <tr style="border-bottom: 1px solid #eee; background-color: #f1f8e9;">
-                <td style="padding: 6px; color: #666; font-size: 0.8em; text-align: center; width: 30px;">11</td>
-                <td style="padding: 6px; color: #888; font-size: 0.85em; width: 80px;">Yahoo股市</td>
-                <td style="padding: 6px;">
-                    <a href="https://tw.stock.yahoo.com/news/%E5%BD%B0%E9%8A%80%E6%B3%95%E8%AA%AA2%E3%80%8B%E7%9C%8Bfed%E5%B9%B4%E5%BA%95%E6%9C%89%E6%9C%9B%E5%B0%8F%E5%B9%85%E9%99%8D%E6%81%AF-%E6%8B%9A%E5%85%A8%E5%B9%B4%E6%8F%9B%E5%8C%AF%E4%BA%A4%E6%98%93%E6%94%B6%E7%9B%8A%E9%80%BE40%E5%84%84%E5%85%83-102533406.html" target="_blank" style="text-decoration: none; color: #333; font-weight: 500; display: block; line-height: 1.4; font-size: 14px;">
-                        彰銀法說2》看Fed年底有望小幅降息 拚全年換匯交易收益逾40億元
-                    </a>
-                </td>
-                <td style="padding: 6px; text-align: right; width: 50px; font-family: monospace; font-weight: bold; color: #1b5e20; font-size: 1.1em;">
-                    -0.5
-                </td>
-            </tr>
-            
-            <tr style="border-bottom: 1px solid #eee; background-color: #f1f8e9;">
-                <td style="padding: 6px; color: #666; font-size: 0.8em; text-align: center; width: 30px;">12</td>
-                <td style="padding: 6px; color: #888; font-size: 0.85em; width: 80px;">Yahoo股市</td>
-                <td style="padding: 6px;">
-                    <a href="https://tw.stock.yahoo.com/news/%E5%A4%A7%E5%AE%97%E5%95%86%E5%93%81%E9%A1%9E%E8%82%A1%E9%A0%98%E6%BC%B2-%E9%81%93%E7%93%8A%E6%AD%90%E6%B4%B2600%E6%8C%87%E6%95%B8%E7%9B%A4%E5%88%9D%E4%B8%8A%E6%BC%B20-08-%E4%B8%BB%E8%A6%81%E8%82%A1%E5%B8%82%E6%BC%B2%E8%B7%8C%E4%BA%92%E8%A6%8B-073625746.html" target="_blank" style="text-decoration: none; color: #333; font-weight: 500; display: block; line-height: 1.4; font-size: 14px;">
-                        大宗商品類股領漲，道瓊歐洲600指數盤初上漲0.08%，主要股市漲跌互見
-                    </a>
-                </td>
-                <td style="padding: 6px; text-align: right; width: 50px; font-family: monospace; font-weight: bold; color: #1b5e20; font-size: 1.1em;">
-                    -0.5
-                </td>
-            </tr>
-            
-            <tr style="border-bottom: 1px solid #eee; background-color: #f1f8e9;">
-                <td style="padding: 6px; color: #666; font-size: 0.8em; text-align: center; width: 30px;">13</td>
-                <td style="padding: 6px; color: #888; font-size: 0.85em; width: 80px;">經濟日報</td>
-                <td style="padding: 6px;">
-                    <a href="https://money.udn.com/money/story/5607/9526601" target="_blank" style="text-decoration: none; color: #333; font-weight: 500; display: block; line-height: 1.4; font-size: 14px;">
-                        台股下跌119點 三大法人逆勢買超473億元
-                    </a>
-                </td>
-                <td style="padding: 6px; text-align: right; width: 50px; font-family: monospace; font-weight: bold; color: #1b5e20; font-size: 1.1em;">
-                    -0.5
-                </td>
-            </tr>
-            
-                        </tbody>
-                    </table>
-                </div>
-                
-                <div class="sub-section">
-                    <div class="sub-title">🏢 個股 & 產業動態</div>
-                    <table>
-                        <tbody>
-                            
-            <tr style="border-bottom: 1px solid #eee; background-color: #f1f8e9;">
-                <td style="padding: 6px; color: #666; font-size: 0.8em; text-align: center; width: 30px;">1</td>
-                <td style="padding: 6px; color: #888; font-size: 0.85em; width: 80px;">經濟日報</td>
-                <td style="padding: 6px;">
-                    <a href="https://money.udn.com/money/story/5607/9526591" target="_blank" style="text-decoration: none; color: #333; font-weight: 500; display: block; line-height: 1.4; font-size: 14px;">
-                        群創爆145萬張成交量收45.7元、跌6.92% 友達重挫跌停
-                    </a>
-                </td>
-                <td style="padding: 6px; text-align: right; width: 50px; font-family: monospace; font-weight: bold; color: #1b5e20; font-size: 1.1em;">
-                    -8.0
-                </td>
-            </tr>
-            
-            <tr style="border-bottom: 1px solid #eee; background-color: #f1f8e9;">
-                <td style="padding: 6px; color: #666; font-size: 0.8em; text-align: center; width: 30px;">2</td>
-                <td style="padding: 6px; color: #888; font-size: 0.85em; width: 80px;">Yahoo股市</td>
-                <td style="padding: 6px;">
-                    <a href="https://tw.stock.yahoo.com/news/%E3%80%90hot%E5%8F%B0%E8%82%A1%E3%80%91%E7%BE%A4%E5%89%B5%E9%87%8D%E6%91%947%E7%88%86110%E8%90%AC%E5%BC%B5%E5%A4%A9%E9%87%8F%E7%B6%B2%E5%95%8F%E3%80%8C%E8%BA%B2%E9%97%9C%E5%B0%8F%E9%BB%91%E5%B1%8B%EF%BC%9F%E3%80%8D-%E5%88%86%E6%9E%90%E5%B8%AB%EF%BC%9A%E7%9F%AD%E7%B7%9A%E5%85%88%E8%B7%91-031005017.html" target="_blank" style="text-decoration: none; color: #333; font-weight: 500; display: block; line-height: 1.4; font-size: 14px;">
-                        【Hot台股】群創重摔7%爆110萬張天量...網問「躲關小黑屋？」 分析師：短線先跑
-                    </a>
-                </td>
-                <td style="padding: 6px; text-align: right; width: 50px; font-family: monospace; font-weight: bold; color: #1b5e20; font-size: 1.1em;">
-                    -4.0
-                </td>
-            </tr>
-            
-            <tr style="border-bottom: 1px solid #eee; background-color: #f1f8e9;">
-                <td style="padding: 6px; color: #666; font-size: 0.8em; text-align: center; width: 30px;">3</td>
-                <td style="padding: 6px; color: #888; font-size: 0.85em; width: 80px;">Yahoo股市</td>
-                <td style="padding: 6px;">
-                    <a href="https://tw.stock.yahoo.com/news/%E5%9C%8B%E5%B7%A8%E3%80%8C%E9%97%9C%E7%A6%81%E9%96%89%E3%80%8D%E4%B8%80%E5%BA%A6%E9%87%8D%E6%8C%AB8%E5%88%86%E6%9E%90%E5%B8%AB%E6%9B%9D%E4%B8%80%E9%97%9C%E9%8D%B5%E7%9C%8B%E5%A4%9A%EF%BC%9A%E7%9C%8B%E7%9C%8B%E8%81%AF%E7%99%BC%E7%A7%91-024522568.html" target="_blank" style="text-decoration: none; color: #333; font-weight: 500; display: block; line-height: 1.4; font-size: 14px;">
-                        國巨「關禁閉」一度重挫8%...分析師曝一關鍵看多：看看聯發科
-                    </a>
-                </td>
-                <td style="padding: 6px; text-align: right; width: 50px; font-family: monospace; font-weight: bold; color: #1b5e20; font-size: 1.1em;">
-                    -4.0
-                </td>
-            </tr>
-            
-            <tr style="border-bottom: 1px solid #eee; background-color: #f1f8e9;">
-                <td style="padding: 6px; color: #666; font-size: 0.8em; text-align: center; width: 30px;">4</td>
-                <td style="padding: 6px; color: #888; font-size: 0.85em; width: 80px;">ETtoday</td>
-                <td style="padding: 6px;">
-                    <a href="https://finance.ettoday.net/news/3172150" target="_blank" style="text-decoration: none; color: #333; font-weight: 500; display: block; line-height: 1.4; font-size: 14px;">
-                        龍頭國巨遭分盤處置！ 被動元件熄火　3檔摜跌停
-                    </a>
-                </td>
-                <td style="padding: 6px; text-align: right; width: 50px; font-family: monospace; font-weight: bold; color: #1b5e20; font-size: 1.1em;">
-                    -4.0
-                </td>
-            </tr>
-            
-            <tr style="border-bottom: 1px solid #eee; background-color: #f1f8e9;">
-                <td style="padding: 6px; color: #666; font-size: 0.8em; text-align: center; width: 30px;">5</td>
-                <td style="padding: 6px; color: #888; font-size: 0.85em; width: 80px;">Yahoo股市</td>
-                <td style="padding: 6px;">
-                    <a href="https://tw.news.yahoo.com/%E5%8F%B0%E8%82%A1%E7%88%86%E9%87%8F%E6%94%B6%E8%B7%8C-%E5%A4%96%E8%B3%87%E5%8A%A0%E7%A2%BC%E8%81%AF%E9%9B%BB-%E5%8A%9B%E7%A9%8D%E9%9B%BB-%E5%80%92%E8%B2%A8%E9%9D%A2%E6%9D%BF%E9%9B%99%E9%9B%84-%E5%8F%8B%E9%81%94%E6%85%98%E8%B7%8C%E5%81%9C-090645575.html" target="_blank" style="text-decoration: none; color: #333; font-weight: 500; display: block; line-height: 1.4; font-size: 14px;">
-                        台股爆量收跌　外資加碼聯電、力積電！倒貨面板雙雄 友達慘跌停
-                    </a>
-                </td>
-                <td style="padding: 6px; text-align: right; width: 50px; font-family: monospace; font-weight: bold; color: #1b5e20; font-size: 1.1em;">
-                    -3.0
-                </td>
-            </tr>
-            
-            <tr style="border-bottom: 1px solid #eee; background-color: #f1f8e9;">
-                <td style="padding: 6px; color: #666; font-size: 0.8em; text-align: center; width: 30px;">6</td>
-                <td style="padding: 6px; color: #888; font-size: 0.85em; width: 80px;">Yahoo股市</td>
-                <td style="padding: 6px;">
-                    <a href="https://tw.news.yahoo.com/%E5%9B%A0%E6%87%89ai%E7%AC%AC-%E4%BB%B6%E4%BA%8B%E5%B0%B1%E8%A3%81%E5%93%A1-%E9%BB%83%E4%BB%81%E5%8B%B3%E7%9C%8B%E4%B8%8D%E4%B8%8B%E5%8E%BB-%E9%80%99%E8%97%89%E5%8F%A3%E5%A4%AA%E6%87%B6%E6%83%B0-091030681.html" target="_blank" style="text-decoration: none; color: #333; font-weight: 500; display: block; line-height: 1.4; font-size: 14px;">
-                        因應AI第一件事就裁員？　黃仁勳看不下去：這藉口太懶惰
-                    </a>
-                </td>
-                <td style="padding: 6px; text-align: right; width: 50px; font-family: monospace; font-weight: bold; color: #1b5e20; font-size: 1.1em;">
-                    -1.5
-                </td>
-            </tr>
-            
-            <tr style="border-bottom: 1px solid #eee; background-color: #f1f8e9;">
-                <td style="padding: 6px; color: #666; font-size: 0.8em; text-align: center; width: 30px;">7</td>
-                <td style="padding: 6px; color: #888; font-size: 0.85em; width: 80px;">Yahoo股市</td>
-                <td style="padding: 6px;">
-                    <a href="https://tw.news.yahoo.com/%E7%A7%91%E6%8A%80%E7%B5%82%E5%B0%87%E5%8F%96%E4%BB%A3%E4%BA%BA%E9%A1%9E-ceo%E6%8A%8A%E8%A3%81%E5%93%A1%E6%AD%B8%E5%92%8E%E6%96%BCai-%E9%BB%83%E4%BB%81%E5%8B%B3%E7%BD%95%E8%A6%8B%E8%AA%AA%E9%87%8D%E8%A9%B1-%E6%87%B6%E6%83%B0%E7%84%A1%E7%90%86-063200912.html" target="_blank" style="text-decoration: none; color: #333; font-weight: 500; display: block; line-height: 1.4; font-size: 14px;">
-                        科技終將取代人類？CEO把裁員歸咎於AI　黃仁勳罕見說重話：懶惰無理
-                    </a>
-                </td>
-                <td style="padding: 6px; text-align: right; width: 50px; font-family: monospace; font-weight: bold; color: #1b5e20; font-size: 1.1em;">
-                    -1.5
-                </td>
-            </tr>
-            
-            <tr style="border-bottom: 1px solid #eee; background-color: #f1f8e9;">
-                <td style="padding: 6px; color: #666; font-size: 0.8em; text-align: center; width: 30px;">8</td>
-                <td style="padding: 6px; color: #888; font-size: 0.85em; width: 80px;">經濟日報</td>
-                <td style="padding: 6px;">
-                    <a href="https://money.udn.com/money/story/11074/9526879" target="_blank" style="text-decoration: none; color: #333; font-weight: 500; display: block; line-height: 1.4; font-size: 14px;">
-                        中美晶股東會／搶占太空太陽能商機 只要客戶願意下單都樂意承接
-                    </a>
-                </td>
-                <td style="padding: 6px; text-align: right; width: 50px; font-family: monospace; font-weight: bold; color: #1b5e20; font-size: 1.1em;">
-                    -1.5
-                </td>
-            </tr>
-            
-            <tr style="border-bottom: 1px solid #eee; background-color: #f1f8e9;">
-                <td style="padding: 6px; color: #666; font-size: 0.8em; text-align: center; width: 30px;">9</td>
-                <td style="padding: 6px; color: #888; font-size: 0.85em; width: 80px;">經濟日報</td>
-                <td style="padding: 6px;">
-                    <a href="https://money.udn.com/money/story/123397/9526808" target="_blank" style="text-decoration: none; color: #333; font-weight: 500; display: block; line-height: 1.4; font-size: 14px;">
-                        台股擂台／「佛系產業教練」白易弘：指數高檔震盪 AI 產業趨勢方興未艾
-                    </a>
-                </td>
-                <td style="padding: 6px; text-align: right; width: 50px; font-family: monospace; font-weight: bold; color: #1b5e20; font-size: 1.1em;">
-                    -1.5
-                </td>
-            </tr>
-            
-            <tr style="border-bottom: 1px solid #eee; background-color: #f1f8e9;">
-                <td style="padding: 6px; color: #666; font-size: 0.8em; text-align: center; width: 30px;">10</td>
-                <td style="padding: 6px; color: #888; font-size: 0.85em; width: 80px;">自由財經</td>
-                <td style="padding: 6px;">
-                    <a href="https://ec.ltn.com.tw/article/breakingnews/5450055" target="_blank" style="text-decoration: none; color: #333; font-weight: 500; display: block; line-height: 1.4; font-size: 14px;">
-                        過去1年價格跌幅最大「20款二手車」 這款最多掉價10.4萬元
-                    </a>
-                </td>
-                <td style="padding: 6px; text-align: right; width: 50px; font-family: monospace; font-weight: bold; color: #1b5e20; font-size: 1.1em;">
-                    -1.5
-                </td>
-            </tr>
-            
-            <tr style="border-bottom: 1px solid #eee; background-color: #f1f8e9;">
-                <td style="padding: 6px; color: #666; font-size: 0.8em; text-align: center; width: 30px;">11</td>
-                <td style="padding: 6px; color: #888; font-size: 0.85em; width: 80px;">ETtoday</td>
-                <td style="padding: 6px;">
-                    <a href="https://finance.ettoday.net/news/3172551" target="_blank" style="text-decoration: none; color: #333; font-weight: 500; display: block; line-height: 1.4; font-size: 14px;">
-                        外資大買台股355億！反手重砍面板股　買賣超10檔一次看
-                    </a>
-                </td>
-                <td style="padding: 6px; text-align: right; width: 50px; font-family: monospace; font-weight: bold; color: #1b5e20; font-size: 1.1em;">
-                    -1.5
-                </td>
-            </tr>
-            
-            <tr style="border-bottom: 1px solid #eee; background-color: #f1f8e9;">
-                <td style="padding: 6px; color: #666; font-size: 0.8em; text-align: center; width: 30px;">12</td>
-                <td style="padding: 6px; color: #888; font-size: 0.85em; width: 80px;">ETtoday</td>
-                <td style="padding: 6px;">
-                    <a href="https://finance.ettoday.net/news/3172331" target="_blank" style="text-decoration: none; color: #333; font-weight: 500; display: block; line-height: 1.4; font-size: 14px;">
-                        快訊／台股收跌119.03點、「44k」得而復失　台積電跌40元
-                    </a>
-                </td>
-                <td style="padding: 6px; text-align: right; width: 50px; font-family: monospace; font-weight: bold; color: #1b5e20; font-size: 1.1em;">
-                    -1.5
-                </td>
-            </tr>
-            
-            <tr style="border-bottom: 1px solid #eee; background-color: #f1f8e9;">
-                <td style="padding: 6px; color: #666; font-size: 0.8em; text-align: center; width: 30px;">13</td>
-                <td style="padding: 6px; color: #888; font-size: 0.85em; width: 80px;">ETtoday</td>
-                <td style="padding: 6px;">
-                    <a href="https://finance.ettoday.net/news/3172040" target="_blank" style="text-decoration: none; color: #333; font-weight: 500; display: block; line-height: 1.4; font-size: 14px;">
-                        「四貸同堂」瘋炒股！　　專家提南韓示警：AI只到第三局
-                    </a>
-                </td>
-                <td style="padding: 6px; text-align: right; width: 50px; font-family: monospace; font-weight: bold; color: #1b5e20; font-size: 1.1em;">
-                    -1.5
-                </td>
-            </tr>
-            
-            <tr style="border-bottom: 1px solid #eee; background-color: #f1f8e9;">
-                <td style="padding: 6px; color: #666; font-size: 0.8em; text-align: center; width: 30px;">14</td>
-                <td style="padding: 6px; color: #888; font-size: 0.85em; width: 80px;">Yahoo股市</td>
-                <td style="padding: 6px;">
-                    <a href="https://tw.stock.yahoo.com/news/%E6%97%A5%E8%82%A1-%E7%8D%B2%E5%88%A9%E4%BA%86%E7%B5%90-%E5%89%B5%E9%AB%98%E5%BE%8C%E5%9B%9E%E6%AA%94-%E6%97%A5%E7%B6%93%E8%B7%8C0-25-081400753.html" target="_blank" style="text-decoration: none; color: #333; font-weight: 500; display: block; line-height: 1.4; font-size: 14px;">
-                        《日股》獲利了結、創高後回檔，日經跌0.25%
-                    </a>
-                </td>
-                <td style="padding: 6px; text-align: right; width: 50px; font-family: monospace; font-weight: bold; color: #1b5e20; font-size: 1.1em;">
-                    -1.0
-                </td>
-            </tr>
-            
-            <tr style="border-bottom: 1px solid #eee; background-color: #f1f8e9;">
-                <td style="padding: 6px; color: #666; font-size: 0.8em; text-align: center; width: 30px;">15</td>
-                <td style="padding: 6px; color: #888; font-size: 0.85em; width: 80px;">Yahoo股市</td>
-                <td style="padding: 6px;">
-                    <a href="https://tw.news.yahoo.com/%E9%BB%83%E4%BB%81%E5%8B%B3%E6%89%B9-%E8%A3%81%E5%93%A1%E6%AD%B8%E5%92%8Eai-%E4%B8%8D%E8%B2%A0%E8%B2%AC%E4%BB%BB-%E7%9C%8B%E5%A5%BD5%E5%B9%B4%E5%BE%8C%E5%B7%A5%E4%BD%9C%E6%A9%9F%E6%9C%83%E6%9B%B4%E5%A4%9A-094447841.html" target="_blank" style="text-decoration: none; color: #333; font-weight: 500; display: block; line-height: 1.4; font-size: 14px;">
-                        黃仁勳批「裁員歸咎AI」不負責任　看好5年後工作機會更多
-                    </a>
-                </td>
-                <td style="padding: 6px; text-align: right; width: 50px; font-family: monospace; font-weight: bold; color: #1b5e20; font-size: 1.1em;">
-                    -0.5
-                </td>
-            </tr>
-            
-                        </tbody>
-                    </table>
-                </div>
-            </div>
-
-            <div style="text-align: center; color: #ccc; font-size: 11px; margin-top: 30px;">
-                Generated by GitHub Actions | V15 Smart Weighting
+            <div class="sub-section">
+                <table>
+                    <thead>
+                        <tr>
+                            <th style="text-align:center; width: 30px;">#</th>
+                            <th style="width: 80px;">來源</th>
+                            <th>新聞標題</th>
+                            <th style="text-align:right; width: 50px;">分數</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr class="row-etf">
+                            <td class="col-id">1</td><td class="col-source">ETtoday</td>
+                            <td class="col-title"><a href="https://finance.ettoday.net/news/3171858" target="_blank">這檔高股息ETF最猛！葉芷娟：00929漲逾45％打敗大盤 近月報酬更勝主動台股ETF</a></td>
+                            <td class="col-score" style="color: #b71c1c;">+2.0</td>
+                        </tr>
+                        <tr class="row-etf">
+                            <td class="col-id">2</td><td class="col-source">ETtoday</td>
+                            <td class="col-title"><a href="https://finance.ettoday.net/news/3172261" target="_blank">00929「1天就飆6.35%」漲幅超過整年！投資達人：活躍期才剛開始</a></td>
+                            <td class="col-score" style="color: #b71c1c;">+3.5</td>
+                        </tr>
+                        <tr class="row-etf">
+                            <td class="col-id">3</td><td class="col-source">Yahoo股市</td>
+                            <td class="col-title"><a href="https://tw.stock.yahoo.com/news/...094826126.html" target="_blank">不再純靠台指期！元大00631L改抱台積電現貨40% 成正2 ETF最強含積王</a></td>
+                            <td class="col-score" style="color: #b71c1c;">+1.0</td>
+                        </tr>
+                        <tr class="row-etf">
+                            <td class="col-id">4</td><td class="col-source">Yahoo股市</td>
+                            <td class="col-title"><a href="https://tw.news.yahoo.com/...080855724.html" target="_blank">「正二」ETF 00631L加碼！增持台積電至4成</a></td>
+                            <td class="col-score" style="color: #b71c1c;">+1.0</td>
+                        </tr>
+                        <tr class="row-etf">
+                            <td class="col-id">5</td><td class="col-source">Yahoo股市</td>
+                            <td class="col-title"><a href="https://tw.news.yahoo.com/...065642967.html" target="_blank">「正二」台股ETF 00631L再加碼台積電！ 占比超過4成</a></td>
+                            <td class="col-score" style="color: #b71c1c;">+1.0</td>
+                        </tr>
+                        <tr class="row-etf">
+                            <td class="col-id">6</td><td class="col-source">ETtoday</td>
+                            <td class="col-title"><a href="https://finance.ettoday.net/news/3172287" target="_blank">ETF「冷門黑馬」暴漲近80% 超狂經理人被挖出！專家：輾壓級</a></td>
+                            <td class="col-score" style="color: #b71c1c;">+2.0</td>
+                        </tr>
+                        <tr class="row-etf">
+                            <td class="col-id">7</td><td class="col-source">Yahoo股市</td>
+                            <td class="col-title"><a href="https://tw.stock.yahoo.com/news/...070602667.html" target="_blank">迎戰台股高檔震盪 主動式ETF加入掩護性買權</a></td>
+                            <td class="col-score" style="color: #1b5e20;">-1.5</td>
+                        </tr>
+                    </tbody>
+                </table>
             </div>
         </div>
-    </body>
-    </html>
-    
+
+        <div class="section-main">
+            <div class="section-title bull-title">
+                <span>🔥 多方訊號 (Bullish)</span>
+                <span>共 54 筆</span>
+            </div>
+            
+            <div class="sub-section">
+                <div class="sub-title">🌎 大盤 & 總體經濟</div>
+                <table>
+                    <tbody>
+                        <tr class="row-bull"><td class="col-id">1</td><td class="col-source">Yahoo股市</td><td class="col-title"><a href="..." target="_blank">台股狂飆「誰在賠錢」？專家點名4類人：避免高槓桿操作</a></td><td class="col-score" style="color: #b71c1c;">+2.5</td></tr>
+                        <tr class="row-bull"><td class="col-id">2</td><td class="col-source">自由財經</td><td class="col-title"><a href="..." target="_blank">外資買不停台股閃現4萬4！這檔電子2天敲逾12萬張最搶手 75萬股東大豐收</a></td><td class="col-score" style="color: #b71c1c;">+2.5</td></tr>
+                        <tr class="row-bull"><td class="col-id">3</td><td class="col-source">Yahoo股市</td><td class="col-title"><a href="..." target="_blank">國泰投信看好台股6月延續多頭氣勢，捕捉COMPUTEX帶來產業利多</a></td><td class="col-score" style="color: #b71c1c;">+2.0</td></tr>
+                        <tr class="row-bull"><td class="col-id">4</td><td class="col-source">Yahoo股市</td><td class="col-title"><a href="..." target="_blank">外資連四買、台股市值登全球第五，新台幣週二偏強整理，再升1.9分</a></td><td class="col-score" style="color: #b71c1c;">+1.5</td></tr>
+                        <tr class="row-bull"><td class="col-id">5</td><td class="col-source">Yahoo股市</td><td class="col-title"><a href="..." target="_blank">台股衝衝衝！經長：台灣已是「中等大國」 今年經濟成長率至少7%</a></td><td class="col-score" style="color: #b71c1c;">+1.0</td></tr>
+                        <tr class="row-bull"><td class="col-id">6</td><td class="col-source">Yahoo股市</td><td class="col-title"><a href="..." target="_blank">台股創高仍失利？投資人哀「買什麼賠什麼」虧損5萬 股民驚嘆：這種盤還能賠</a></td><td class="col-score" style="color: #b71c1c;">+1.0</td></tr>
+                        <tr class="row-bull"><td class="col-id">7</td><td class="col-source">Yahoo股市</td><td class="col-title"><a href="..." target="_blank">三大法人買超台股473.94億元</a></td><td class="col-score" style="color: #b71c1c;">+1.0</td></tr>
+                        <tr class="row-bull"><td class="col-id">8</td><td class="col-source">Yahoo股市</td><td class="col-title"><a href="..." target="_blank">台股4萬4得而復失 三大法人續站多方買超473.94億元</a></td><td class="col-score" style="color: #b71c1c;">+1.0</td></tr>
+                        <tr class="row-bull"><td class="col-id">9</td><td class="col-source">Yahoo股市</td><td class="col-title"><a href="..." target="_blank">彰銀法說1》樂看國發會2500億美元赴美融保添助力 評估鳳凰城設點</a></td><td class="col-score" style="color: #b71c1c;">+1.0</td></tr>
+                        <tr class="row-bull"><td class="col-id">10</td><td class="col-source">Yahoo股市</td><td class="col-title"><a href="..." target="_blank">5/26新台幣兌美元匯率以31.451元作收，升值1.9分</a></td><td class="col-score" style="color: #b71c1c;">+1.0</td></tr>
+                        <tr class="row-bull"><td class="col-id">11</td><td class="col-source">自由財經</td><td class="col-title"><a href="..." target="_blank">合庫金首席經濟學家徐千婷看台股有三大支撐 估台灣今年經濟成長率8％以上</a></td><td class="col-score" style="color: #b71c1c;">+1.0</td></tr>
+                        <tr class="row-bull"><td class="col-id">12</td><td class="col-source">自由財經</td><td class="col-title"><a href="..." target="_blank">外資續匯入！新台幣連5紅收31.451元</a></td><td class="col-score" style="color: #b71c1c;">+1.0</td></tr>
+                        <tr class="row-bull"><td class="col-id">13</td><td class="col-source">自由財經</td><td class="col-title"><a href="..." target="_blank">通膨升溫、外匯承壓 斯里蘭卡央行暴力升息4碼</a></td><td class="col-score" style="color: #b71c1c;">+1.0</td></tr>
+                    </tbody>
+                </table>
+            </div>
+            
+            <div class="sub-section">
+                <div class="sub-title">🏢 個股 & 產業動態</div>
+                <table>
+                    <tbody>
+                        <tr class="row-bull"><td class="col-id">1</td><td class="col-source">經濟日報</td><td class="col-title"><a href="..." target="_blank">「有沒有記憶體？」華邦電漲停創高 外資掃貨狂潮要再發動了？</a></td><td class="col-score" style="color: #b71c1c;">+6.0</td></tr>
+                        <tr class="row-bull"><td class="col-id">2</td><td class="col-source">Yahoo股市</td><td class="col-title"><a href="..." target="_blank">LINE Pay股東會報喜 海外布局推向日本、東南亞</a></td><td class="col-score" style="color: #b71c1c;">+5.0</td></tr>
+                        <tr class="row-bull"><td class="col-id">3</td><td class="col-source">Yahoo股市</td><td class="col-title"><a href="..." target="_blank">台積電今年飆漲49% 台股躍升全球第5大股市</a></td><td class="col-score" style="color: #b71c1c;">+4.5</td></tr>
+                        <tr class="row-bull"><td class="col-id">4</td><td class="col-source">ETtoday</td><td class="col-title"><a href="..." target="_blank">快訊／台積電漲15元至2325 台股上漲逾400點創高站上「44K」</a></td><td class="col-score" style="color: #b71c1c;">+4.0</td></tr>
+                        <tr class="row-bull"><td class="col-id">5</td><td class="col-source">經濟日報</td><td class="col-title"><a href="..." target="_blank">精誠資訊強化 AI 代理布局 聯手百林商智推自動化軟體機器人</a></td><td class="col-score" style="color: #b71c1c;">+3.5</td></tr>
+                        <tr class="row-bull"><td class="col-id">6</td><td class="col-source">自由財經</td><td class="col-title"><a href="..." target="_blank">合庫金前四月獲利創新高  總經理期許今年獲利再創佳績</a></td><td class="col-score" style="color: #b71c1c;">+3.5</td></tr>
+                        <tr class="row-bull"><td class="col-id">7</td><td class="col-source">自由財經</td><td class="col-title"><a href="..." target="_blank">明泰持續深化AI資料中心布局 可望重回成長軌道</a></td><td class="col-score" style="color: #b71c1c;">+3.5</td></tr>
+                        <tr class="row-bull"><td class="col-id">8</td><td class="col-source">ETtoday</td><td class="col-title"><a href="..." target="_blank">金融股撐台股！富邦金破百刷紀錄、市值排名回升 中信金觸新高</a></td><td class="col-score" style="color: #b71c1c;">+3.5</td></tr>
+                        <tr class="row-bull"><td class="col-id">9</td><td class="col-source">ETtoday</td><td class="col-title"><a href="..." target="_blank">越關越大尾！尚茂連漲22根漲停 挾小股本從票面衝到百元價</a></td><td class="col-score" style="color: #b71c1c;">+3.5</td></tr>
+                        <tr class="row-bull"><td class="col-id">10</td><td class="col-source">自由財經</td><td class="col-title"><a href="..." target="_blank">泓格半導體設備需求旺到擴產 AI測試成最大成長引擎</a></td><td class="col-score" style="color: #b71c1c;">+3.0</td></tr>
+                        <tr class="row-bull"><td class="col-id">11</td><td class="col-source">Yahoo股市</td><td class="col-title"><a href="..." target="_blank">不敗教主曝台積電像拖油瓶 改買2類股...大賺7位數</a></td><td class="col-score" style="color: #b71c1c;">+2.5</td></tr>
+                        <tr class="row-bull"><td class="col-id">12</td><td class="col-source">Yahoo股市</td><td class="col-title"><a href="..." target="_blank">量子題材熄火？仁寶英業達連飆三天後急殺半根停板 分析師揭翻多條件</a></td><td class="col-score" style="color: #b71c1c;">+2.5</td></tr>
+                        <tr class="row-bull"><td class="col-id">13</td><td class="col-source">經濟日報</td><td class="col-title"><a href="..." target="_blank">正新股東會／全面改選董事、羅才仁重掌董座 新團隊力拚全球智慧布局</a></td><td class="col-score" style="color: #b71c1c;">+2.5</td></tr>
+                        <tr class="row-bull"><td class="col-id">14</td><td class="col-source">經濟日報</td><td class="col-title"><a href="..." target="_blank">興農股東會／劉雲松接任董事長 持續深化集團經營布局</a></td><td class="col-score" style="color: #b71c1c;">+2.5</td></tr>
+                        <tr class="row-bull"><td class="col-id">15</td><td class="col-source">自由財經</td><td class="col-title"><a href="..." target="_blank">仁寶飆高大暴走！兇手是這群人 27萬股東被扒一層皮</a></td><td class="col-score" style="color: #b71c1c;">+2.5</td></tr>
+                        <tr class="row-bull"><td class="col-id">16</td><td class="col-source">Yahoo股市</td><td class="col-title"><a href="..." target="_blank">台股炸1.47兆新天量！富邦金「破百」難撐盤 面板雙虎落平陽剩彩晶獨漲</a></td><td class="col-score" style="color: #b71c1c;">+2.0</td></tr>
+                        <tr class="row-bull"><td class="col-id">17</td><td class="col-source">經濟日報</td><td class="col-title"><a href="..." target="_blank">穩得股東會／下半年受惠元件類產品接單暢旺 全年將優於去年</a></td><td class="col-score" style="color: #b71c1c;">+2.0</td></tr>
+                        <tr class="row-bull"><td class="col-id">18</td><td class="col-source">經濟日報</td><td class="col-title"><a href="..." target="_blank">捷敏股東會／搭 AI 伺服器電源架構升級 強化散熱製程技術</a></td><td class="col-score" style="color: #b71c1c;">+2.0</td></tr>
+                        <tr class="row-bull"><td class="col-id">19</td><td class="col-source">自由財經</td><td class="col-title"><a href="..." target="_blank">彰銀首季獲利年增26％  財管、海外業務雙引擎續升溫</a></td><td class="col-score" style="color: #b71c1c;">+2.0</td></tr>
+                        <tr class="row-bull"><td class="col-id">20</td><td class="col-source">ETtoday</td><td class="col-title"><a href="..." target="_blank">台股4萬3還有上升空間！吳嘉隆預言將衝到5萬2 台積電有望飆3500</a></td><td class="col-score" style="color: #b71c1c;">+2.0</td></tr>
+                        <tr class="row-bull"><td class="col-id">21</td><td class="col-source">ETtoday</td><td class="col-title"><a href="..." target="_blank">股匯齊揚！外資強補494億元 華邦電、力積電大買逾7萬張</a></td><td class="col-score" style="color: #b71c1c;">+2.0</td></tr>
+                        <tr class="row-bull"><td class="col-id">22</td><td class="col-source">Yahoo股市</td><td class="col-title"><a href="..." target="_blank">權值股它最猛！聯發科攜元太搶攻AI閱讀器商機「噴783億成交額霸榜」</a></td><td class="col-score" style="color: #b71c1c;">+1.0</td></tr>
+                        <tr class="row-bull"><td class="col-id">23</td><td class="col-source">Yahoo股市</td><td class="col-title"><a href="..." target="_blank">揚秦股東會通過配發6元股利</a></td><td class="col-score" style="color: #b71c1c;">+1.0</td></tr>
+                        <tr class="row-bull"><td class="col-id">24</td><td class="col-source">Yahoo股市</td><td class="col-title"><a href="..." target="_blank">聯發科與元太合作 搶攻彩色電子書市場</a></td><td class="col-score" style="color: #b71c1c;">+1.0</td></tr>
+                        <tr class="row-bull"><td class="col-id">25</td><td class="col-source">Yahoo股市</td><td class="col-title"><a href="..." target="_blank">東南亞面臨AI代理人浪潮挑戰 治理框架急需升級</a></td><td class="col-score" style="color: #b71c1c;">+1.0</td></tr>
+                        <tr class="row-bull"><td class="col-id">26</td><td class="col-source">經濟日報</td><td class="col-title"><a href="..." target="_blank">無人機物流拚常態化 民航局推24條廊道、強化風險管理</a></td><td class="col-score" style="color: #b71c1c;">+1.0</td></tr>
+                        <tr class="row-bull"><td class="col-id">27</td><td class="col-source">經濟日報</td><td class="col-title"><a href="..." target="_blank">長榮航太股東會／通過配發現金股利5元 看好新年度營運表現</a></td><td class="col-score" style="color: #b71c1c;">+1.0</td></tr>
+                        <tr class="row-bull"><td class="col-id">28</td><td class="col-source">經濟日報</td><td class="col-title"><a href="..." target="_blank">胡連股東會／第1季庫存調整結束 4月起到7月業績一路上揚</a></td><td class="col-score" style="color: #b71c1c;">+1.0</td></tr>
+                        <tr class="row-bull"><td class="col-id">29</td><td class="col-source">經濟日報</td><td class="col-title"><a href="..." target="_blank">外資買超355億元但竟狂賣面板股 群創、友達、彩晶合計遭倒貨逾40萬張</a></td><td class="col-score" style="color: #b71c1c;">+1.0</td></tr>
+                        <tr class="row-bull"><td class="col-id">30</td><td class="col-source">經濟日報</td><td class="col-title"><a href="..." target="_blank">瑞軒獲利／自結4月 EPS 0.03元</a></td><td class="col-score" style="color: #b71c1c;">+1.0</td></tr>
+                        <tr class="row-bull"><td class="col-id">31</td><td class="col-source">經濟日報</td><td class="col-title"><a href="..." target="_blank">科嶠獲利／自結4月 EPS 0.15元</a></td><td class="col-score" style="color: #b71c1c;">+1.0</td></tr>
+                        <tr class="row-bull"><td class="col-id">32</td><td class="col-source">自由財經</td><td class="col-title"><a href="..." target="_blank">三洋實業股東會通過每股配息6元 看好未來五年營運無虞</a></td><td class="col-score" style="color: #b71c1c;">+1.0</td></tr>
+                        <tr class="row-bull"><td class="col-id">33</td><td class="col-source">自由財經</td><td class="col-title"><a href="..." target="_blank">COMPUTEX瘋AI 貿協黃志芳：泡沫化是資本市場擔憂 產業動能強</a></td><td class="col-score" style="color: #b71c1c;">+1.0</td></tr>
+                        <tr class="row-bull"><td class="col-id">34</td><td class="col-source">ETtoday</td><td class="col-title"><a href="..." target="_blank">台塑化煉油事業重返成長軌道 多元採購確保料源穩定</a></td><td class="col-score" style="color: #b71c1c;">+1.0</td></tr>
+                        <tr class="row-bull"><td class="col-id">35</td><td class="col-source">ETtoday</td><td class="col-title"><a href="..." target="_blank">台積電像拖油瓶？ 不敗教主借8位數「改買2類股」：已獲利7位數</a></td><td class="col-score" style="color: #b71c1c;">+1.0</td></tr>
+                        <tr class="row-bull"><td class="col-id">36</td><td class="col-source">ETtoday</td><td class="col-title"><a href="..." target="_blank">瘋漲的貨櫃運價 德魯里不預期持續上漲太久、攬貨業看6月中回落</a></td><td class="col-score" style="color: #b71c1c;">+1.0</td></tr>
+                        <tr class="row-bull"><td class="col-id">37</td><td class="col-source">ETtoday</td><td class="col-title"><a href="..." target="_blank">外資上調「台積電、聯發科」目標價 股民震驚了</a></td><td class="col-score" style="color: #b71c1c;">+1.0</td></tr>
+                        <tr class="row-bull"><td class="col-id">38</td><td class="col-source">ETtoday</td><td class="col-title"><a href="..." target="_blank">美股AI硬體股瘋漲！財經專家揭資金追逐「最底層的基礎設施」</a></td><td class="col-score" style="color: #b71c1c;">+1.0</td></tr>
+                        <tr class="row-bull"><td class="col-id">39</td><td class="col-source">ETtoday</td><td class="col-title"><a href="..." target="_blank">貨櫃運輸被評價格上漲服務卻惡化 航商表示無奈</a></td><td class="col-score" style="color: #b71c1c;">+1.0</td></tr>
+                        <tr class="row-bull"><td class="col-id">40</td><td class="col-source">Yahoo股市</td><td class="col-title"><a href="..." target="_blank">《放．專題》AI讓台灣第一次站上世界中心？台股超車印度背後 其實是一場「國運重組」</a></td><td class="col-score" style="color: #b71c1c;">+0.5</td></tr>
+                        <tr class="row-bull"><td class="col-id">41</td><td class="col-source">自由財經</td><td class="col-title"><a href="..." target="_blank">俄烏戰爭帶動無人機需求！台灣出口暴增20倍 搶攻非紅供應鏈商機</a></td><td class="col-score" style="color: #b71c1c;">+0.5</td></tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <div class="section-main">
+            <div class="section-title bear-title">
+                <span>📉 空方訊號 (Bearish)</span>
+                <span>共 27 筆</span>
+            </div>
+            
+            <div class="sub-section">
+                <div class="sub-title">🌎 大盤 & 總體經濟</div>
+                <table>
+                    <tbody>
+                        <tr class="row-bear"><td class="col-id">1</td><td class="col-source">Yahoo股市</td><td class="col-title"><a href="..." target="_blank">美股狂歡要落幕？兩大壞數據示警崩盤近了 網酸：喊2萬崩到現在快5萬</a></td><td class="col-score" style="color: #1b5e20;">-4.0</td></tr>
+                        <tr class="row-bear"><td class="col-id">2</td><td class="col-source">Yahoo股市</td><td class="col-title"><a href="..." target="_blank">高盛示警美股「夏季震盪」將至！債市壓力浮現、標普500連漲8週恐進入波動期</a></td><td class="col-score" style="color: #1b5e20;">-3.5</td></tr>
+                        <tr class="row-bear"><td class="col-id">3</td><td class="col-source">Yahoo股市</td><td class="col-title"><a href="..." target="_blank">台股衝4萬4史高後翻黑！三大法人擲473億進場打水漂 股民笑：準備在擎天崗洗碗</a></td><td class="col-score" style="color: #1b5e20;">-3.0</td></tr>
+                        <tr class="row-bear"><td class="col-id">4</td><td class="col-source">Yahoo股市</td><td class="col-title"><a href="..." target="_blank">日經指數週二震盪下滑162.1點或0.25%，三菱商事、愛德萬股價疲弱</a></td><td class="col-score" style="color: #1b5e20;">-3.0</td></tr>
+                        <tr class="row-bear"><td class="col-id">5</td><td class="col-source">Yahoo股市</td><td class="col-title"><a href="..." target="_blank">【Yahoo早盤】台股登4萬4創高後跳水翻黑 分析師白易弘勸「慎追」：收高不易</a></td><td class="col-score" style="color: #1b5e20;">-3.0</td></tr>
+                        <tr class="row-bear"><td class="col-id">6</td><td class="col-source">Yahoo股市</td><td class="col-title"><a href="..." target="_blank">《台股盤後》量增收跌119點，44K得而復失</a></td><td class="col-score" style="color: #1b5e20;">-1.5</td></tr>
+                        <tr class="row-bear"><td class="col-id">7</td><td class="col-source">Yahoo股市</td><td class="col-title"><a href="..." target="_blank">台股高檔震盪還能追？！ 專家估最高挑戰5萬3，親曝美債抄底術</a></td><td class="col-score" style="color: #1b5e20;">-1.5</td></tr>
+                        <tr class="row-bear"><td class="col-id">8</td><td class="col-source">Yahoo股市</td><td class="col-title"><a href="..." target="_blank">永豐期貨：台股高檔震盪加劇，量能變化成關鍵</a></td><td class="col-score" style="color: #1b5e20;">-1.5</td></tr>
+                        <tr class="row-bear"><td class="col-id">9</td><td class="col-source">自由財經</td><td class="col-title"><a href="..." target="_blank">台股震盪逾700點！72萬存股族逆勢衝高 最大推手是「它」</a></td><td class="col-score" style="color: #1b5e20;">-1.5</td></tr>
+                        <tr class="row-bear"><td class="col-id">10</td><td class="col-source">Yahoo股市</td><td class="col-title"><a href="..." target="_blank">彰銀法說2》看Fed年底有望小幅降息 拚全年換匯交易收益逾40億元</a></td><td class="col-score" style="color: #1b5e20;">-0.5</td></tr>
+                        <tr class="row-bear"><td class="col-id">11</td><td class="col-source">Yahoo股市</td><td class="col-title"><a href="..." target="_blank">大宗商品類股領漲，道瓊歐洲600指數盤初上漲0.08%，主要股市漲跌互見</a></td><td class="col-score" style="color: #1b5e20;">-0.5</td></tr>
+                        <tr class="row-bear"><td class="col-id">12</td><td class="col-source">經濟日報</td><td class="col-title"><a href="..." target="_blank">台股下跌119點 三大法人逆勢買超473億元</a></td><td class="col-score" style="color: #1b5e20;">-0.5</td></tr>
+                    </tbody>
+                </table>
+            </div>
+            
+            <div class="sub-section">
+                <div class="sub-title">🏢 個股 & 產業動態</div>
+                <table>
+                    <tbody>
+                        <tr class="row-bear"><td class="col-id">1</td><td class="col-source">經濟日報</td><td class="col-title"><a href="..." target="_blank">群創爆145萬張成交量收45.7元、跌6.92% 友達重挫跌停</a></td><td class="col-score" style="color: #1b5e20;">-8.0</td></tr>
+                        <tr class="row-bear"><td class="col-id">2</td><td class="col-source">Yahoo股市</td><td class="col-title"><a href="..." target="_blank">【Hot台股】群創重摔7%爆110萬張天量...網問「躲關小黑屋？」 分析師：短線先跑</a></td><td class="col-score" style="color: #1b5e20;">-4.0</td></tr>
+                        <tr class="row-bear"><td class="col-id">3</td><td class="col-source">Yahoo股市</td><td class="col-title"><a href="..." target="_blank">國巨「關禁閉」一度重挫8%...分析師曝一關鍵看多：看看聯發科</a></td><td class="col-score" style="color: #1b5e20;">-4.0</td></tr>
+                        <tr class="row-bear"><td class="col-id">4</td><td class="col-source">ETtoday</td><td class="col-title"><a href="..." target="_blank">龍頭國巨遭分盤處置！ 被動元件熄火 3檔摜跌停</a></td><td class="col-score" style="color: #1b5e20;">-4.0</td></tr>
+                        <tr class="row-bear"><td class="col-id">5</td><td class="col-source">Yahoo股市</td><td class="col-title"><a href="..." target="_blank">台股爆量收跌 外資加碼聯電、力積電！倒貨面板雙雄 友達慘跌停</a></td><td class="col-score" style="color: #1b5e20;">-3.0</td></tr>
+                        <tr class="row-bear"><td class="col-id">6</td><td class="col-source">Yahoo股市</td><td class="col-title"><a href="..." target="_blank">因應AI第一件事就裁員？ 黃仁勳看不下去：這藉口太懶惰</a></td><td class="col-score" style="color: #1b5e20;">-1.5</td></tr>
+                        <tr class="row-bear"><td class="col-id">7</td><td class="col-source">Yahoo股市</td><td class="col-title"><a href="..." target="_blank">科技終將取代人類？CEO把裁員歸咎於AI 黃仁勳罕見說重話：懶惰無理</a></td><td class="col-score" style="color: #1b5e20;">-1.5</td></tr>
+                        <tr class="row-bear"><td class="col-id">8</td><td class="col-source">經濟日報</td><td class="col-title"><a href="..." target="_blank">中美晶股東會／搶占太空太陽能商機 只要客戶願意下單都樂意承接</a></td><td class="col-score" style="color: #1b5e20;">-1.5</td></tr>
+                        <tr class="row-bear"><td class="col-id">9</td><td class="col-source">經濟日報</td><td class="col-title"><a href="..." target="_blank">台股擂台／「佛系產業教練」白易弘：指數高檔震盪 AI 產業趨勢方興未艾</a></td><td class="col-score" style="color: #1b5e20;">-1.5</td></tr>
+                        <tr class="row-bear"><td class="col-id">10</td><td class="col-source">自由財經</td><td class="col-title"><a href="..." target="_blank">過去1年價格跌幅最大「20款二手車」 這款最多掉價10.4萬元</a></td><td class="col-score" style="color: #1b5e20;">-1.5</td></tr>
+                        <tr class="row-bear"><td class="col-id">11</td><td class="col-source">ETtoday</td><td class="col-title"><a href="..." target="_blank">外資大買台股355億！反手重砍面板股 買賣超10檔一次看</a></td><td class="col-score" style="color: #1b5e20;">-1.5</td></tr>
+                        <tr class="row-bear"><td class="col-id">12</td><td class="col-source">ETtoday</td><td class="col-title"><a href="..." target="_blank">快訊／台股收跌119.03點、「44k」得而復失 台積電跌40元</a></td><td class="col-score" style="color: #1b5e20;">-1.5</td></tr>
+                        <tr class="row-bear"><td class="col-id">13</td><td class="col-source">ETtoday</td><td class="col-title"><a href="..." target="_blank">「四貸同堂」瘋炒股！ 專家提南韓示警：AI只到第三局</a></td><td class="col-score" style="color: #1b5e20;">-1.5</td></tr>
+                        <tr class="row-bear"><td class="col-id">14</td><td class="col-source">Yahoo股市</td><td class="col-title"><a href="..." target="_blank">《日股》獲利了結、創高後回檔，日經跌0.25%</a></td><td class="col-score" style="color: #1b5e20;">-1.0</td></tr>
+                        <tr class="row-bear"><td class="col-id">15</td><td class="col-source">Yahoo股市</td><td class="col-title"><a href="..." target="_blank">黃仁勳批「裁員歸咎AI」不負責任 看好5年後工作機會更多</a></td><td class="col-score" style="color: #1b5e20;">-0.5</td></tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <div style="text-align: center; color: #ccc; font-size: 11px; margin-top: 30px;">
+            Generated by GitHub Actions | V15 Smart Weighting (Updated Format)
+        </div>
+    </div>
+</body>
+</html>
